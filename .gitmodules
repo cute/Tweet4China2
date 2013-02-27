@@ -1,0 +1,3 @@
+[submodule "iOS/Tweet4China/3th-party/FHSTwitterEngine"]
+	path = iOS/Tweet4China/3th-party/FHSTwitterEngine
+	url = git://github.com/fhsjaagshs/FHSTwitterEngine.git
