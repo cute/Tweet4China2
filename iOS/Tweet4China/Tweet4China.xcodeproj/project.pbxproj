@@ -16,9 +16,6 @@
 		9628176216DE5EDC00ABF0AD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9628176116DE5EDC00ABF0AD /* Default.png */; };
 		9628176416DE5EDC00ABF0AD /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9628176316DE5EDC00ABF0AD /* Default@2x.png */; };
 		9628176616DE5EDC00ABF0AD /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9628176516DE5EDC00ABF0AD /* Default-568h@2x.png */; };
-		9628176916DE5EDC00ABF0AD /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9628176716DE5EDC00ABF0AD /* MainStoryboard_iPhone.storyboard */; };
-		9628176C16DE5EDC00ABF0AD /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9628176A16DE5EDC00ABF0AD /* MainStoryboard_iPad.storyboard */; };
-		9628176F16DE5EDC00ABF0AD /* HSUViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628176E16DE5EDC00ABF0AD /* HSUViewController.m */; };
 		962817A516DE5FDF00ABF0AD /* FHSTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628177A16DE5FDF00ABF0AD /* FHSTwitterEngine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		962817A616DE5FDF00ABF0AD /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628177E16DE5FDF00ABF0AD /* NSString+URLEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		962817A716DE5FDF00ABF0AD /* Base64TranscoderFHS.c in Sources */ = {isa = PBXBuildFile; fileRef = 9628178016DE5FDF00ABF0AD /* Base64TranscoderFHS.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -30,6 +27,13 @@
 		962817AD16DE5FDF00ABF0AD /* OAServiceTicket.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628178D16DE5FDF00ABF0AD /* OAServiceTicket.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		962817AE16DE5FDF00ABF0AD /* OAToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628178F16DE5FDF00ABF0AD /* OAToken.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		962817BB16DE5FF100ABF0AD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962817BA16DE5FF100ABF0AD /* SystemConfiguration.framework */; };
+		9628184E16DFAB3D00ABF0AD /* HSUHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628184D16DFAB3D00ABF0AD /* HSUHomeViewController.m */; };
+		9628185116DFAB5000ABF0AD /* HSUConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185016DFAB5000ABF0AD /* HSUConnectViewController.m */; };
+		9628185416DFAB8100ABF0AD /* HSUDiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185316DFAB8100ABF0AD /* HSUDiscoverViewController.m */; };
+		9628185716DFABE700ABF0AD /* HSUProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185616DFABE700ABF0AD /* HSUProfileViewController.m */; };
+		9628185A16DFACEC00ABF0AD /* HSUCommonTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185916DFACEC00ABF0AD /* HSUCommonTools.m */; };
+		9628185D16DFAE2A00ABF0AD /* HSUNavitationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185C16DFAE2A00ABF0AD /* HSUNavitationBar.m */; };
+		9628186016DFB27100ABF0AD /* HSUTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185F16DFB27100ABF0AD /* HSUTabController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,10 +60,6 @@
 		9628176116DE5EDC00ABF0AD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		9628176316DE5EDC00ABF0AD /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		9628176516DE5EDC00ABF0AD /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		9628176816DE5EDC00ABF0AD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		9628176B16DE5EDC00ABF0AD /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		9628176D16DE5EDC00ABF0AD /* HSUViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HSUViewController.h; sourceTree = "<group>"; };
-		9628176E16DE5EDC00ABF0AD /* HSUViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HSUViewController.m; sourceTree = "<group>"; };
 		9628177716DE5FDF00ABF0AD /* changelog.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = changelog.markdown; sourceTree = "<group>"; };
 		9628177916DE5FDF00ABF0AD /* FHSTwitterEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHSTwitterEngine.h; sourceTree = "<group>"; };
 		9628177A16DE5FDF00ABF0AD /* FHSTwitterEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHSTwitterEngine.m; sourceTree = "<group>"; };
@@ -95,6 +95,21 @@
 		962817A016DE5FDF00ABF0AD /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		962817A116DE5FDF00ABF0AD /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.markdown; sourceTree = "<group>"; };
 		962817BA16DE5FF100ABF0AD /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		962817C916DF81C000ABF0AD /* HSUDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUDefinitions.h; sourceTree = "<group>"; };
+		9628184C16DFAB3D00ABF0AD /* HSUHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUHomeViewController.h; sourceTree = "<group>"; };
+		9628184D16DFAB3D00ABF0AD /* HSUHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUHomeViewController.m; sourceTree = "<group>"; };
+		9628184F16DFAB5000ABF0AD /* HSUConnectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUConnectViewController.h; sourceTree = "<group>"; };
+		9628185016DFAB5000ABF0AD /* HSUConnectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUConnectViewController.m; sourceTree = "<group>"; };
+		9628185216DFAB8100ABF0AD /* HSUDiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUDiscoverViewController.h; sourceTree = "<group>"; };
+		9628185316DFAB8100ABF0AD /* HSUDiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUDiscoverViewController.m; sourceTree = "<group>"; };
+		9628185516DFABE700ABF0AD /* HSUProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUProfileViewController.h; sourceTree = "<group>"; };
+		9628185616DFABE700ABF0AD /* HSUProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUProfileViewController.m; sourceTree = "<group>"; };
+		9628185816DFACEB00ABF0AD /* HSUCommonTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUCommonTools.h; sourceTree = "<group>"; };
+		9628185916DFACEC00ABF0AD /* HSUCommonTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUCommonTools.m; sourceTree = "<group>"; };
+		9628185B16DFAE2900ABF0AD /* HSUNavitationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUNavitationBar.h; sourceTree = "<group>"; };
+		9628185C16DFAE2A00ABF0AD /* HSUNavitationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUNavitationBar.m; sourceTree = "<group>"; };
+		9628185E16DFB27000ABF0AD /* HSUTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUTabController.h; sourceTree = "<group>"; };
+		9628185F16DFB27100ABF0AD /* HSUTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUTabController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,10 +163,6 @@
 			children = (
 				9628175E16DE5EDC00ABF0AD /* HSUAppDelegate.h */,
 				9628175F16DE5EDC00ABF0AD /* HSUAppDelegate.m */,
-				9628176716DE5EDC00ABF0AD /* MainStoryboard_iPhone.storyboard */,
-				9628176A16DE5EDC00ABF0AD /* MainStoryboard_iPad.storyboard */,
-				9628176D16DE5EDC00ABF0AD /* HSUViewController.h */,
-				9628176E16DE5EDC00ABF0AD /* HSUViewController.m */,
 				9628175616DE5EDC00ABF0AD /* Supporting Files */,
 			);
 			path = Tweet4China;
@@ -278,6 +289,21 @@
 		962817A316DE5FDF00ABF0AD /* src */ = {
 			isa = PBXGroup;
 			children = (
+				962817C916DF81C000ABF0AD /* HSUDefinitions.h */,
+				9628185816DFACEB00ABF0AD /* HSUCommonTools.h */,
+				9628185916DFACEC00ABF0AD /* HSUCommonTools.m */,
+				9628184C16DFAB3D00ABF0AD /* HSUHomeViewController.h */,
+				9628184D16DFAB3D00ABF0AD /* HSUHomeViewController.m */,
+				9628184F16DFAB5000ABF0AD /* HSUConnectViewController.h */,
+				9628185016DFAB5000ABF0AD /* HSUConnectViewController.m */,
+				9628185216DFAB8100ABF0AD /* HSUDiscoverViewController.h */,
+				9628185316DFAB8100ABF0AD /* HSUDiscoverViewController.m */,
+				9628185516DFABE700ABF0AD /* HSUProfileViewController.h */,
+				9628185616DFABE700ABF0AD /* HSUProfileViewController.m */,
+				9628185B16DFAE2900ABF0AD /* HSUNavitationBar.h */,
+				9628185C16DFAE2A00ABF0AD /* HSUNavitationBar.m */,
+				9628185E16DFB27000ABF0AD /* HSUTabController.h */,
+				9628185F16DFB27100ABF0AD /* HSUTabController.m */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -354,8 +380,6 @@
 				9628176216DE5EDC00ABF0AD /* Default.png in Resources */,
 				9628176416DE5EDC00ABF0AD /* Default@2x.png in Resources */,
 				9628176616DE5EDC00ABF0AD /* Default-568h@2x.png in Resources */,
-				9628176916DE5EDC00ABF0AD /* MainStoryboard_iPhone.storyboard in Resources */,
-				9628176C16DE5EDC00ABF0AD /* MainStoryboard_iPad.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,7 +392,6 @@
 			files = (
 				9628175C16DE5EDC00ABF0AD /* main.m in Sources */,
 				9628176016DE5EDC00ABF0AD /* HSUAppDelegate.m in Sources */,
-				9628176F16DE5EDC00ABF0AD /* HSUViewController.m in Sources */,
 				962817A516DE5FDF00ABF0AD /* FHSTwitterEngine.m in Sources */,
 				962817A616DE5FDF00ABF0AD /* NSString+URLEncoding.m in Sources */,
 				962817A716DE5FDF00ABF0AD /* Base64TranscoderFHS.c in Sources */,
@@ -379,6 +402,13 @@
 				962817AC16DE5FDF00ABF0AD /* OARequestParameter.m in Sources */,
 				962817AD16DE5FDF00ABF0AD /* OAServiceTicket.m in Sources */,
 				962817AE16DE5FDF00ABF0AD /* OAToken.m in Sources */,
+				9628184E16DFAB3D00ABF0AD /* HSUHomeViewController.m in Sources */,
+				9628185116DFAB5000ABF0AD /* HSUConnectViewController.m in Sources */,
+				9628185416DFAB8100ABF0AD /* HSUDiscoverViewController.m in Sources */,
+				9628185716DFABE700ABF0AD /* HSUProfileViewController.m in Sources */,
+				9628185A16DFACEC00ABF0AD /* HSUCommonTools.m in Sources */,
+				9628185D16DFAE2A00ABF0AD /* HSUNavitationBar.m in Sources */,
+				9628186016DFB27100ABF0AD /* HSUTabController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,22 +421,6 @@
 				9628175916DE5EDC00ABF0AD /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		9628176716DE5EDC00ABF0AD /* MainStoryboard_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9628176816DE5EDC00ABF0AD /* en */,
-			);
-			name = MainStoryboard_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		9628176A16DE5EDC00ABF0AD /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				9628176B16DE5EDC00ABF0AD /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		9628179816DE5FDF00ABF0AD /* InfoPlist.strings */ = {
@@ -527,6 +541,7 @@
 				9628177416DE5EDC00ABF0AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

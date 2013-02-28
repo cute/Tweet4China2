@@ -1,13 +1,13 @@
 //
-//  HSUViewController.h
+//  HSUTabController.h
 //  Tweet4China
 //
-//  Created by Jason Hsu on 2/27/13.
+//  Created by Jason Hsu on 2/28/13.
 //  Copyright (c) 2013 Jason Hsu. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface HSUViewController : UIViewController
+@interface HSUTabController : UITabBarController
 
 @end

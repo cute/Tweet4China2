@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HSUTabController.h"
 
 @interface HSUAppDelegate : UIResponder <UIApplicationDelegate>
 
