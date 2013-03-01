@@ -9,7 +9,7 @@
 #ifndef Tweet4China_HSUDefinitions_h
 #define Tweet4China_HSUDefinitions_h
 
-#define kTwitterAppKey @"JotIXH4moIF1fIJDVJ50eQ"
-#define kTwitterAppSecret @"5TKbyf4fDyjzse0GqJ62YwABgP6zKuZCbCHUeYTqugc"
+#define kTwitterAppKey
+#define kTwitterAppSecret
 
 #endif
