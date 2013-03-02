@@ -13,5 +13,6 @@
 //#define kTwitterAppSecret
 
 #define kTabBarHeight 44
+#define kIPadTabBarWidth 84
 
 #endif

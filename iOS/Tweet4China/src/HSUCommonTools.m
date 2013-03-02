@@ -22,7 +22,7 @@
 
 + (CGFloat)winWidth
 {
-    return [[UIScreen mainScreen] bounds].size.width;
+    return [HSUCommonTools isIPhone] ? [[UIScreen mainScreen] bounds].size.width : [[UIScreen mainScreen] bounds].size.width - kIPadTabBarWidth;
 }
 
 + (CGFloat)winHeight

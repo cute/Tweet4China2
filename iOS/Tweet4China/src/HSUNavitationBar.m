@@ -15,29 +15,43 @@
 
 - (void)layoutSubviews
 {
-    if (customSubviewsCreated) return;
+    NSInteger logoTag = 1, tweetTag = 2, searchTag = 3;
+    UIImageView *logo = nil;
+    UIButton *tweetButton = nil;
+    UIButton *searchButton = nil;
     
-    UIImageView *logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_title_logo"]];
-    logo.center = self.center;
-    logo.frame = CGRectMake(logo.frame.origin.x, 10, logo.frame.size.width, logo.frame.size.height);
-    [self addSubview:logo];
+    if (!customSubviewsCreated) {
+        logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_title_logo"]];
+        logo.tag = logoTag;
+        [self addSubview:logo];
+        
+        tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        tweetButton.tag = tweetTag;
+        [tweetButton setImage:[UIImage imageNamed:@"ic_title_tweet"] forState:UIControlStateNormal];
+        [tweetButton sizeToFit];
+        tweetButton.showsTouchWhenHighlighted = YES;
+        [self addSubview:tweetButton];
+        
+        searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        searchButton.tag = searchTag;
+        [searchButton setImage:[UIImage imageNamed:@"ic_title_search"] forState:UIControlStateNormal];
+        [searchButton sizeToFit];
+        searchButton.showsTouchWhenHighlighted = YES;
+        [self addSubview:searchButton];
+        
+        self.userInteractionEnabled = YES;
+        customSubviewsCreated = YES;
+    } else {
+        logo = (UIImageView *)[self viewWithTag:logoTag];
+        tweetButton = (UIButton *)[self viewWithTag:tweetTag];
+        searchButton = (UIButton *)[self viewWithTag:searchTag];
+    }
     
-    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [searchButton setImage:[UIImage imageNamed:@"ic_title_search"] forState:UIControlStateNormal];
-    [searchButton sizeToFit];
-    searchButton.frame = CGRectMake(245, 12, searchButton.bounds.size.width, searchButton.bounds.size.height);
-    searchButton.showsTouchWhenHighlighted = YES;
-    [self addSubview:searchButton];
-    
-    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [tweetButton setImage:[UIImage imageNamed:@"ic_title_tweet"] forState:UIControlStateNormal];
-    [tweetButton sizeToFit];
-    tweetButton.frame = CGRectMake(286, 12, tweetButton.bounds.size.width, tweetButton.bounds.size.height);
-    tweetButton.showsTouchWhenHighlighted = YES;
-    [self addSubview:tweetButton];
-    
-    self.userInteractionEnabled = YES;
-    customSubviewsCreated = YES;
+    logo.frame = CGRectMake(self.bounds.size.width/2-logo.bounds.size.width/2, 10, logo.bounds.size.width, logo.bounds.size.height);
+    CGFloat right1 = [HSUCommonTools isIPhone] ? 10 : 14;
+    CGFloat right2 = [HSUCommonTools isIPhone] ? 22 : 30;
+    tweetButton.frame = CGRectMake([HSUCommonTools winWidth]-right1-tweetButton.bounds.size.width, 12, tweetButton.bounds.size.width, tweetButton.bounds.size.height);
+    searchButton.frame = CGRectMake(tweetButton.frame.origin.x-right2-searchButton.bounds.size.width, 12, searchButton.bounds.size.width, searchButton.bounds.size.height);
 }
 
 - (void)drawRect:(CGRect)rect
@@ -45,11 +59,11 @@
     [super drawRect:rect];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGRect rectangle = CGRectMake(0, 0, [HSUCommonTools winWidth], rect.size.height/2);
+    CGRect rectangle = CGRectMake(0, 0, rect.size.width, rect.size.height/2);
     CGContextSetRGBFillColor(context, 0, 0, 0, 1);
     CGContextSetRGBStrokeColor(context, 0, 0, 0, 1);
     CGContextFillRect(context, rectangle);
-    rectangle = CGRectMake(0, rect.size.height/2, [HSUCommonTools winWidth], rect.size.height/2);
+    rectangle = CGRectMake(0, rect.size.height/2, rect.size.width, rect.size.height/2);
     CGContextSetRGBFillColor(context, 1, 1, 1, 1);
     CGContextSetRGBStrokeColor(context, 1, 1, 1, 1);
     CGContextFillRect(context, rectangle);
@@ -60,4 +74,5 @@
 - (CGSize)sizeThatFits:(CGSize)size {
     return CGSizeMake(self.frame.size.width, 47);
 }
+
 @end
