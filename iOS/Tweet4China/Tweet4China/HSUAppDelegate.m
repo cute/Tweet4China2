@@ -12,11 +12,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    // Init global variables
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
     self.window.rootViewController = [[HSUTabController alloc] init];
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 							

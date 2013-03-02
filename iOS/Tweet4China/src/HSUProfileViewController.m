@@ -27,7 +27,6 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationController.tabBarItem.title = @"Me";
 }
 
 - (void)didReceiveMemoryWarning

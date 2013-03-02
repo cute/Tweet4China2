@@ -12,5 +12,7 @@
 
 + (BOOL)isIPhone;
 + (BOOL)isIPad;
++ (CGFloat)winWidth;
++ (CGFloat)winHeight;
 
 @end

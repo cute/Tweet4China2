@@ -20,4 +20,14 @@
     return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad;
 }
 
++ (CGFloat)winWidth
+{
+    return [[UIScreen mainScreen] bounds].size.width;
+}
+
++ (CGFloat)winHeight
+{
+    return [[UIScreen mainScreen] bounds].size.height;
+}
+
 @end
