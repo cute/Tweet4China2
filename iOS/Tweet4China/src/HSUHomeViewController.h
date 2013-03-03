@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HSUBaseViewController.h"
 
-@interface HSUHomeViewController : UIViewController
+@interface HSUHomeViewController : HSUBaseViewController
 
 @end

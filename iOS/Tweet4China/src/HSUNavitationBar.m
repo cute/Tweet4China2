@@ -64,8 +64,8 @@
     CGContextSetRGBStrokeColor(context, 0, 0, 0, 1);
     CGContextFillRect(context, rectangle);
     rectangle = CGRectMake(0, rect.size.height/2, rect.size.width, rect.size.height/2);
-    CGContextSetRGBFillColor(context, 1, 1, 1, 1);
-    CGContextSetRGBStrokeColor(context, 1, 1, 1, 1);
+    CGContextSetRGBFillColor(context, .9, .9, .9, 1);
+    CGContextSetRGBStrokeColor(context, .9, .9, .9, 1);
     CGContextFillRect(context, rectangle);
     
     [[UIImage imageNamed:@"bg_nav_bar"] drawInRect:CGRectMake(0, 0, rect.size.width, rect.size.height)];

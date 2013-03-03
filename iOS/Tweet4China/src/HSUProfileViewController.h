@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HSUBaseViewController.h"
 
-@interface HSUProfileViewController : UIViewController
+@interface HSUProfileViewController : HSUBaseViewController
 
 @end
