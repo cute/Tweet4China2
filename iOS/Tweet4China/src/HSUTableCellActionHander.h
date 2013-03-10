@@ -10,4 +10,6 @@
 
 @interface HSUTableCellActionHander : NSObject
 
+- (id)initWithSender:(UIControl *)sender target:(id)target action:(SEL)action events:(UIControlEvents)events cellData:(NSDictionary *)cellData actionName:(NSString *)actionName;
+
 @end

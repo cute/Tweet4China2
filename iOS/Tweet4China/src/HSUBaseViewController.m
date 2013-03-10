@@ -80,11 +80,5 @@
 }
 
 #pragma mark - Actions
-- (void)follow:(UIControl *)sender
-{
-    NSInteger index = sender.tag;
-    NSDictionary *cellData = [self.dataSource dataAtIndex:index];
-    cellData = nil;
-}
 
 @end

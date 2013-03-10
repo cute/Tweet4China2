@@ -14,13 +14,22 @@
     NSMutableArray *data;
 }
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        data = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 #pragma mark - TableView
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *cellData = data[indexPath.row];
     NSString *dataType = cellData[@"data_type"];
     HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:dataType];
-    [cell setupWithData:cellData atIndex:indexPath.row];
+    [cell setupWithData:cellData];
     cell.defaultActionTarget = tableView.delegate;
     cell.defaultActionEvents = UIControlEventTouchUpInside;
     return cell;

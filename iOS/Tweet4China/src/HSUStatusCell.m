@@ -20,9 +20,9 @@
 }
 
 
-- (void)setupWithData:(NSMutableDictionary *)data atIndex:(NSInteger)index
+- (void)setupWithData:(NSDictionary *)data
 {
-    [super setupWithData:data atIndex:index];
+    [super setupWithData:data];
 }
 
 + (CGFloat)heightForData:(NSDictionary *)data

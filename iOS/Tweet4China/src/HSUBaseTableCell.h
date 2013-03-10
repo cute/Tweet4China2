@@ -13,7 +13,7 @@
 @property (nonatomic, weak) id defaultActionTarget;
 @property (nonatomic, assign) UIControlEvents defaultActionEvents;
 
-- (void)setupWithData:(NSDictionary *)data atIndex:(NSInteger)index;
+- (void)setupWithData:(NSDictionary *)data;
 
 + (CGFloat)heightForData:(NSDictionary *)data;
 

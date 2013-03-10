@@ -7,14 +7,18 @@
 //
 
 #import "HSUBaseTableCell.h"
+#import "HSUTableCellActionHander.h"
 
 @implementation HSUBaseTableCell
+{
+    NSMutableDictionary *handlers;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
+        handlers = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -29,18 +33,18 @@
 - (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(NSDictionary *)data
 {
     id target = data[[NSString stringWithFormat:@"%@_t", key]];
-    if (target == nil) {
-        target = self.defaultActionTarget;
-    }
+    if (target == nil) target = self.defaultActionTarget;
+    
     SEL action = NSSelectorFromString(data[[NSString stringWithFormat:@"%@_a", key]]);
+    
     UIControlEvents events = [data[[NSString stringWithFormat:@"%@_e", key]] intValue];
-    if (events == 0) {
-        events = self.defaultActionEvents;
-    }
-    [control addTarget:control action:action forControlEvents:events];
+    if (events == 0) events = self.defaultActionEvents;
+    
+    HSUTableCellActionHander *handler = [[HSUTableCellActionHander alloc] initWithSender:control target:target action:action events:events cellData:data actionName:key];
+    handlers[key] = handler;
 }
 
-- (void)setupWithData:(NSDictionary *)data atIndex:(NSInteger)index
+- (void)setupWithData:(NSDictionary *)data
 {
     
 }

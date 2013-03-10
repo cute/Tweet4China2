@@ -58,4 +58,8 @@
     [dataSource setAction:@selector(follow:) forKey:@"follow"];
 }
 
+- (void)follow:(NSDictionary *)cellData
+{
+}
+
 @end

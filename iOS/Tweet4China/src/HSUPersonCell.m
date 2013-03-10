@@ -9,21 +9,24 @@
 #import "HSUPersonCell.h"
 
 @implementation HSUPersonCell
+{
+    UIButton *followButton;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        followButton = [[UIButton alloc] init];
     }
     return self;
 }
 
-- (void)setupWithData:(NSDictionary *)data atIndex:(NSInteger)index
+- (void)setupWithData:(NSDictionary *)data
 {
-    [super setupWithData:data atIndex:index];
-    UIButton *followButton = [[UIButton alloc] init];
-    followButton.tag = index;
+    [super setupWithData:data];
+    
+    [followButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
     [self setupControl:followButton forKey:@"follow" withData:data];
 }
 
