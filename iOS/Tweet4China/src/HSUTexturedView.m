@@ -3,7 +3,7 @@
 //  Tweet4China
 //
 //  Created by Jason Hsu on 3/3/13.
-//  Copyright (c) 2013 Jason Hsu. All rights reserved.
+//  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
 #import "HSUTexturedView.h"
