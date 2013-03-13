@@ -46,11 +46,13 @@
 
 - (void)setupWithData:(NSDictionary *)data
 {
+//    NSDictionary *cellData = data[@"cell_data"];
     
 }
 
 + (CGFloat)heightForData:(NSDictionary *)data
 {
+//    NSDictionary *cellData = data[@"cell_data"];
     return 0;
 }
 

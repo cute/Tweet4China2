@@ -15,4 +15,6 @@
 @property (nonatomic, strong) Class dataSourceClass;
 @property (nonatomic, strong) HSUBaseDataSource *dataSource;
 
+- (Class)cellClassForDataType:(NSString *)dataType;
+
 @end

@@ -26,10 +26,10 @@
 #pragma mark - TableView
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *cellData = data[indexPath.row];
-    NSString *dataType = cellData[@"data_type"];
+    NSDictionary *dataForRow = [self dataAtIndex:indexPath.row];
+    NSString *dataType = dataForRow[@"data_type"];
     HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:dataType];
-    [cell setupWithData:cellData];
+    [cell setupWithData:[self cellDataAtIndex:indexPath.row]];
     cell.defaultActionTarget = tableView.delegate;
     cell.defaultActionEvents = UIControlEventTouchUpInside;
     return cell;
@@ -58,6 +58,11 @@
     }
     // Warn
     return nil;
+}
+
+- (NSDictionary *)cellDataAtIndex:(NSInteger)index
+{
+    return [self dataAtIndex:index][@"cell_data"];
 }
 
 - (void)setTarget:(id)target forKey:(NSString *)key atIndex:(NSInteger)index

@@ -60,19 +60,24 @@
 #pragma mark - TableView
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *cellData = [self.dataSource dataAtIndex:indexPath.row];
-    NSString *dataType = cellData[@"data_type"];
-    Class cellClass = NSClassFromString([NSString stringWithFormat:@"HSU%@Cell", dataType]);
-    return [cellClass heightForData:cellData];
+    NSDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
+    NSString *dataType = data[@"data_type"];
+    Class cellClass = [self cellClassForDataType:dataType];
+    return [cellClass heightForData:data];
 }
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *cellData = [self.dataSource dataAtIndex:indexPath.row];
-    if ([cellData[@"data_type"] isEqualToString:@"LoadMore"]) {
+    NSDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
+    if ([data[@"data_type"] isEqualToString:@"LoadMore"]) {
         [self.dataSource loadMore];
     }
+}
+
+- (Class)cellClassForDataType:(NSString *)dataType
+{
+    return NSClassFromString([NSString stringWithFormat:@"HSU%@Cell", dataType]);
 }
 
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error

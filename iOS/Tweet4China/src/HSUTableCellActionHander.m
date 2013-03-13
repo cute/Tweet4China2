@@ -37,7 +37,9 @@
 - (void)doAction
 {
     if ([self.target respondsToSelector:self.action]) {
-        [self.target performSelector:self.action withObject:self.cellData];
+        SuppressPerformSelectorLeakWarning(
+            [self.target performSelector:self.action withObject:self.cellData];
+        );
     }
 }
 
