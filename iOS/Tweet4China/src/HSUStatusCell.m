@@ -23,11 +23,15 @@
 - (void)setupWithData:(NSDictionary *)data
 {
     [super setupWithData:data];
+    self.textLabel.text = [NSString stringWithFormat:@"%@: %@", data[@"user"][@"name"], data[@"text"]];
+    self.textLabel.font = [UIFont systemFontOfSize:12];
+    self.textLabel.numberOfLines = 3;
 }
 
 + (CGFloat)heightForData:(NSDictionary *)data
 {
-    return 0;
+    NSString *text = [NSString stringWithFormat:@"%@: %@", data[@"user"][@"name"], data[@"text"]];
+    return [text sizeWithFont:[UIFont systemFontOfSize:12]].width / 320 * 15 + 15;
 }
 
 @end

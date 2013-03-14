@@ -27,7 +27,6 @@
 {
     self = [super init];
     if (self) {
-        self.tableViewFrame = RM(0, 10, [HSUCommonTools winWidth], [HSUCommonTools winHeight] - 10);
         self.dataSourceClass = [HSUBaseDataSource class];
     }
     return self;
@@ -41,10 +40,16 @@
     self.dataSource.delegate = self;
     
     tableView = [[UITableView alloc] init];
-    tableView.frame = self.tableViewFrame;
     [tableView registerClass:[HSUStatusCell class] forCellReuseIdentifier:@"Status"];
     tableView.dataSource = self.dataSource;
+    tableView.delegate = self;
     [self.view addSubview:tableView];
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self.dataSource action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Loading ..."];
+    [tableView addSubview:refreshControl];
+    self.refreshControl = refreshControl;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -53,7 +58,10 @@
     
     UIImage *texture = [UIImage imageNamed:@"bg_texture"];
     UIView *background = [[HSUTexturedView alloc] initWithFrame:self.view.bounds texture:texture];
-    [self.view addSubview:background];
+    [self.view insertSubview:background atIndex:0];
+    
+    tableView.frame = self.view.bounds;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
 }
 
 
@@ -63,9 +71,8 @@
     NSDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
     NSString *dataType = data[@"data_type"];
     Class cellClass = [self cellClassForDataType:dataType];
-    return [cellClass heightForData:data];
+    return [cellClass heightForData:data[@"cell_data"]];
 }
-
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -82,6 +89,12 @@
 
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error
 {
+    if (error) {
+        NSLog(@"%@", error);
+    } else {
+        [tableView reloadData];
+        [self.refreshControl endRefreshing];
+    }
 }
 
 #pragma mark - Actions

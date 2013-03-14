@@ -7,6 +7,7 @@
 //
 
 #import "HSUHomeViewController.h"
+#import "HSUHomeDataSource.h"
 
 @interface HSUHomeViewController ()
 
@@ -18,6 +19,7 @@
 {
     self = [super init];
     if (self) {
+        self.dataSourceClass = [HSUHomeDataSource class];
     }
     return self;
 }
@@ -27,10 +29,20 @@
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewDidAppear:animated];
+    
+    [(HSUHomeDataSource *)self.dataSource authenticate];
+    
+    if (self.dataSource.count == 0) {
+        [self.dataSource refresh];
+    }
+}
+
+- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error
+{
+    [super dataSource:dataSource didFinishUpdateWithError:error];
 }
 
 @end

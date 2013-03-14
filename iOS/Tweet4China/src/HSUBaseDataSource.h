@@ -15,8 +15,9 @@
 @property (nonatomic, assign) NSInteger count;
 @property (nonatomic, weak) id<HSUBaseDataSourceDelegate> delegate;
 @property (nonatomic, readonly) NSArray *allData;
+@property (nonatomic, strong) NSMutableArray *data;
 
-//- (NSDictionary *)cellDataAtIndex:(NSInteger)index;
+- (NSDictionary *)cellDataAtIndex:(NSInteger)index;
 - (NSMutableDictionary *)dataAtIndex:(NSInteger)index;
 - (void)setTarget:(id)target forKey:(NSString *)key atIndex:(NSInteger)index;
 - (void)setAction:(SEL)action forKey:(NSString *)key atIndex:(NSInteger)index;

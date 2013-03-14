@@ -8,17 +8,15 @@
 
 #import "HSUBaseDataSource.h"
 #import "HSUBaseTableCell.h"
+#import "UIAlertView+Blocks.h"
 
 @implementation HSUBaseDataSource
-{
-    NSMutableArray *data;
-}
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        data = [[NSMutableArray alloc] init];
+        self.data = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -37,7 +35,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return data.count;
+    return self.data.count;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -48,13 +46,13 @@
 #pragma mark - Data
 - (NSArray *)allData
 {
-    return data;
+    return self.data;
 }
 
 - (NSMutableDictionary *)dataAtIndex:(NSInteger)index
 {
-    if (data.count < index) {
-        return data[index];
+    if (self.data.count > index) {
+        return self.data[index];
     }
     // Warn
     return nil;

@@ -11,9 +11,9 @@
 #import "HSUBaseDataSource.h"
 @interface HSUBaseViewController : UIViewController <UITableViewDelegate, HSUBaseDataSourceDelegate>
 
-@property (nonatomic, assign) CGRect tableViewFrame;
 @property (nonatomic, strong) Class dataSourceClass;
 @property (nonatomic, strong) HSUBaseDataSource *dataSource;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 - (Class)cellClassForDataType:(NSString *)dataType;
 
