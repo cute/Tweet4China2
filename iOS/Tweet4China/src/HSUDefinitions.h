@@ -23,4 +23,8 @@ Stuff; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
+#define ccr(x, y, w, h) CGRectMake(x, y, w, h)
+#define ccp(x, y) CGPointMake(x, y)
+#define ccs(w, h) CGSizeMake(w, h)
+
 #endif

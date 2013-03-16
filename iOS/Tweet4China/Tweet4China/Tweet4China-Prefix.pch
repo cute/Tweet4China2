@@ -13,4 +13,5 @@
     #import <Foundation/Foundation.h>
     #import "HSUDefinitions.h"
     #import "HSUCommonTools.h"
+    #import "UIImageView+Addition.h"
 #endif

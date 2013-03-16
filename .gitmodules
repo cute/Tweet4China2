@@ -7,3 +7,9 @@
 [submodule "iOS/Tweet4China/3th-party/JSONKit"]
 	path = iOS/Tweet4China/3th-party/JSONKit
 	url = git://github.com/johnezang/JSONKit.git
+[submodule "iOS/Tweet4China/3th-party/TTTAttributedLabel"]
+	path = iOS/Tweet4China/3th-party/TTTAttributedLabel
+	url = git://github.com/mattt/TTTAttributedLabel.git
+[submodule "iOS/Tweet4China/3th-party/AFNetworking"]
+	path = iOS/Tweet4China/3th-party/AFNetworking
+	url = git://github.com/AFNetworking/AFNetworking.git

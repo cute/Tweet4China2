@@ -37,12 +37,13 @@
     __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
         @autoreleasepool {
-            id result = [twEngine getHomeTimelineSinceID:@"1" count:20];
+            id result = [twEngine getHomeTimelineSinceID:@"1" count:200];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     if ([result isKindOfClass:[NSError class]]) {
                         [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:result];
                     } else {
+                        NSLog(@"%@", result);
                         NSArray *tweets = result;
                         for (int i=tweets.count-1; i>=0; i--) {
                             NSDictionary *tweet = tweets[i];
