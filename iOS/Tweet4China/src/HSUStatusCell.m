@@ -147,6 +147,16 @@
 //        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
 //        [contentArea addConstraints:cs];
         
+        vs = NSDictionaryOfVariableBindings(avatarI);
+        vf = [NSString stringWithFormat:@"V:[avatarI(%d)]", avatar_S];
+        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
+        [contentArea addConstraints:cs];
+        
+        vs = NSDictionaryOfVariableBindings(avatarI);
+        vf = [NSString stringWithFormat:@"|-0-[avatarI(%d)]", avatar_S];
+        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
+        [contentArea addConstraints:cs];
+        
         vs = NSDictionaryOfVariableBindings(ambientArea);
         vf = [NSString stringWithFormat:@"V:|-0-[ambientArea(%d)]", ambient_H];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
@@ -192,7 +202,7 @@
     // avatar
     NSString *avatarUrl = data[@"user"][@"profile_image_url_https"];
     [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
-    [avatarI sizeToFit];
+//    [avatarI sizeToFit];
     
     // info
     nameL.text = data[@"user"][@"name"];

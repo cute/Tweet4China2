@@ -9,8 +9,8 @@
 #ifndef Tweet4China_HSUDefinitions_h
 #define Tweet4China_HSUDefinitions_h
 
-#define kTwitterAppKey
-#define kTwitterAppSecret
+#define kTwitterAppKey @"ykNHjkGVh91pu38dzlzE1A"
+#define kTwitterAppSecret @"KYUnIUjcSupeLb4I0z4VEihpMbvGZj5310g5dYYY0g"
 
 #define kTabBarHeight 44
 #define kIPadTabBarWidth 84

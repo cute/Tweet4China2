@@ -43,7 +43,7 @@
                     if ([result isKindOfClass:[NSError class]]) {
                         [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:result];
                     } else {
-                        NSLog(@"%@", result);
+//                        NSLog(@"%@", result);
                         NSArray *tweets = result;
                         for (int i=tweets.count-1; i>=0; i--) {
                             NSDictionary *tweet = tweets[i];
