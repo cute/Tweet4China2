@@ -12,13 +12,36 @@
 
 @implementation HSUBaseDataSource
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (id)init
 {
     self = [super init];
     if (self) {
         self.data = [[NSMutableArray alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(handleUIApplicationWillResignActive)
+                                                     name:UIApplicationWillResignActiveNotification
+                                                   object:nil];
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [self init];
+    if (self) {
+        self.data = [aDecoder decodeObjectForKey:@"data"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.data forKey:@"data"];
 }
 
 #pragma mark - TableView
@@ -56,6 +79,11 @@
     }
     // Warn
     return nil;
+}
+
+- (NSInteger)count
+{
+    return self.data.count;
 }
 
 - (NSDictionary *)cellDataAtIndex:(NSInteger)index
@@ -129,6 +157,25 @@
 - (void)loadFromIndex:(NSInteger)startIndex toIndex:(NSInteger)endIndex
 {
     
+}
+
+- (void)handleUIApplicationWillResignActive
+{
+    [NSKeyedArchiver archiveRootObject:self toFile:[self.class cacheFile]];
+}
+
++ (NSString *)cacheFile
+{
+    return tp(self.description.lowercaseString);
+}
+
++ (id)dataSource
+{
+    id dataSource = [NSKeyedUnarchiver unarchiveObjectWithFile:[self cacheFile]];
+    if (dataSource) {
+        return dataSource;
+    }
+    return [[self alloc] init];
 }
 
 @end

@@ -18,9 +18,6 @@
 @end
 
 @implementation HSUBaseViewController
-{
-    UITableView *tableView;
-}
 
 #pragma mark - Liftstyle
 - (id)init
@@ -36,14 +33,15 @@
 {
     [super viewDidLoad];
     
-    self.dataSource = [[self.dataSourceClass alloc] init];
+    self.dataSource = [self.dataSourceClass dataSource];
     self.dataSource.delegate = self;
     
-    tableView = [[UITableView alloc] init];
+    UITableView *tableView = [[UITableView alloc] init];
     [tableView registerClass:[HSUStatusCell class] forCellReuseIdentifier:@"Status"];
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
     [self.view addSubview:tableView];
+    self.tableView = tableView;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self.dataSource action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
@@ -60,8 +58,9 @@
     UIView *background = [[HSUTexturedView alloc] initWithFrame:self.view.bounds texture:texture];
     [self.view insertSubview:background atIndex:0];
     
-    tableView.frame = self.view.bounds;
-    tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.frame = self.view.bounds;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.backgroundColor = [UIColor clearColor];
 }
 
 
@@ -92,7 +91,7 @@
     if (error) {
         NSLog(@"%@", error);
     } else {
-        [tableView reloadData];
+        [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     }
 }

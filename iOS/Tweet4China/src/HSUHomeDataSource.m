@@ -37,7 +37,8 @@
     __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
         @autoreleasepool {
-            id result = [twEngine getHomeTimelineSinceID:@"1" count:200];
+            NSString *latestIdStr = [self dataAtIndex:0][@"cell_data"][@"id_str"];
+            id result = [twEngine getHomeTimelineSinceID:latestIdStr count:200];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     if ([result isKindOfClass:[NSError class]]) {
@@ -45,7 +46,14 @@
                     } else {
 //                        NSLog(@"%@", result);
                         NSArray *tweets = result;
-                        for (int i=tweets.count-1; i>=0; i--) {
+                        NSString *lastIdStr = tweets.lastObject[@"id_str"];
+                        uint newTweetCount = tweets.count;
+                        if (![latestIdStr isEqualToString:lastIdStr]) {
+//                            [self.data insertObject:nil atIndex:0];
+                        } else {
+                            newTweetCount --;
+                        }
+                        for (int i=newTweetCount-1; i>=0; i--) {
                             NSDictionary *tweet = tweets[i];
                             NSDictionary *rowData = @{@"data_type": @"Status", @"cell_data": tweet};
                             [self.data insertObject:rowData atIndex:0];

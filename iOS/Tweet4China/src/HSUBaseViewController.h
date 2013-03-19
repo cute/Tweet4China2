@@ -14,6 +14,7 @@
 @property (nonatomic, strong) Class dataSourceClass;
 @property (nonatomic, strong) HSUBaseDataSource *dataSource;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) UITableView *tableView;
 
 - (Class)cellClassForDataType:(NSString *)dataType;
 

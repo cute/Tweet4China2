@@ -10,7 +10,7 @@
 
 @protocol HSUBaseDataSourceDelegate;
 @class HSUEnumerationItem;
-@interface HSUBaseDataSource : NSObject <UITableViewDataSource>
+@interface HSUBaseDataSource : NSObject <UITableViewDataSource, NSCoding>
 
 @property (nonatomic, assign) NSInteger count;
 @property (nonatomic, weak) id<HSUBaseDataSourceDelegate> delegate;
@@ -31,6 +31,8 @@
 - (void)refresh;
 - (void)loadMore;
 - (void)loadFromIndex:(NSInteger)startIndex toIndex:(NSInteger)endIndex;
++ (id)dataSource;
++ (NSString *)cacheFile;
 
 @end
 

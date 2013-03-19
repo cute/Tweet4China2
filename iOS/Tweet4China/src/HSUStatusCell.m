@@ -10,8 +10,9 @@
 #import "TTTAttributedLabel.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+Addition.h"
+#import <QuartzCore/QuartzCore.h>
 
-#define ambient_H 19
+#define ambient_H 25
 #define info_H 19
 #define font_S 13
 #define margin_W 10
@@ -45,6 +46,8 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        
         background = [[UIView alloc] init];
         [background setTranslatesAutoresizingMaskIntoConstraints:NO];
         [self.contentView addSubview:background];
@@ -74,6 +77,8 @@
         avatarI = [[UIImageView alloc] init];
         [avatarI setTranslatesAutoresizingMaskIntoConstraints:NO];
         [contentArea addSubview:avatarI];
+        avatarI.layer.cornerRadius = 8;
+        avatarI.layer.masksToBounds = YES;
         
         nameL = [[UILabel alloc] init];
         [nameL setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -84,6 +89,7 @@
         [screenNameL setTranslatesAutoresizingMaskIntoConstraints:NO];
         [infoArea addSubview:screenNameL];
         screenNameL.font = [UIFont systemFontOfSize:11];
+        screenNameL.textColor = [UIColor darkGrayColor];
         
         attrI = [[UIImageView alloc] init];
         [attrI setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -93,6 +99,7 @@
         [timeL setTranslatesAutoresizingMaskIntoConstraints:NO];
         [infoArea addSubview:timeL];
         timeL.font = [UIFont systemFontOfSize:11];
+        timeL.textColor = [UIColor darkGrayColor];
         
         textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
         [textAL setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -138,14 +145,9 @@
         [contentArea addConstraints:cs];
         
         vs = NSDictionaryOfVariableBindings(nameL, screenNameL, attrI, timeL);
-        vf = [NSString stringWithFormat:@"|-0-[nameL]-3-[screenNameL]-3-[attrI]-3-[timeL]-0-|"];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:NSLayoutFormatAlignAllBaseline metrics:nil views:vs];
+        vf = [NSString stringWithFormat:@"|-0-[nameL]-3-[screenNameL]-(>=3)-[attrI]-3-[timeL]-0-|"];
+        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:NSLayoutFormatAlignAllCenterY metrics:nil views:vs];
         [infoArea addConstraints:cs];
-        
-//        vs = NSDictionaryOfVariableBindings(textAL);
-//        vf = [NSString stringWithFormat:@"|-%d-[textAL]-0-|", (avatar_S + padding_S)];
-//        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-//        [contentArea addConstraints:cs];
         
         vs = NSDictionaryOfVariableBindings(avatarI);
         vf = [NSString stringWithFormat:@"V:[avatarI(%d)]", avatar_S];
@@ -160,7 +162,6 @@
         vs = NSDictionaryOfVariableBindings(ambientArea);
         vf = [NSString stringWithFormat:@"V:|-0-[ambientArea(%d)]", ambient_H];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-//        [contentArea addConstraints:cs];
         ambientAreaConstraints = cs;
         
         vs = NSDictionaryOfVariableBindings(ambientArea, avatarI);
@@ -168,10 +169,10 @@
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
         [contentArea addConstraints:cs];
         
-//        vs = NSDictionaryOfVariableBindings(ambientArea, infoArea, textAL);
-//        vf = [NSString stringWithFormat:@"V:|-0-[ambientArea]-0-[infoArea]-0-[textAL]-(>=0)-|"];
-//        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-//        [contentArea addConstraints:cs];
+        vs = NSDictionaryOfVariableBindings(ambientArea, infoArea);
+        vf = [NSString stringWithFormat:@"V:[ambientArea]-0-[infoArea]"];
+        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
+        [contentArea addConstraints:cs];
     }
     return self;
 }
@@ -196,13 +197,13 @@
         ambientI.imageName = nil;
         ambientL.text = nil;
         ambientArea.hidden = YES;
+        ambientArea.bounds = CGRectZero;
         [contentArea removeConstraints:ambientAreaConstraints];
     }
     
     // avatar
     NSString *avatarUrl = data[@"user"][@"profile_image_url_https"];
     [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
-//    [avatarI sizeToFit];
     
     // info
     nameL.text = data[@"user"][@"name"];
@@ -227,19 +228,13 @@
     
     // text
     textAL.font = [UIFont systemFontOfSize:font_S];
-    textAL.textColor = [UIColor darkGrayColor];
+    textAL.textColor = [UIColor blackColor];
     textAL.lineBreakMode = NSLineBreakByWordWrapping;
     textAL.numberOfLines = 0;
-    textAL.linkAttributes = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:(NSString *)kCTUnderlineStyleAttributeName];
+    textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
+                              (NSString *)kCTForegroundColorAttributeName: (id)cgc(33, 75, 115, 1)};
+    textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgc(215, 230, 242, 1)};
     
-    NSMutableDictionary *mutableActiveLinkAttributes = [NSMutableDictionary dictionary];
-    [mutableActiveLinkAttributes setValue:(id)[[UIColor redColor] CGColor] forKey:(NSString *)kCTForegroundColorAttributeName];
-    [mutableActiveLinkAttributes setValue:[NSNumber numberWithBool:NO] forKey:(NSString *)kCTUnderlineStyleAttributeName];
-    [mutableActiveLinkAttributes setValue:(id)[[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:0.1f] CGColor] forKey:(NSString *)kTTTBackgroundFillColorAttributeName];
-    [mutableActiveLinkAttributes setValue:(id)[[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:0.25f] CGColor] forKey:(NSString *)kTTTBackgroundStrokeColorAttributeName];
-    [mutableActiveLinkAttributes setValue:(id)[NSNumber numberWithFloat:1.0f] forKey:(NSString *)kTTTBackgroundLineWidthAttributeName];
-    [mutableActiveLinkAttributes setValue:(id)[NSNumber numberWithFloat:5.0f] forKey:(NSString *)kTTTBackgroundCornerRadiusAttributeName];
-    textAL.activeLinkAttributes = mutableActiveLinkAttributes;
     textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
     textAL.lineHeightMultiple = 1;
     
@@ -252,15 +247,22 @@
             for (NSDictionary *urlDict in urls) {
                 NSString *url = urlDict[@"url"];
                 NSString *displayUrl = urlDict[@"display_url"];
-                NSString *expanedUrl = urlDict[@"expaned_url"];
-                if (url && url.length && displayUrl && displayUrl.length && expanedUrl && expanedUrl.length) {
+                if (url && url.length && displayUrl && displayUrl.length) {
                     text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
-                    [textAL addLinkToURL:[NSURL URLWithString:expanedUrl] withRange:[text rangeOfString:url]];
+                }
+            }
+            textAL.text = text;
+            for (NSDictionary *urlDict in urls) {
+                NSString *url = urlDict[@"url"];
+                NSString *displayUrl = urlDict[@"display_url"];
+                NSString *expanedUrl = urlDict[@"expanded_url"];
+                if (url && url.length && displayUrl && displayUrl.length && expanedUrl && expanedUrl.length) {
+                    NSRange range = [text rangeOfString:displayUrl];
+                    [textAL addLinkToURL:[NSURL URLWithString:expanedUrl] withRange:range];
                 }
             }
         }
     }
-//    [textAL sizeToFit];
 }
 
 + (CGFloat)heightForData:(NSDictionary *)data
@@ -296,7 +298,7 @@
     leftHeight += padding_S;
     
     leftHeight += avatar_S;
-    NSLog(@"Height: %g", MAX(height, leftHeight));
+//    NSLog(@"Height: %g", MAX(height, leftHeight));
     
     return MAX(height, leftHeight);
 }
@@ -305,9 +307,7 @@
 {
     [super layoutSubviews];
     
-    textAL.frame = ccr((padding_S+avatar_S), info_H, self.bounds.size.width-(margin_W*2+padding_S*3+avatar_S), self.bounds.size.height-(padding_S*2+info_H+(ambientArea.hidden ? 0 : ambient_H)));
-    
-    NSLog(@"%@: %@", NSStringFromCGRect(textAL.frame), textAL.text);
+    textAL.frame = ccr((padding_S+avatar_S), info_H+(ambientArea.hidden ? 0 : ambient_H), self.bounds.size.width-(margin_W*2+padding_S*3+avatar_S), self.bounds.size.height-(padding_S*2+info_H+(ambientArea.hidden ? 0 : ambient_H)));
 }
 
 @end
