@@ -36,6 +36,7 @@
     [(HSUHomeDataSource *)self.dataSource authenticate];
     
     if (self.dataSource.count == 0) {
+        [self.refreshControl beginRefreshing];
         [self.dataSource refresh];
     }
 }

@@ -72,12 +72,13 @@
         ambientL = [[UILabel alloc] init];
         [ambientL setTranslatesAutoresizingMaskIntoConstraints:NO];
         [ambientArea addSubview:ambientL];
-        ambientL.font = [UIFont systemFontOfSize:13];
+        ambientL.font = [UIFont boldSystemFontOfSize:13];
+        ambientL.textColor = [UIColor darkGrayColor];
         
         avatarI = [[UIImageView alloc] init];
         [avatarI setTranslatesAutoresizingMaskIntoConstraints:NO];
         [contentArea addSubview:avatarI];
-        avatarI.layer.cornerRadius = 8;
+        avatarI.layer.cornerRadius = 5;
         avatarI.layer.masksToBounds = YES;
         
         nameL = [[UILabel alloc] init];
@@ -104,6 +105,15 @@
         textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
         [textAL setTranslatesAutoresizingMaskIntoConstraints:NO];
         [contentArea addSubview:textAL];
+        textAL.font = [UIFont systemFontOfSize:font_S];
+        textAL.textColor = [UIColor blackColor];
+        textAL.lineBreakMode = NSLineBreakByWordWrapping;
+        textAL.numberOfLines = 0;
+        textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgc(33, 75, 115, 1)};
+        textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgc(215, 230, 242, 1)};
+        textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
+        textAL.lineHeightMultiple = 1;
         
         NSDictionary *vs;
         NSString *vf;
@@ -178,17 +188,20 @@
 }
 
 
-- (void)setupWithData:(NSDictionary *)data
+- (void)setupWithData:(NSMutableDictionary *)data
 {
     [super setupWithData:data];
     
+    NSDictionary *cellData = data[@"cell_data"];
+    NSMutableDictionary *renderData = data[@"render_data"];
+    
     // ambient
     ambientI.hidden = NO;
-    NSDictionary *retweetedStatus = data[@"retweeted_status"];
+    NSDictionary *retweetedStatus = cellData[@"retweeted_status"];
     if (retweetedStatus) {
         ambientI.imageName = retweeted_R;
         [ambientI sizeToFit];
-        NSString *ambientText = [NSString stringWithFormat:@"%@ retweeted", data[@"user"][@"name"]];
+        NSString *ambientText = [NSString stringWithFormat:@"%@ retweeted", cellData[@"user"][@"name"]];
         ambientL.text = ambientText;
         [ambientL sizeToFit];
         ambientArea.hidden = NO;
@@ -202,17 +215,17 @@
     }
     
     // avatar
-    NSString *avatarUrl = data[@"user"][@"profile_image_url_https"];
+    NSString *avatarUrl = cellData[@"user"][@"profile_image_url_https"];
     [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
     
     // info
-    nameL.text = data[@"user"][@"name"];
+    nameL.text = cellData[@"user"][@"name"];
     [nameL sizeToFit];
-    screenNameL.text = [NSString stringWithFormat:@"@%@", data[@"user"][@"screen_name"]];
+    screenNameL.text = [NSString stringWithFormat:@"@%@", cellData[@"user"][@"screen_name"]];
     [screenNameL sizeToFit];
     attrI.imageName = nil;
     [attrI sizeToFit];
-    NSArray *medias = data[@"entities"][@"media"];
+    NSArray *medias = cellData[@"entities"][@"media"];
     if (medias && medias.count) {
         NSDictionary *media = medias[0];
         NSString *type = media[@"type"];
@@ -222,65 +235,68 @@
     }
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"eee MMM dd HH:mm:ss ZZZZ yyyy"]; // "Thu Mar 14 14:54:18 +0000 2013"
-    NSDate *createdDate = [df dateFromString:data[@"created_at"]];
+    NSDate *createdDate = [df dateFromString:cellData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
     [timeL sizeToFit];
     
     // text
-    textAL.font = [UIFont systemFontOfSize:font_S];
-    textAL.textColor = [UIColor blackColor];
-    textAL.lineBreakMode = NSLineBreakByWordWrapping;
-    textAL.numberOfLines = 0;
-    textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
-                              (NSString *)kCTForegroundColorAttributeName: (id)cgc(33, 75, 115, 1)};
-    textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgc(215, 230, 242, 1)};
-    
-    textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
-    textAL.lineHeightMultiple = 1;
-    
-    NSString *text = data[@"text"];
-    textAL.text = text;
-    NSDictionary *entities = data[@"entities"];
-    if (entities) {
-        NSArray *urls = entities[@"urls"];
-        if (urls && urls.count) {
-            for (NSDictionary *urlDict in urls) {
-                NSString *url = urlDict[@"url"];
-                NSString *displayUrl = urlDict[@"display_url"];
-                if (url && url.length && displayUrl && displayUrl.length) {
-                    text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
+    NSAttributedString *attributedText = renderData[@"attributedText"];
+    if (attributedText) {
+        textAL.attributedText = attributedText;
+    } else {
+        NSString *text = cellData[@"text"];
+        textAL.text = text;
+        NSDictionary *entities = cellData[@"entities"];
+        if (entities) {
+            NSArray *urls = entities[@"urls"];
+            if (urls && urls.count) {
+                for (NSDictionary *urlDict in urls) {
+                    NSString *url = urlDict[@"url"];
+                    NSString *displayUrl = urlDict[@"display_url"];
+                    if (url && url.length && displayUrl && displayUrl.length) {
+                        text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
+                    }
                 }
-            }
-            textAL.text = text;
-            for (NSDictionary *urlDict in urls) {
-                NSString *url = urlDict[@"url"];
-                NSString *displayUrl = urlDict[@"display_url"];
-                NSString *expanedUrl = urlDict[@"expanded_url"];
-                if (url && url.length && displayUrl && displayUrl.length && expanedUrl && expanedUrl.length) {
-                    NSRange range = [text rangeOfString:displayUrl];
-                    [textAL addLinkToURL:[NSURL URLWithString:expanedUrl] withRange:range];
+                textAL.text = text;
+                for (NSDictionary *urlDict in urls) {
+                    NSString *url = urlDict[@"url"];
+                    NSString *displayUrl = urlDict[@"display_url"];
+                    NSString *expanedUrl = urlDict[@"expanded_url"];
+                    if (url && url.length && displayUrl && displayUrl.length && expanedUrl && expanedUrl.length) {
+                        NSRange range = [text rangeOfString:displayUrl];
+                        [textAL addLinkToURL:[NSURL URLWithString:expanedUrl] withRange:range];
+                    }
                 }
             }
         }
+        renderData[@"attributedText"] = textAL.attributedText;
     }
 }
 
-+ (CGFloat)heightForData:(NSDictionary *)data
++ (CGFloat)heightForData:(NSMutableDictionary *)data
 {
+    NSDictionary *cellData = data[@"cell_data"];
+    NSMutableDictionary *renderData = data[@"render_data"];
+    if (renderData) {
+        if (renderData[@"height"]) {
+            return [renderData[@"height"] floatValue];
+        }
+    }
+    
     CGFloat height = 0;
     CGFloat leftHeight = 0;
     
     height += padding_S; // add padding top
     leftHeight += padding_S;
     
-    if (data[@"retweeted_status"]) {
+    if (cellData[@"retweeted_status"]) {
         height += ambient_H; // add ambient
         leftHeight += ambient_H;
     }
     height += info_H; // add info
     
-    NSString *text = data[@"text"];
-    NSDictionary *entities = data[@"entities"];
+    NSString *text = cellData[@"text"];
+    NSDictionary *entities = cellData[@"entities"];
     if (entities) {
         NSArray *urls = entities[@"urls"];
         if (urls && urls.count) {
@@ -298,9 +314,11 @@
     leftHeight += padding_S;
     
     leftHeight += avatar_S;
-//    NSLog(@"Height: %g", MAX(height, leftHeight));
     
-    return MAX(height, leftHeight);
+    CGFloat cellHeight = MAX(height, leftHeight);
+    renderData[@"height"] = @(cellHeight);
+    
+    return cellHeight;
 }
 
 - (void)layoutSubviews

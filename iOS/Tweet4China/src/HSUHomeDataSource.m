@@ -34,10 +34,15 @@
 
 - (void)refresh
 {
+	[HSUNetworkActivityIndicatorManager oneMore];
+    
     __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
         @autoreleasepool {
             NSString *latestIdStr = [self dataAtIndex:0][@"cell_data"][@"id_str"];
+            if (!latestIdStr) {
+                latestIdStr = @"1";
+            }
             id result = [twEngine getHomeTimelineSinceID:latestIdStr count:200];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
@@ -55,10 +60,14 @@
                         }
                         for (int i=newTweetCount-1; i>=0; i--) {
                             NSDictionary *tweet = tweets[i];
-                            NSDictionary *rowData = @{@"data_type": @"Status", @"cell_data": tweet};
+                            NSDictionary *rowData = @{@"data_type": @"Status",
+                                                      @"cell_data": tweet,
+                                                      @"render_data": [@{} mutableCopy]};
                             [self.data insertObject:rowData atIndex:0];
                         }
+                        [weakSelf saveCache];
                         [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:nil];
+                        [HSUNetworkActivityIndicatorManager oneLess];
                     }
                 }
             });

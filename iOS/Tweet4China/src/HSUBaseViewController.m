@@ -67,10 +67,10 @@
 #pragma mark - TableView
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
+    NSMutableDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
     NSString *dataType = data[@"data_type"];
     Class cellClass = [self cellClassForDataType:dataType];
-    return [cellClass heightForData:data[@"cell_data"]];
+    return [cellClass heightForData:data];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

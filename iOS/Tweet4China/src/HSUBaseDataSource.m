@@ -22,35 +22,17 @@
     self = [super init];
     if (self) {
         self.data = [[NSMutableArray alloc] init];
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(handleUIApplicationWillResignActive)
-                                                     name:UIApplicationWillResignActiveNotification
-                                                   object:nil];
     }
     return self;
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [self init];
-    if (self) {
-        self.data = [aDecoder decodeObjectForKey:@"data"];
-    }
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder
-{
-    [aCoder encodeObject:self.data forKey:@"data"];
 }
 
 #pragma mark - TableView
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *dataForRow = [self dataAtIndex:indexPath.row];
+    NSMutableDictionary *dataForRow = [self dataAtIndex:indexPath.row];
     NSString *dataType = dataForRow[@"data_type"];
     HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:dataType];
-    [cell setupWithData:[self cellDataAtIndex:indexPath.row]];
+    [cell setupWithData:dataForRow];
     cell.defaultActionTarget = tableView.delegate;
     cell.defaultActionEvents = UIControlEventTouchUpInside;
     return cell;
@@ -159,23 +141,32 @@
     
 }
 
-- (void)handleUIApplicationWillResignActive
+- (void)saveCache
 {
-    [NSKeyedArchiver archiveRootObject:self toFile:[self.class cacheFile]];
+    [[NSUserDefaults standardUserDefaults] setObject:self.data forKey:self.class.cacheKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-+ (NSString *)cacheFile
++ (NSString *)cacheKey
 {
-    return tp(self.description.lowercaseString);
+    return self.description.lowercaseString;
 }
 
 + (id)dataSource
 {
-    id dataSource = [NSKeyedUnarchiver unarchiveObjectWithFile:[self cacheFile]];
-    if (dataSource) {
-        return dataSource;
+    HSUBaseDataSource *dataSource = [[self alloc] init];
+    NSArray *data = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
+    if (data) {
+        NSMutableArray *mData = [@[] mutableCopy];
+        for (NSDictionary *dataRow in data) {
+            NSDictionary *newData = @{@"data_type": dataRow[@"data_type"],
+                                      @"cell_data": dataRow[@"cell_data"],
+                                      @"render_data": [dataRow[@"render_data"] mutableCopy]};
+            [mData addObject:newData];
+        }
+        dataSource.data = mData;
     }
-    return [[self alloc] init];
+    return dataSource;
 }
 
 @end

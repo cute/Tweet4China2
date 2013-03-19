@@ -44,15 +44,13 @@
     handlers[key] = handler;
 }
 
-- (void)setupWithData:(NSDictionary *)data
+- (void)setupWithData:(NSMutableDictionary *)data
 {
-//    NSDictionary *cellData = data[@"cell_data"];
     
 }
 
-+ (CGFloat)heightForData:(NSDictionary *)data
++ (CGFloat)heightForData:(NSMutableDictionary *)data
 {
-//    NSDictionary *cellData = data[@"cell_data"];
     return 0;
 }
 
