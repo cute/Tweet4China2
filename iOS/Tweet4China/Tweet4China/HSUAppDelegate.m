@@ -13,10 +13,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Init global variables
+    L(@"start");
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
     self.window.rootViewController = [[HSUTabController alloc] init];
     [self.window makeKeyAndVisible];
+    L(@"start OK");
     
     return YES;
 }

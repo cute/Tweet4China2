@@ -16,6 +16,7 @@
 @property (nonatomic, weak) id<HSUBaseDataSourceDelegate> delegate;
 @property (nonatomic, readonly) NSArray *allData;
 @property (atomic, strong) NSMutableArray *data;
+@property (atomic, readonly) NSArray *cacheData;
 
 - (NSDictionary *)cellDataAtIndex:(NSInteger)index;
 - (NSMutableDictionary *)dataAtIndex:(NSInteger)index;

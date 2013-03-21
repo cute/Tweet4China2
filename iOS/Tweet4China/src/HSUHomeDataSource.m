@@ -8,6 +8,8 @@
 
 #import "HSUHomeDataSource.h"
 #import "FHSTwitterEngine.h"
+#import "HSUStatusCell.h"
+#import "TTTAttributedLabel.h"
 
 @implementation HSUHomeDataSource
 {
@@ -60,9 +62,8 @@
                         }
                         for (int i=newTweetCount-1; i>=0; i--) {
                             NSDictionary *tweet = tweets[i];
-                            NSDictionary *rowData = @{@"data_type": @"Status",
-                                                      @"cell_data": tweet,
-                                                      @"render_data": [@{} mutableCopy]};
+                            NSDictionary *rowData = @{@"cell_data": tweet,
+                                                      @"render_data": [@{@"data_type": @"Status"} mutableCopy]};
                             [self.data insertObject:rowData atIndex:0];
                         }
                         [weakSelf saveCache];
@@ -73,6 +74,15 @@
             });
         }
     });
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    if ([cell isKindOfClass:[HSUStatusCell class]]) {
+        ((HSUStatusCell *)cell).contentLabel.delegate = self.attributeLabelDelegate;
+    }
+    return cell;
 }
 
 @end

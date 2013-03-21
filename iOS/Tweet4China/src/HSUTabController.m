@@ -90,8 +90,8 @@
             UILabel *titleLabel = [[UILabel alloc] init];
             titleLabel.text = title;
             titleLabel.font = [UIFont systemFontOfSize:10];
-            titleLabel.backgroundColor = [UIColor clearColor];
-            titleLabel.textColor = [UIColor whiteColor];
+            titleLabel.backgroundColor = kClearColor;
+            titleLabel.textColor = kWhiteColor;
             [titleLabel sizeToFit];
             titleLabel.center = tabBarItem.center;
             titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, buttonItemHeight-titleLabel.bounds.size.height+5, titleLabel.bounds.size.width, titleLabel.bounds.size.height);

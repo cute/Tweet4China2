@@ -14,9 +14,7 @@
 @property (nonatomic, assign) UIControlEvents defaultActionEvents;
 
 - (void)setupWithData:(NSMutableDictionary *)data;
-
 + (CGFloat)heightForData:(NSMutableDictionary *)data;
-
 - (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(NSDictionary *)data;
 
 @end

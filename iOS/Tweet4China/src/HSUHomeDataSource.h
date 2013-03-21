@@ -8,7 +8,10 @@
 
 #import "HSUBaseDataSource.h"
 
+@protocol TTTAttributedLabelDelegate;
 @interface HSUHomeDataSource : HSUBaseDataSource
+
+@property (nonatomic, weak) id<TTTAttributedLabelDelegate> attributeLabelDelegate;
 
 - (void)authenticate;
 

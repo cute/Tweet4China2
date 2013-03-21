@@ -26,8 +26,12 @@ _Pragma("clang diagnostic pop") \
 #define ccr(x, y, w, h) CGRectMake(x, y, w, h)
 #define ccp(x, y) CGPointMake(x, y)
 #define ccs(w, h) CGSizeMake(w, h)
+#define edi(top, left, bottom, right) UIEdgeInsetsMake(top, left, bottom, right)
 #define cgc(r, g, b, a) [[UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a] CGColor]
 #define uic(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
+#define L(s) NSLog(@"%@", s);
+#define kWhiteColor [UIColor whiteColor]
+#define kClearColor [UIColor clearColor]
 #define dp(filename) [([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]) stringByAppendingPathComponent:filename]
 #define tp(filename) [([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0])stringByAppendingPathComponent:filename]
 

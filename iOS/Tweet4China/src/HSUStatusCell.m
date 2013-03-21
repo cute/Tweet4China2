@@ -12,8 +12,8 @@
 #import "NSDate+Addition.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define ambient_H 25
-#define info_H 19
+#define ambient_H 21
+#define info_H 16
 #define font_S 13
 #define margin_W 10
 #define padding_S 10
@@ -46,81 +46,91 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
-        
         background = [[UIView alloc] init];
-        [background setTranslatesAutoresizingMaskIntoConstraints:NO];
+        background.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:background];
-        background.backgroundColor = [UIColor whiteColor];
+        background.backgroundColor = kClearColor;
         
         contentArea = [[UIView alloc] init];
-        [contentArea setTranslatesAutoresizingMaskIntoConstraints:NO];
+        contentArea.translatesAutoresizingMaskIntoConstraints = NO;
         [background addSubview:contentArea];
         
         ambientArea = [[UIView alloc] init];
-        [ambientArea setTranslatesAutoresizingMaskIntoConstraints:NO];
+        ambientArea.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:ambientArea];
         
         infoArea = [[UIView alloc] init];
-        [infoArea setTranslatesAutoresizingMaskIntoConstraints:NO];
+        infoArea.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:infoArea];
         
         ambientI = [[UIImageView alloc] init];
-        [ambientI setTranslatesAutoresizingMaskIntoConstraints:NO];
+        ambientI.translatesAutoresizingMaskIntoConstraints = NO;
         [ambientArea addSubview:ambientI];
         
         ambientL = [[UILabel alloc] init];
-        [ambientL setTranslatesAutoresizingMaskIntoConstraints:NO];
+        ambientL.translatesAutoresizingMaskIntoConstraints = NO;
         [ambientArea addSubview:ambientL];
-        ambientL.font = [UIFont boldSystemFontOfSize:13];
-        ambientL.textColor = [UIColor darkGrayColor];
+        ambientL.font = [UIFont systemFontOfSize:font_S];
+        ambientL.textColor = [UIColor grayColor];
+        ambientL.highlightedTextColor = kWhiteColor;
+        ambientL.backgroundColor = kClearColor;
         
         avatarI = [[UIImageView alloc] init];
-        [avatarI setTranslatesAutoresizingMaskIntoConstraints:NO];
+        avatarI.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:avatarI];
         avatarI.layer.cornerRadius = 5;
         avatarI.layer.masksToBounds = YES;
         
         nameL = [[UILabel alloc] init];
-        [nameL setTranslatesAutoresizingMaskIntoConstraints:NO];
+        nameL.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:nameL];
-        nameL.font = [UIFont systemFontOfSize:13];
+        nameL.font = [UIFont boldSystemFontOfSize:14];
+        nameL.textColor = [UIColor blackColor];
+        nameL.highlightedTextColor = kWhiteColor;
+        nameL.backgroundColor = kClearColor;
         
         screenNameL = [[UILabel alloc] init];
-        [screenNameL setTranslatesAutoresizingMaskIntoConstraints:NO];
+        screenNameL.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:screenNameL];
-        screenNameL.font = [UIFont systemFontOfSize:11];
-        screenNameL.textColor = [UIColor darkGrayColor];
+        screenNameL.font = [UIFont systemFontOfSize:12];
+        screenNameL.textColor = [UIColor grayColor];
+        screenNameL.highlightedTextColor = kWhiteColor;
+        screenNameL.backgroundColor = kClearColor;
         
         attrI = [[UIImageView alloc] init];
-        [attrI setTranslatesAutoresizingMaskIntoConstraints:NO];
+        attrI.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:attrI];
         
         timeL = [[UILabel alloc] init];
-        [timeL setTranslatesAutoresizingMaskIntoConstraints:NO];
+        timeL.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:timeL];
         timeL.font = [UIFont systemFontOfSize:11];
-        timeL.textColor = [UIColor darkGrayColor];
+        timeL.textColor = [UIColor grayColor];
+        timeL.highlightedTextColor = kWhiteColor;
+        timeL.backgroundColor = kClearColor;
         
         textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
-        [textAL setTranslatesAutoresizingMaskIntoConstraints:NO];
+        textAL.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:textAL];
-        textAL.font = [UIFont systemFontOfSize:font_S];
+        textAL.font = [UIFont systemFontOfSize:14];
         textAL.textColor = [UIColor blackColor];
+        textAL.highlightedTextColor = kWhiteColor;
         textAL.lineBreakMode = NSLineBreakByWordWrapping;
         textAL.numberOfLines = 0;
         textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
-                                  (NSString *)kCTForegroundColorAttributeName: (id)cgc(33, 75, 115, 1)};
-        textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgc(215, 230, 242, 1)};
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgc(30, 98, 164, 1)};
+        textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgc(215, 230, 242, 1),
+                                        (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
-        textAL.lineHeightMultiple = 1;
+        textAL.lineHeightMultiple = 1.2;
+        textAL.backgroundColor = kClearColor;
         
         NSDictionary *vs;
         NSString *vf;
         NSArray *cs;
         
         vs = NSDictionaryOfVariableBindings(background);
-        vf = [NSString stringWithFormat:@"|-%d-[background]-%d-|", margin_W, margin_W];
+        vf = [NSString stringWithFormat:@"|-0-[background]-0-|"];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
         [self.contentView addConstraints:cs];
         
@@ -175,7 +185,7 @@
         ambientAreaConstraints = cs;
         
         vs = NSDictionaryOfVariableBindings(ambientArea, avatarI);
-        vf = [NSString stringWithFormat:@"V:[ambientArea]-0-[avatarI(%d)]", avatar_S];
+        vf = [NSString stringWithFormat:@"V:[ambientArea]-3-[avatarI(%d)]", avatar_S];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
         [contentArea addConstraints:cs];
         
@@ -236,6 +246,7 @@
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"eee MMM dd HH:mm:ss ZZZZ yyyy"]; // "Thu Mar 14 14:54:18 +0000 2013"
     NSDate *createdDate = [df dateFromString:cellData[@"created_at"]];
+    createdDate = [df dateFromString:@"Wed Mar 20 10:44:33 +0000 2013"];
     timeL.text = createdDate.twitterDisplay;
     [timeL sizeToFit];
     
@@ -315,7 +326,7 @@
     
     leftHeight += avatar_S;
     
-    CGFloat cellHeight = MAX(height, leftHeight);
+    CGFloat cellHeight = MAX(height, leftHeight) * 1.2;
     renderData[@"height"] = @(cellHeight);
     
     return cellHeight;
@@ -326,6 +337,11 @@
     [super layoutSubviews];
     
     textAL.frame = ccr((padding_S+avatar_S), info_H+(ambientArea.hidden ? 0 : ambient_H), self.bounds.size.width-(margin_W*2+padding_S*3+avatar_S), self.bounds.size.height-(padding_S*2+info_H+(ambientArea.hidden ? 0 : ambient_H)));
+}
+
+- (TTTAttributedLabel *)contentLabel
+{
+    return textAL;
 }
 
 @end

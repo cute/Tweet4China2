@@ -30,7 +30,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSMutableDictionary *dataForRow = [self dataAtIndex:indexPath.row];
-    NSString *dataType = dataForRow[@"data_type"];
+    NSString *dataType = dataForRow[@"render_data"][@"data_type"];
     HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:dataType];
     [cell setupWithData:dataForRow];
     cell.defaultActionTarget = tableView.delegate;
@@ -141,9 +141,23 @@
     
 }
 
+- (NSArray *)cacheData
+{
+    uint count = MIN(self.count, 200);
+    NSMutableArray *cacheData = [NSMutableArray arrayWithCapacity:200];
+    for (uint i=0; i<count; i++) {
+        NSDictionary *rowData = [self dataAtIndex:i];
+        NSDictionary *cellData = rowData[@"cell_data"];
+        NSDictionary *renderData = @{@"data_type": rowData[@"render_data"][@"data_type"]};
+        NSDictionary *cacheRowData = @{@"cell_data": cellData, @"render_data": renderData};
+        [cacheData addObject:cacheRowData];
+    }
+    return cacheData;
+}
+
 - (void)saveCache
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.data forKey:self.class.cacheKey];
+    [[NSUserDefaults standardUserDefaults] setObject:self.cacheData forKey:self.class.cacheKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -159,8 +173,7 @@
     if (data) {
         NSMutableArray *mData = [@[] mutableCopy];
         for (NSDictionary *dataRow in data) {
-            NSDictionary *newData = @{@"data_type": dataRow[@"data_type"],
-                                      @"cell_data": dataRow[@"cell_data"],
+            NSDictionary *newData = @{@"cell_data": dataRow[@"cell_data"],
                                       @"render_data": [dataRow[@"render_data"] mutableCopy]};
             [mData addObject:newData];
         }

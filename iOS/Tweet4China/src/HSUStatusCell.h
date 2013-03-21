@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "HSUBaseTableCell.h"
 
+@class TTTAttributedLabel;
 @interface HSUStatusCell : HSUBaseTableCell
+
+@property (nonatomic, readonly) TTTAttributedLabel *contentLabel;
 
 @end

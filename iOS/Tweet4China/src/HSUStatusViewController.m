@@ -41,7 +41,7 @@
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
     
     NSDictionary *cellData = [self.dataSource dataAtIndex:indexPath.row];
-    if ([cellData[@"data_type"] isEqualToString:@"Status"]) {
+    if ([cellData[@"render_data"][@"data_type"] isEqualToString:@"Status"]) {
         if ([HSUCommonTools isIPhone]) {
             HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] init];
             [self.navigationController pushViewController:statusVC animated:YES];

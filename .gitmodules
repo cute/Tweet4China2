@@ -13,3 +13,6 @@
 [submodule "iOS/Tweet4China/3th-party/AFNetworking"]
 	path = iOS/Tweet4China/3th-party/AFNetworking
 	url = git://github.com/AFNetworking/AFNetworking.git
+[submodule "iOS/Tweet4China/3th-party/Moment"]
+	path = iOS/Tweet4China/3th-party/Moment
+	url = git://github.com/kmussel/Moment.git

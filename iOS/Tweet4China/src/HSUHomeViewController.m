@@ -6,10 +6,15 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
+#import <MessageUI/MessageUI.h>
+
 #import "HSUHomeViewController.h"
 #import "HSUHomeDataSource.h"
+#import "TTTAttributedLabel.h"
+#import "UIActionSheet+Blocks.h"
+#import "HSURefreshControl.h"
 
-@interface HSUHomeViewController ()
+@interface HSUHomeViewController () <TTTAttributedLabelDelegate, MFMailComposeViewControllerDelegate>
 
 @end
 
@@ -27,6 +32,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    ((HSUHomeDataSource *)self.dataSource).attributeLabelDelegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -44,6 +51,48 @@
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error
 {
     [super dataSource:dataSource didFinishUpdateWithError:error];
+}
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+    RIButtonItem *tweetLinkItem = [RIButtonItem itemWithLabel:@"Tweet Link"];
+    tweetLinkItem.action = ^{
+        
+    };
+    RIButtonItem *copyLinkItem = [RIButtonItem itemWithLabel:@"Copy Link"];
+    copyLinkItem.action = ^{
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = url.absoluteString;
+    };
+    RIButtonItem *mailLinkItem = [RIButtonItem itemWithLabel:@"Mail Link"];
+    mailLinkItem.action = ^{
+        NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a><br><br>", url.absoluteString, url.absoluteString];
+        NSString *subject = @"Link from Twitter";
+        if([MFMailComposeViewController canSendMail]) {
+            MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+            mailCont.mailComposeDelegate = self;
+            [mailCont setSubject:subject];
+            [mailCont setMessageBody:body isHTML:YES];
+            [self presentModalViewController:mailCont animated:YES];
+        } else {
+            NSString *url = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@",
+                             [subject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                             [body stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        }
+    };
+    RIButtonItem *openInSafariItem = [RIButtonItem itemWithLabel:@"Open in Safari"];
+    openInSafariItem.action = ^{
+        [[UIApplication sharedApplication] openURL:url];
+    };
+    UIActionSheet *linkActionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:tweetLinkItem, copyLinkItem, mailLinkItem, openInSafariItem, nil];
+    [linkActionSheet showInView:self.view.window];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

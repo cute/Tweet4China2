@@ -11,6 +11,8 @@
 #import "HSUStatusCell.h"
 #import "HSUBaseDataSource.h"
 #import "HSUStatusViewController.h"
+#import "HSURefreshControl.h"
+#import "HSUBaseDataSource.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface HSUBaseViewController ()
@@ -33,19 +35,24 @@
 {
     [super viewDidLoad];
     
-    self.dataSource = [self.dataSourceClass dataSource];
-    self.dataSource.delegate = self;
+    if (!self.dataSource) {
+        self.dataSource = [self.dataSourceClass dataSource];
+        self.dataSource.delegate = self;
+    }
     
-    UITableView *tableView = [[UITableView alloc] init];
+    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     [tableView registerClass:[HSUStatusCell class] forCellReuseIdentifier:@"Status"];
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
+    tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    tableView.backgroundColor = [UIColor clearColor];
+    tableView.backgroundView = nil;
+    tableView.separatorColor = uic(206, 206, 206, 1);
     [self.view addSubview:tableView];
     self.tableView = tableView;
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    HSURefreshControl *refreshControl = [[HSURefreshControl alloc] init];
     [refreshControl addTarget:self.dataSource action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
-    refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:@"Loading ..."];
     [tableView addSubview:refreshControl];
     self.refreshControl = refreshControl;
 }
@@ -58,9 +65,9 @@
     UIView *background = [[HSUTexturedView alloc] initWithFrame:self.view.bounds texture:texture];
     [self.view insertSubview:background atIndex:0];
     
-    self.tableView.frame = self.view.bounds;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.frame = self.view.bounds;//ccr(10, 10, self.view.bounds.size.width-20, self.view.bounds.size.height-10);
+//    self.tableView.scrollIndicatorInsets = edi(-10, -10, 0, -10);
+//    self.tableView.clipsToBounds = NO;
 }
 
 
@@ -68,7 +75,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSMutableDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
-    NSString *dataType = data[@"data_type"];
+    NSString *dataType = data[@"render_data"][@"data_type"];
     Class cellClass = [self cellClassForDataType:dataType];
     return [cellClass heightForData:data];
 }
@@ -76,9 +83,40 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
-    if ([data[@"data_type"] isEqualToString:@"LoadMore"]) {
+    if ([data[@"render_data"][@"data_type"] isEqualToString:@"LoadMore"]) {
         [self.dataSource loadMore];
     }
+    
+    NSLog(@"did selected");
+}
+
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    NSLog(@"perform action");
+    return YES;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"should highlight");
+    return YES;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"will select");
+    return indexPath;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"will deselect");
+    return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"did highlight");
 }
 
 - (Class)cellClassForDataType:(NSString *)dataType
