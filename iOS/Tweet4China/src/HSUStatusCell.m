@@ -26,7 +26,6 @@
 
 @implementation HSUStatusCell
 {
-    UIView *background;
     UIView *contentArea;
     UIView *ambientArea;
     UIImageView *ambientI;
@@ -40,20 +39,18 @@
     TTTAttributedLabel *textAL;
     
     NSArray *ambientAreaConstraints;
+    NSArray *infoAreaConstraints;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        background = [[UIView alloc] init];
-        background.translatesAutoresizingMaskIntoConstraints = NO;
-        [self.contentView addSubview:background];
-        background.backgroundColor = kClearColor;
+        self.backgroundColor = [UIColor whiteColor];
         
         contentArea = [[UIView alloc] init];
         contentArea.translatesAutoresizingMaskIntoConstraints = NO;
-        [background addSubview:contentArea];
+        [self.contentView addSubview:contentArea];
         
         ambientArea = [[UIView alloc] init];
         ambientArea.translatesAutoresizingMaskIntoConstraints = NO;
@@ -110,10 +107,10 @@
         timeL.backgroundColor = kClearColor;
         
         textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
-        textAL.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:textAL];
         textAL.font = [UIFont systemFontOfSize:14];
-        textAL.textColor = [UIColor blackColor];
+        textAL.backgroundColor = kClearColor;
+        textAL.textColor = uic(38, 38, 38, 1);
         textAL.highlightedTextColor = kWhiteColor;
         textAL.lineBreakMode = NSLineBreakByWordWrapping;
         textAL.numberOfLines = 0;
@@ -123,31 +120,20 @@
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
         textAL.lineHeightMultiple = 1.2;
-        textAL.backgroundColor = kClearColor;
         
         NSDictionary *vs;
         NSString *vf;
         NSArray *cs;
         
-        vs = NSDictionaryOfVariableBindings(background);
-        vf = [NSString stringWithFormat:@"|-0-[background]-0-|"];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [self.contentView addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(background);
-        vf = [NSString stringWithFormat:@"V:|-0-[background]-0-|"];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [self.contentView addConstraints:cs];
-        
         vs = NSDictionaryOfVariableBindings(contentArea);
         vf = [NSString stringWithFormat:@"|-%d-[contentArea]-%d-|", padding_S, padding_S];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [background addConstraints:cs];
+        [self.contentView addConstraints:cs];
         
         vs = NSDictionaryOfVariableBindings(contentArea);
         vf = [NSString stringWithFormat:@"V:|-%d-[contentArea]-%d-|", padding_S, padding_S];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [background addConstraints:cs];
+        [self.contentView addConstraints:cs];
         
         vs = NSDictionaryOfVariableBindings(ambientArea);
         vf = [NSString stringWithFormat:@"|-0-[ambientArea]-0-|"];
@@ -163,11 +149,6 @@
         vf = [NSString stringWithFormat:@"|-%d-[infoArea]-0-|", (avatar_S + padding_S)];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
         [contentArea addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(nameL, screenNameL, attrI, timeL);
-        vf = [NSString stringWithFormat:@"|-0-[nameL]-3-[screenNameL]-(>=3)-[attrI]-3-[timeL]-0-|"];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:NSLayoutFormatAlignAllCenterY metrics:nil views:vs];
-        [infoArea addConstraints:cs];
         
         vs = NSDictionaryOfVariableBindings(avatarI);
         vf = [NSString stringWithFormat:@"V:[avatarI(%d)]", avatar_S];
@@ -185,7 +166,7 @@
         ambientAreaConstraints = cs;
         
         vs = NSDictionaryOfVariableBindings(ambientArea, avatarI);
-        vf = [NSString stringWithFormat:@"V:[ambientArea]-3-[avatarI(%d)]", avatar_S];
+        vf = [NSString stringWithFormat:@"V:[ambientArea]-2-[avatarI(%d)]", avatar_S];
         cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
         [contentArea addConstraints:cs];
         
@@ -203,7 +184,6 @@
     [super setupWithData:data];
     
     NSDictionary *cellData = data[@"cell_data"];
-    NSMutableDictionary *renderData = data[@"render_data"];
     
     // ambient
     ambientI.hidden = NO;
@@ -226,6 +206,7 @@
     
     // avatar
     NSString *avatarUrl = cellData[@"user"][@"profile_image_url_https"];
+    avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
     [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
     
     // info
@@ -243,45 +224,45 @@
             attrI.imageName = attr_photo_R;
         }
     }
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"eee MMM dd HH:mm:ss ZZZZ yyyy"]; // "Thu Mar 14 14:54:18 +0000 2013"
-    NSDate *createdDate = [df dateFromString:cellData[@"created_at"]];
-    createdDate = [df dateFromString:@"Wed Mar 20 10:44:33 +0000 2013"];
+    NSDate *createdDate = [NSDate dateFromTwitterCreatedAt:cellData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
     [timeL sizeToFit];
     
+    if (infoAreaConstraints) {
+        [infoArea removeConstraints:infoAreaConstraints];
+    }
+    NSDictionary *vs = NSDictionaryOfVariableBindings(nameL, screenNameL, attrI, timeL);
+    NSString *vf = [NSString stringWithFormat:@"|-0-[nameL]-3-[screenNameL]-(>=3)-[attrI]-3-[timeL(%g)]-0-|", timeL.bounds.size.width];
+    infoAreaConstraints = [NSLayoutConstraint constraintsWithVisualFormat:vf options:NSLayoutFormatAlignAllCenterY metrics:nil views:vs];
+    [infoArea addConstraints:infoAreaConstraints];
+    
     // text
-    NSAttributedString *attributedText = renderData[@"attributedText"];
-    if (attributedText) {
-        textAL.attributedText = attributedText;
-    } else {
-        NSString *text = cellData[@"text"];
-        textAL.text = text;
-        NSDictionary *entities = cellData[@"entities"];
-        if (entities) {
-            NSArray *urls = entities[@"urls"];
-            if (urls && urls.count) {
-                for (NSDictionary *urlDict in urls) {
-                    NSString *url = urlDict[@"url"];
-                    NSString *displayUrl = urlDict[@"display_url"];
-                    if (url && url.length && displayUrl && displayUrl.length) {
-                        text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
-                    }
+    NSString *text = cellData[@"text"];
+    textAL.text = text;
+    NSDictionary *entities = cellData[@"entities"];
+    if (entities) {
+        NSArray *urls = entities[@"urls"];
+        if (urls && urls.count) {
+            for (NSDictionary *urlDict in urls) {
+                NSString *url = urlDict[@"url"];
+                NSString *displayUrl = urlDict[@"display_url"];
+                if (url && url.length && displayUrl && displayUrl.length) {
+                    text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
                 }
-                textAL.text = text;
-                for (NSDictionary *urlDict in urls) {
-                    NSString *url = urlDict[@"url"];
-                    NSString *displayUrl = urlDict[@"display_url"];
-                    NSString *expanedUrl = urlDict[@"expanded_url"];
-                    if (url && url.length && displayUrl && displayUrl.length && expanedUrl && expanedUrl.length) {
-                        NSRange range = [text rangeOfString:displayUrl];
-                        [textAL addLinkToURL:[NSURL URLWithString:expanedUrl] withRange:range];
-                    }
+            }
+            textAL.text = text;
+            for (NSDictionary *urlDict in urls) {
+                NSString *url = urlDict[@"url"];
+                NSString *displayUrl = urlDict[@"display_url"];
+                NSString *expanedUrl = urlDict[@"expanded_url"];
+                if (url && url.length && displayUrl && displayUrl.length && expanedUrl && expanedUrl.length) {
+                    NSRange range = [text rangeOfString:displayUrl];
+                    [textAL addLinkToURL:[NSURL URLWithString:expanedUrl] withRange:range];
                 }
             }
         }
-        renderData[@"attributedText"] = textAL.attributedText;
     }
+    textAL.delegate = data[@"render_data"][@"attributed_label_delegate"];
 }
 
 + (CGFloat)heightForData:(NSMutableDictionary *)data
@@ -322,11 +303,12 @@
     height += ceilf([text sizeWithFont:[UIFont systemFontOfSize:font_S] constrainedToSize:CGSizeMake(cellWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping].height); // add text
     
     height += padding_S; // add padding-bottom
+    height *= 1.3;
     leftHeight += padding_S;
     
     leftHeight += avatar_S;
     
-    CGFloat cellHeight = MAX(height, leftHeight) * 1.2;
+    CGFloat cellHeight = MAX(height, leftHeight);
     renderData[@"height"] = @(cellHeight);
     
     return cellHeight;
@@ -336,7 +318,7 @@
 {
     [super layoutSubviews];
     
-    textAL.frame = ccr((padding_S+avatar_S), info_H+(ambientArea.hidden ? 0 : ambient_H), self.bounds.size.width-(margin_W*2+padding_S*3+avatar_S), self.bounds.size.height-(padding_S*2+info_H+(ambientArea.hidden ? 0 : ambient_H)));
+    textAL.frame = ccr((padding_S+avatar_S), info_H+(ambientArea.hidden ? 0 : ambient_H), self.bounds.size.width-(margin_W*2+padding_S*3+avatar_S), self.bounds.size.height-(padding_S+info_H+(ambientArea.hidden ? 0 : ambient_H)));
 }
 
 - (TTTAttributedLabel *)contentLabel

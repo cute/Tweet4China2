@@ -36,7 +36,7 @@
 
 - (void)refresh
 {
-	[HSUNetworkActivityIndicatorManager oneMore];
+    [super refresh];
     
     __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
@@ -51,7 +51,7 @@
                     if ([result isKindOfClass:[NSError class]]) {
                         [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:result];
                     } else {
-//                        NSLog(@"%@", result);
+//                        L(result);
                         NSArray *tweets = result;
                         NSString *lastIdStr = tweets.lastObject[@"id_str"];
                         uint newTweetCount = tweets.count;
@@ -68,7 +68,6 @@
                         }
                         [weakSelf saveCache];
                         [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:nil];
-                        [HSUNetworkActivityIndicatorManager oneLess];
                     }
                 }
             });
@@ -78,11 +77,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:[HSUStatusCell class]]) {
-        ((HSUStatusCell *)cell).contentLabel.delegate = self.attributeLabelDelegate;
-    }
-    return cell;
+    return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 }
 
 @end

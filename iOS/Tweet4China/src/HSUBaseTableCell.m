@@ -32,12 +32,13 @@
 
 - (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(NSDictionary *)data
 {
-    id target = data[[NSString stringWithFormat:@"%@_t", key]];
+    NSDictionary *renderData = data[@"render_data"];
+    id target = renderData[[NSString stringWithFormat:@"%@_t", key]];
     if (target == nil) target = self.defaultActionTarget;
     
-    SEL action = NSSelectorFromString(data[[NSString stringWithFormat:@"%@_a", key]]);
+    SEL action = NSSelectorFromString(renderData[[NSString stringWithFormat:@"%@_a", key]]);
     
-    UIControlEvents events = [data[[NSString stringWithFormat:@"%@_e", key]] intValue];
+    UIControlEvents events = [renderData[[NSString stringWithFormat:@"%@_e", key]] intValue];
     if (events == 0) events = self.defaultActionEvents;
     
     HSUTableCellActionHander *handler = [[HSUTableCellActionHander alloc] initWithSender:control target:target action:action events:events cellData:data actionName:key];

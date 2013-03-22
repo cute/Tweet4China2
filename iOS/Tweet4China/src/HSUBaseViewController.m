@@ -132,6 +132,7 @@
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     }
+    [HSUNetworkActivityIndicatorManager oneLess];
 }
 
 #pragma mark - Actions

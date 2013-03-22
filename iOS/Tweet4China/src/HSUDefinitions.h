@@ -23,6 +23,8 @@ Stuff; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
+#define dp(filename) [([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]) stringByAppendingPathComponent:filename]
+#define tp(filename) [([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0])stringByAppendingPathComponent:filename]
 #define ccr(x, y, w, h) CGRectMake(x, y, w, h)
 #define ccp(x, y) CGPointMake(x, y)
 #define ccs(w, h) CGSizeMake(w, h)
@@ -32,7 +34,7 @@ _Pragma("clang diagnostic pop") \
 #define L(s) NSLog(@"%@", s);
 #define kWhiteColor [UIColor whiteColor]
 #define kClearColor [UIColor clearColor]
-#define dp(filename) [([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]) stringByAppendingPathComponent:filename]
-#define tp(filename) [([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0])stringByAppendingPathComponent:filename]
+
+#define kNNStartRefreshing @"HSU_Start_Refreshing"
 
 #endif

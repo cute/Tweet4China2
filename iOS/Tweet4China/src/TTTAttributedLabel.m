@@ -199,6 +199,8 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 @implementation TTTAttributedLabel {
 @private
     BOOL _needsFramesetter;
+    
+    BOOL longTouchLink;
 }
 
 @dynamic text;
@@ -986,10 +988,14 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
     if (!self.activeLink) {
         [super touchesBegan:touches withEvent:event];
     } else {
+        longTouchLink = YES;
         if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithURL:)]) {
             __weak __typeof(&*self)weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-                [weakSelf.delegate attributedLabel:weakSelf didSelectLinkWithURL:self.activeLink.URL];
+                if (longTouchLink) {
+                    [weakSelf.delegate attributedLabel:weakSelf didSelectLinkWithURL:self.activeLink.URL];
+                    longTouchLink = NO;
+                }
             });
         }
     }
@@ -1018,9 +1024,9 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
         
         switch (result.resultType) {
             case NSTextCheckingTypeLink:
-                return;
-                if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithURL:)]) {
-                    [self.delegate attributedLabel:self didSelectLinkWithURL:result.URL];
+                longTouchLink = NO;
+                if ([self.delegate respondsToSelector:@selector(attributedLabel:didReleaseLinkWithURL:)]) {
+                    [self.delegate attributedLabel:self didReleaseLinkWithURL:result.URL];
                     return;
                 }
                 break;

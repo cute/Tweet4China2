@@ -33,7 +33,9 @@
 {
     [super viewDidLoad];
     
-    ((HSUHomeDataSource *)self.dataSource).attributeLabelDelegate = self;
+    for (NSDictionary *rowData in self.dataSource.allData) {
+        rowData[@"render_data"][@"attributed_label_delegate"] = self;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -88,6 +90,11 @@
     };
     UIActionSheet *linkActionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:tweetLinkItem, copyLinkItem, mailLinkItem, openInSafariItem, nil];
     [linkActionSheet showInView:self.view.window];
+}
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithURL:(NSURL *)url
+{
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error

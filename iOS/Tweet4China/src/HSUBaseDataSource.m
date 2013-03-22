@@ -75,20 +75,20 @@
 
 - (void)setTarget:(id)target forKey:(NSString *)key atIndex:(NSInteger)index
 {
-    NSMutableDictionary *cellData = [self dataAtIndex:index];
-    cellData[[NSString stringWithFormat:@"%@_t", key]] = target;
+    NSMutableDictionary *renderData = [self dataAtIndex:index][@"render_data"];
+    renderData[[NSString stringWithFormat:@"%@_t", key]] = target;
 }
 
 - (void)setAction:(SEL)action forKey:(NSString *)key atIndex:(NSInteger)index
 {
-    NSMutableDictionary *cellData = [self dataAtIndex:index];
-    cellData[[NSString stringWithFormat:@"%@_a", key]] = NSStringFromSelector(action);
+    NSMutableDictionary *renderData = [self dataAtIndex:index][@"render_data"];
+    renderData[[NSString stringWithFormat:@"%@_a", key]] = NSStringFromSelector(action);
 }
 
 - (void)setEvents:(UIControlEvents)events forKey:(NSString *)key atIndex:(NSInteger)index
 {
-    NSMutableDictionary *cellData = [self dataAtIndex:index];
-    cellData[[NSString stringWithFormat:@"%@_e", key]] = [NSNumber numberWithInteger:events];
+    NSMutableDictionary *renderData = [self dataAtIndex:index][@"render_data"];
+    renderData[[NSString stringWithFormat:@"%@_e", key]] = [NSNumber numberWithInteger:events];
 }
 
 - (void)setTarget:(id)target action:(SEL)action events:(UIControlEvents)events forKey:(NSString *)key atIndex:(NSInteger)index
@@ -128,7 +128,8 @@
 
 - (void)refresh
 {
-    
+	[HSUNetworkActivityIndicatorManager oneMore];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNNStartRefreshing object:nil];
 }
 
 - (void)loadMore

@@ -14,6 +14,23 @@
     AVAudioPlayer *beginRefreshingPlayer, *endRefreshingPlayer;
 }
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefreshing) name:kNNStartRefreshing object:nil];
+    }
+    return self;
+}
+
+- (void)startRefreshing
+{
+    if (beginRefreshingPlayer == nil) {
+        beginRefreshingPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"psst1" withExtension:@"wav"] error:nil];
+    }
+    [beginRefreshingPlayer play];
+}
+
 - (void)beginRefreshing
 {
     [super beginRefreshing];
