@@ -10,6 +10,16 @@
 
 @implementation HSUTableCellData
 
+- (id)initWithRawData:(NSDictionary *)rawData dataType:(NSString *)dataType
+{
+    self = [super init];
+    if (self) {
+        self.rawData = rawData;
+        self.renderData = [@{@"data_type": dataType} mutableCopy];
+    }
+    return self;
+}
+
 - (id)initWithCacheData:(NSDictionary *)cacheData
 {
     self = [super init];

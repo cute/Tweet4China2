@@ -12,6 +12,7 @@
 @interface HSUTableCellData : NSObject
 
 - (id)initWithCacheData:(NSDictionary *)cacheData;
+- (id)initWithRawData:(NSDictionary *)rawData dataType:(NSString *)dataType;
 
 @property (nonatomic, readonly) NSString *dataType;
 @property (nonatomic, strong) NSDictionary *rawData;

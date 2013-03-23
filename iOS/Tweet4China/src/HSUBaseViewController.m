@@ -6,12 +6,14 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "HSUBaseViewController.h"
 #import "HSUTexturedView.h"
 #import "HSUStatusCell.h"
 #import "HSUStatusViewController.h"
 #import "HSURefreshControl.h"
-#import <QuartzCore/QuartzCore.h>
+#import "HSULoadMoreCell.h"
 
 @interface HSUBaseViewController ()
 
@@ -39,7 +41,9 @@
     }
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-    [tableView registerClass:[HSUStatusCell class] forCellReuseIdentifier:@"Status"];
+    // todo: rework
+    [tableView registerClass:[HSUStatusCell class] forCellReuseIdentifier:kDataType_Status];
+    [tableView registerClass:[HSULoadMoreCell class] forCellReuseIdentifier:kDataType_LoadMore];
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;

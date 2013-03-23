@@ -43,4 +43,7 @@ _Pragma("clang diagnostic pop") \
 #import "HSUUIEvent.h"
 #import "HSUCommonTools.h"
 
+#define kDataType_Status @"Status"
+#define kDataType_LoadMore @"LoadMore"
+
 #endif

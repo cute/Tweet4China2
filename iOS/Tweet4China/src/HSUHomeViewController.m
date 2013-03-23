@@ -13,6 +13,7 @@
 #import "TTTAttributedLabel.h"
 #import "UIActionSheet+Blocks.h"
 #import "HSURefreshControl.h"
+#import "HSULoadMoreCell.h"
 
 @interface HSUHomeViewController () <TTTAttributedLabelDelegate, MFMailComposeViewControllerDelegate>
 
@@ -104,6 +105,16 @@
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    HSUTableCellData *cellData = [self.dataSource dataAtIndex:indexPath.row];
+    if ([cellData.dataType isEqualToString:kDataType_LoadMore]) {
+        cellData.renderData[@"status"] = @(kLoadMoreCellStatus_Loading);
+        
+        [self.dataSource loadMore];
+    }
 }
 
 @end

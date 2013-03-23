@@ -89,7 +89,7 @@
 
 - (void)loadMore
 {
-    
+    [HSUNetworkActivityIndicatorManager oneMore];
 }
 
 - (void)loadFromIndex:(NSInteger)startIndex toIndex:(NSInteger)endIndex

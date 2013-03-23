@@ -40,7 +40,7 @@
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
     
     HSUTableCellData *cellData = [self.dataSource dataAtIndex:indexPath.row];
-    if ([cellData.dataType isEqualToString:@"Status"]) {
+    if ([cellData.dataType isEqualToString:kDataType_Status]) {
         if ([HSUCommonTools isIPhone]) {
             HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] init];
             [self.navigationController pushViewController:statusVC animated:YES];
