@@ -8,13 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class HSUTableCellData;
 @interface HSUBaseTableCell : UITableViewCell
 
-@property (nonatomic, weak) id defaultActionTarget;
-@property (nonatomic, assign) UIControlEvents defaultActionEvents;
-
-- (void)setupWithData:(NSMutableDictionary *)data;
-+ (CGFloat)heightForData:(NSMutableDictionary *)data;
-- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(NSDictionary *)data;
+- (void)setupWithData:(HSUTableCellData *)data;
++ (CGFloat)heightForData:(HSUTableCellData *)data;
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data;
 
 @end

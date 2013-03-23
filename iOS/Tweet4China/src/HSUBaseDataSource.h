@@ -10,6 +10,8 @@
 
 @protocol HSUBaseDataSourceDelegate;
 @class HSUEnumerationItem;
+@class HSUTableCellData;
+@class HSUUIEvent;
 @interface HSUBaseDataSource : NSObject <UITableViewDataSource>
 
 @property (nonatomic, assign) NSInteger count;
@@ -18,16 +20,10 @@
 @property (atomic, strong) NSMutableArray *data;
 @property (atomic, readonly) NSArray *cacheData;
 
-- (NSDictionary *)cellDataAtIndex:(NSInteger)index;
-- (NSMutableDictionary *)dataAtIndex:(NSInteger)index;
-- (void)setTarget:(id)target forKey:(NSString *)key atIndex:(NSInteger)index;
-- (void)setAction:(SEL)action forKey:(NSString *)key atIndex:(NSInteger)index;
-- (void)setEvents:(UIControlEvents)events forKey:(NSString *)key atIndex:(NSInteger)index;
-- (void)setTarget:(id)target action:(SEL)action events:(UIControlEvents)events forKey:(NSString *)key atIndex:(NSInteger)index;
-- (void)setTarget:(id)target forKey:(NSString *)key;
-- (void)setAction:(SEL)action forKey:(NSString *)key;
-- (void)setEvents:(UIControlEvents)events forKey:(NSString *)key;
-- (void)setTarget:(id)target action:(SEL)action events:(UIControlEvents)events forKey:(NSString *)key;
+- (NSDictionary *)rawDataAtIndex:(NSInteger)index;
+- (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;
+- (HSUTableCellData *)dataAtIndex:(NSInteger)index;
+- (void)addEvent:(HSUUIEvent *)event;
 
 - (void)refresh;
 - (void)loadMore;

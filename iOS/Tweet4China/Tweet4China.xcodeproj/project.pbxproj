@@ -99,6 +99,8 @@
 		967A55E016FCB1D500581274 /* Icon-production.png in Resources */ = {isa = PBXBuildFile; fileRef = 967A55DF16FCB1D500581274 /* Icon-production.png */; };
 		967A55E216FCB1E100581274 /* Icon-iPad-production@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 967A55E116FCB1E100581274 /* Icon-iPad-production@2x.png */; };
 		967A55E416FCB1E600581274 /* Icon-iPad-production.png in Resources */ = {isa = PBXBuildFile; fileRef = 967A55E316FCB1E600581274 /* Icon-iPad-production.png */; };
+		967A55E716FCD30900581274 /* HSUTableCellData.m in Sources */ = {isa = PBXBuildFile; fileRef = 967A55E616FCD30900581274 /* HSUTableCellData.m */; };
+		967A55EA16FCD3DA00581274 /* HSUUIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 967A55E916FCD3D900581274 /* HSUUIEvent.m */; };
 		968EC06116ECB0830068A6A0 /* HSUPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06016ECB0830068A6A0 /* HSUPersonCell.m */; };
 		968EC06516ECB62A0068A6A0 /* HSUStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06416ECB62A0068A6A0 /* HSUStatusViewController.m */; };
 		968EC06816ECD2150068A6A0 /* HSUTableCellActionHander.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06716ECD2150068A6A0 /* HSUTableCellActionHander.m */; };
@@ -252,6 +254,10 @@
 		967A55DF16FCB1D500581274 /* Icon-production.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-production.png"; path = "../Icon-production.png"; sourceTree = "<group>"; };
 		967A55E116FCB1E100581274 /* Icon-iPad-production@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad-production@2x.png"; path = "../Icon-iPad-production@2x.png"; sourceTree = "<group>"; };
 		967A55E316FCB1E600581274 /* Icon-iPad-production.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-iPad-production.png"; path = "../Icon-iPad-production.png"; sourceTree = "<group>"; };
+		967A55E516FCD30900581274 /* HSUTableCellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUTableCellData.h; sourceTree = "<group>"; };
+		967A55E616FCD30900581274 /* HSUTableCellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUTableCellData.m; sourceTree = "<group>"; };
+		967A55E816FCD3D900581274 /* HSUUIEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUUIEvent.h; sourceTree = "<group>"; };
+		967A55E916FCD3D900581274 /* HSUUIEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUUIEvent.m; sourceTree = "<group>"; };
 		968EC05F16ECB0830068A6A0 /* HSUPersonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUPersonCell.h; sourceTree = "<group>"; };
 		968EC06016ECB0830068A6A0 /* HSUPersonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUPersonCell.m; sourceTree = "<group>"; };
 		968EC06316ECB62A0068A6A0 /* HSUStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUStatusViewController.h; sourceTree = "<group>"; };
@@ -573,6 +579,10 @@
 				964827B116E37C9C0002345B /* HSUBaseViewController.m */,
 				96BE216F16EC77BF00226799 /* HSUBaseDataSource.h */,
 				96BE217016EC77BF00226799 /* HSUBaseDataSource.m */,
+				967A55E516FCD30900581274 /* HSUTableCellData.h */,
+				967A55E616FCD30900581274 /* HSUTableCellData.m */,
+				967A55E816FCD3D900581274 /* HSUUIEvent.h */,
+				967A55E916FCD3D900581274 /* HSUUIEvent.m */,
 				9696D80016F1AAB4005D7AAB /* HSUHomeDataSource.h */,
 				9696D80116F1AAB4005D7AAB /* HSUHomeDataSource.m */,
 				9628184C16DFAB3D00ABF0AD /* HSUHomeViewController.h */,
@@ -792,6 +802,8 @@
 				96B55E9916F88F540084667B /* HSUNetworkActivityIndicatorManager.m in Sources */,
 				96F92D8416FB02070026284D /* TTTAttributedLabel.m in Sources */,
 				962AB00616FB324D00D44566 /* HSURefreshControl.m in Sources */,
+				967A55E716FCD30900581274 /* HSUTableCellData.m in Sources */,
+				967A55EA16FCD3DA00581274 /* HSUUIEvent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,7 +22,7 @@
     return self;
 }
 
-- (void)setupWithData:(NSMutableDictionary *)data
+- (void)setupWithData:(HSUTableCellData *)data
 {
     [super setupWithData:data];
     

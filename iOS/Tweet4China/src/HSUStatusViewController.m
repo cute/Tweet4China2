@@ -8,6 +8,8 @@
 
 #import "HSUStatusViewController.h"
 #import "HSUBaseDataSource.h"
+#import "HSUTableCellData.h"
+#import "HSUUIEvent.h"
 
 @interface HSUStatusViewController ()
 
@@ -40,8 +42,8 @@
 {
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
     
-    NSDictionary *cellData = [self.dataSource dataAtIndex:indexPath.row];
-    if ([cellData[@"render_data"][@"data_type"] isEqualToString:@"Status"]) {
+    HSUTableCellData *cellData = [self.dataSource dataAtIndex:indexPath.row];
+    if ([cellData.dataType isEqualToString:@"Status"]) {
         if ([HSUCommonTools isIPhone]) {
             HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] init];
             [self.navigationController pushViewController:statusVC animated:YES];
@@ -55,11 +57,13 @@
 {
     [super dataSource:dataSource didFinishUpdateWithError:error];
     
-    [dataSource setAction:@selector(follow:) forKey:@"follow"];
+    HSUUIEvent *event = [[HSUUIEvent alloc] initWithName:@"follow" target:self action:@selector(follow:) events:UIControlEventTouchUpInside];
+    [dataSource addEvent:event];
 }
 
 - (void)follow:(NSDictionary *)cellData
 {
+    NSLog(@"follow fired with data: %@", cellData);
 }
 
 @end

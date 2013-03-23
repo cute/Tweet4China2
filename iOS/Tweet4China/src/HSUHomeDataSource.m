@@ -10,6 +10,7 @@
 #import "FHSTwitterEngine.h"
 #import "HSUStatusCell.h"
 #import "TTTAttributedLabel.h"
+#import "HSUTableCellData.h"
 
 @implementation HSUHomeDataSource
 {
@@ -41,7 +42,7 @@
     __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
         @autoreleasepool {
-            NSString *latestIdStr = [self dataAtIndex:0][@"cell_data"][@"id_str"];
+            NSString *latestIdStr = [self rawDataAtIndex:0][@"id_str"];
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
@@ -62,9 +63,10 @@
                         }
                         for (int i=newTweetCount-1; i>=0; i--) {
                             NSDictionary *tweet = tweets[i];
-                            NSDictionary *rowData = @{@"cell_data": tweet,
-                                                      @"render_data": [@{@"data_type": @"Status"} mutableCopy]};
-                            [self.data insertObject:rowData atIndex:0];
+                            HSUTableCellData *cellData = [[HSUTableCellData alloc] init];
+                            cellData.rawData = tweet;
+                            cellData.renderData = [@{@"data_type": @"Status"} mutableCopy];
+                            [self.data insertObject:cellData atIndex:0];
                         }
                         [weakSelf saveCache];
                         [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:nil];

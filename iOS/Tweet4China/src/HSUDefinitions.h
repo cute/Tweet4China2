@@ -32,6 +32,8 @@ _Pragma("clang diagnostic pop") \
 #define cgc(r, g, b, a) [[UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a] CGColor]
 #define uic(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
 #define L(s) NSLog(@"%@", s);
+#define LF(f,...) NSLog(f,##__VA_ARGS__);
+#define S(f,...) [NSString stringWithFormat:f,##__VA_ARGS__]
 #define kWhiteColor [UIColor whiteColor]
 #define kClearColor [UIColor clearColor]
 

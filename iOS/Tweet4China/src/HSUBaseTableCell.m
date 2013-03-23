@@ -8,6 +8,8 @@
 
 #import "HSUBaseTableCell.h"
 #import "HSUTableCellActionHander.h"
+#import "HSUTableCellData.h"
+#import "HSUUIEvent.h"
 
 @implementation HSUBaseTableCell
 {
@@ -30,27 +32,19 @@
     // Configure the view for the selected state
 }
 
-- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(NSDictionary *)data
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data
 {
-    NSDictionary *renderData = data[@"render_data"];
-    id target = renderData[[NSString stringWithFormat:@"%@_t", key]];
-    if (target == nil) target = self.defaultActionTarget;
-    
-    SEL action = NSSelectorFromString(renderData[[NSString stringWithFormat:@"%@_a", key]]);
-    
-    UIControlEvents events = [renderData[[NSString stringWithFormat:@"%@_e", key]] intValue];
-    if (events == 0) events = self.defaultActionEvents;
-    
-    HSUTableCellActionHander *handler = [[HSUTableCellActionHander alloc] initWithSender:control target:target action:action events:events cellData:data actionName:key];
-    handlers[key] = handler;
+    NSDictionary *renderData = data.renderData;
+    HSUUIEvent *event = renderData[key];
+    [control addTarget:event.target action:event.action forControlEvents:event.events];
 }
 
-- (void)setupWithData:(NSMutableDictionary *)data
+- (void)setupWithData:(HSUTableCellData *)data
 {
     
 }
 
-+ (CGFloat)heightForData:(NSMutableDictionary *)data
++ (CGFloat)heightForData:(HSUTableCellData *)data
 {
     return 0;
 }

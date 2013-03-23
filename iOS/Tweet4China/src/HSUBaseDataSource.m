@@ -9,13 +9,10 @@
 #import "HSUBaseDataSource.h"
 #import "HSUBaseTableCell.h"
 #import "UIAlertView+Blocks.h"
+#import "HSUTableCellData.h"
+#import "HSUUIEvent.h"
 
 @implementation HSUBaseDataSource
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 
 - (id)init
 {
@@ -29,12 +26,9 @@
 #pragma mark - TableView
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableDictionary *dataForRow = [self dataAtIndex:indexPath.row];
-    NSString *dataType = dataForRow[@"render_data"][@"data_type"];
-    HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:dataType];
-    [cell setupWithData:dataForRow];
-    cell.defaultActionTarget = tableView.delegate;
-    cell.defaultActionEvents = UIControlEventTouchUpInside;
+    HSUTableCellData *cellData = [self dataAtIndex:indexPath.row];
+    HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:cellData.dataType];
+    [cell setupWithData:cellData];
     return cell;
 }
 
@@ -54,7 +48,7 @@
     return self.data;
 }
 
-- (NSMutableDictionary *)dataAtIndex:(NSInteger)index
+- (HSUTableCellData *)dataAtIndex:(NSInteger)index
 {
     if (self.data.count > index) {
         return self.data[index];
@@ -63,66 +57,29 @@
     return nil;
 }
 
+- (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;
+{
+    if (self.data.count > index) {
+        return [self dataAtIndex:index].renderData;
+    }
+    return nil;
+}
+
 - (NSInteger)count
 {
     return self.data.count;
 }
 
-- (NSDictionary *)cellDataAtIndex:(NSInteger)index
+- (NSDictionary *)rawDataAtIndex:(NSInteger)index
 {
-    return [self dataAtIndex:index][@"cell_data"];
+    return [self dataAtIndex:index].rawData;
 }
 
-- (void)setTarget:(id)target forKey:(NSString *)key atIndex:(NSInteger)index
+- (void)addEvent:(HSUUIEvent *)event
 {
-    NSMutableDictionary *renderData = [self dataAtIndex:index][@"render_data"];
-    renderData[[NSString stringWithFormat:@"%@_t", key]] = target;
-}
-
-- (void)setAction:(SEL)action forKey:(NSString *)key atIndex:(NSInteger)index
-{
-    NSMutableDictionary *renderData = [self dataAtIndex:index][@"render_data"];
-    renderData[[NSString stringWithFormat:@"%@_a", key]] = NSStringFromSelector(action);
-}
-
-- (void)setEvents:(UIControlEvents)events forKey:(NSString *)key atIndex:(NSInteger)index
-{
-    NSMutableDictionary *renderData = [self dataAtIndex:index][@"render_data"];
-    renderData[[NSString stringWithFormat:@"%@_e", key]] = [NSNumber numberWithInteger:events];
-}
-
-- (void)setTarget:(id)target action:(SEL)action events:(UIControlEvents)events forKey:(NSString *)key atIndex:(NSInteger)index
-{
-    [self setTarget:target forKey:key atIndex:index];
-    [self setAction:action forKey:key atIndex:index];
-    [self setEvents:events forKey:key atIndex:index];
-}
-
-- (void)setTarget:(id)target forKey:(NSString *)key
-{
-    for (int i=0; i<self.count; i++) {
-        [self setTarget:target forKey:key atIndex:i];
-    }
-}
-
-- (void)setAction:(SEL)action forKey:(NSString *)key
-{
-    for (int i=0; i<self.count; i++) {
-        [self setAction:action forKey:key atIndex:i];
-    }
-}
-
-- (void)setEvents:(UIControlEvents)events forKey:(NSString *)key
-{
-    for (int i=0; i<self.count; i++) {
-        [self setEvents:events forKey:key atIndex:i];
-    }
-}
-
-- (void)setTarget:(id)target action:(SEL)action events:(UIControlEvents)events forKey:(NSString *)key
-{
-    for (int i=0; i<self.count; i++) {
-        [self setTarget:target action:action events:events forKey:key atIndex:i];
+    for (uint i=0; i<self.count; i++) {
+        event.cellData = [self dataAtIndex:i];
+        [self renderDataAtIndex:i][event.name] = event;
     }
 }
 
@@ -144,14 +101,12 @@
 
 - (NSArray *)cacheData
 {
-    uint count = MIN(self.count, 200);
     NSMutableArray *cacheData = [NSMutableArray arrayWithCapacity:200];
-    for (uint i=0; i<count; i++) {
-        NSDictionary *rowData = [self dataAtIndex:i];
-        NSDictionary *cellData = rowData[@"cell_data"];
-        NSDictionary *renderData = @{@"data_type": rowData[@"render_data"][@"data_type"]};
-        NSDictionary *cacheRowData = @{@"cell_data": cellData, @"render_data": renderData};
-        [cacheData addObject:cacheRowData];
+    for (HSUTableCellData *cellData in self.data) {
+        if (cacheData.count > 200) {
+            break;
+        }
+        [cacheData addObject:cellData.cacheData];
     }
     return cacheData;
 }
@@ -170,12 +125,12 @@
 + (id)dataSource
 {
     HSUBaseDataSource *dataSource = [[self alloc] init];
+    return dataSource;
     NSArray *data = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
     if (data) {
         NSMutableArray *mData = [@[] mutableCopy];
         for (NSDictionary *dataRow in data) {
-            NSDictionary *newData = @{@"cell_data": dataRow[@"cell_data"],
-                                      @"render_data": [dataRow[@"render_data"] mutableCopy]};
+            HSUTableCellData *newData = [[HSUTableCellData alloc] initWithCacheData:dataRow];
             [mData addObject:newData];
         }
         dataSource.data = mData;

@@ -13,6 +13,7 @@
 #import "HSUStatusViewController.h"
 #import "HSURefreshControl.h"
 #import "HSUBaseDataSource.h"
+#import "HSUTableCellData.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface HSUBaseViewController ()
@@ -74,49 +75,18 @@
 #pragma mark - TableView
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
-    NSString *dataType = data[@"render_data"][@"data_type"];
-    Class cellClass = [self cellClassForDataType:dataType];
+    HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
+    Class cellClass = [self cellClassForDataType:data.dataType];
     return [cellClass heightForData:data];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *data = [self.dataSource dataAtIndex:indexPath.row];
-    if ([data[@"render_data"][@"data_type"] isEqualToString:@"LoadMore"]) {
+    HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
+    if ([data.dataType isEqualToString:@"LoadMore"]) {
         [self.dataSource loadMore];
     }
     
-    NSLog(@"did selected");
-}
-
-- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    NSLog(@"perform action");
-    return YES;
-}
-
-- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"should highlight");
-    return YES;
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"will select");
-    return indexPath;
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"will deselect");
-    return indexPath;
-}
-
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"did highlight");
 }
 
 - (Class)cellClassForDataType:(NSString *)dataType

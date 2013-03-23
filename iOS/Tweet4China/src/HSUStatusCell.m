@@ -10,6 +10,7 @@
 #import "TTTAttributedLabel.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+Addition.h"
+#import "HSUTableCellData.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define ambient_H 21
@@ -179,19 +180,19 @@
 }
 
 
-- (void)setupWithData:(NSMutableDictionary *)data
+- (void)setupWithData:(HSUTableCellData *)data
 {
     [super setupWithData:data];
     
-    NSDictionary *cellData = data[@"cell_data"];
+    NSDictionary *rawData = data.rawData;
     
     // ambient
     ambientI.hidden = NO;
-    NSDictionary *retweetedStatus = cellData[@"retweeted_status"];
+    NSDictionary *retweetedStatus = rawData[@"retweeted_status"];
     if (retweetedStatus) {
         ambientI.imageName = retweeted_R;
         [ambientI sizeToFit];
-        NSString *ambientText = [NSString stringWithFormat:@"%@ retweeted", cellData[@"user"][@"name"]];
+        NSString *ambientText = [NSString stringWithFormat:@"%@ retweeted", rawData[@"user"][@"name"]];
         ambientL.text = ambientText;
         [ambientL sizeToFit];
         ambientArea.hidden = NO;
@@ -205,18 +206,18 @@
     }
     
     // avatar
-    NSString *avatarUrl = cellData[@"user"][@"profile_image_url_https"];
+    NSString *avatarUrl = rawData[@"user"][@"profile_image_url_https"];
     avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
     [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
     
     // info
-    nameL.text = cellData[@"user"][@"name"];
+    nameL.text = rawData[@"user"][@"name"];
     [nameL sizeToFit];
-    screenNameL.text = [NSString stringWithFormat:@"@%@", cellData[@"user"][@"screen_name"]];
+    screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
     [screenNameL sizeToFit];
     attrI.imageName = nil;
     [attrI sizeToFit];
-    NSArray *medias = cellData[@"entities"][@"media"];
+    NSArray *medias = rawData[@"entities"][@"media"];
     if (medias && medias.count) {
         NSDictionary *media = medias[0];
         NSString *type = media[@"type"];
@@ -224,7 +225,7 @@
             attrI.imageName = attr_photo_R;
         }
     }
-    NSDate *createdDate = [NSDate dateFromTwitterCreatedAt:cellData[@"created_at"]];
+    NSDate *createdDate = [NSDate dateFromTwitterCreatedAt:rawData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
     [timeL sizeToFit];
     
@@ -237,9 +238,9 @@
     [infoArea addConstraints:infoAreaConstraints];
     
     // text
-    NSString *text = cellData[@"text"];
+    NSString *text = rawData[@"text"];
     textAL.text = text;
-    NSDictionary *entities = cellData[@"entities"];
+    NSDictionary *entities = rawData[@"entities"];
     if (entities) {
         NSArray *urls = entities[@"urls"];
         if (urls && urls.count) {
@@ -262,13 +263,13 @@
             }
         }
     }
-    textAL.delegate = data[@"render_data"][@"attributed_label_delegate"];
+    textAL.delegate = data.renderData[@"attributed_label_delegate"];
 }
 
-+ (CGFloat)heightForData:(NSMutableDictionary *)data
++ (CGFloat)heightForData:(HSUTableCellData *)data
 {
-    NSDictionary *cellData = data[@"cell_data"];
-    NSMutableDictionary *renderData = data[@"render_data"];
+    NSDictionary *rawData = data.rawData;
+    NSMutableDictionary *renderData = data.renderData;
     if (renderData) {
         if (renderData[@"height"]) {
             return [renderData[@"height"] floatValue];
@@ -281,14 +282,14 @@
     height += padding_S; // add padding top
     leftHeight += padding_S;
     
-    if (cellData[@"retweeted_status"]) {
+    if (rawData[@"retweeted_status"]) {
         height += ambient_H; // add ambient
         leftHeight += ambient_H;
     }
     height += info_H; // add info
     
-    NSString *text = cellData[@"text"];
-    NSDictionary *entities = cellData[@"entities"];
+    NSString *text = rawData[@"text"];
+    NSDictionary *entities = rawData[@"entities"];
     if (entities) {
         NSArray *urls = entities[@"urls"];
         if (urls && urls.count) {

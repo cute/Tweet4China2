@@ -13,6 +13,7 @@
 #import "TTTAttributedLabel.h"
 #import "UIActionSheet+Blocks.h"
 #import "HSURefreshControl.h"
+#import "HSUTableCellData.h"
 
 @interface HSUHomeViewController () <TTTAttributedLabelDelegate, MFMailComposeViewControllerDelegate>
 
@@ -33,8 +34,8 @@
 {
     [super viewDidLoad];
     
-    for (NSDictionary *rowData in self.dataSource.allData) {
-        rowData[@"render_data"][@"attributed_label_delegate"] = self;
+    for (HSUTableCellData *cellData in self.dataSource.allData) {
+        cellData.renderData[@"attributed_label_delegate"] = self;
     }
 }
 
@@ -53,6 +54,10 @@
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error
 {
     [super dataSource:dataSource didFinishUpdateWithError:error];
+    
+    for (HSUTableCellData *cellData in self.dataSource.allData) {
+        cellData.renderData[@"attributed_label_delegate"] = self;
+    }
 }
 
 - (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
