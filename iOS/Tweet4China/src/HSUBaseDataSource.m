@@ -9,8 +9,6 @@
 #import "HSUBaseDataSource.h"
 #import "HSUBaseTableCell.h"
 #import "UIAlertView+Blocks.h"
-#import "HSUTableCellData.h"
-#import "HSUUIEvent.h"
 
 @implementation HSUBaseDataSource
 

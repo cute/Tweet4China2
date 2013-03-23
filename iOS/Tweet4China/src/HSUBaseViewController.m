@@ -9,11 +9,8 @@
 #import "HSUBaseViewController.h"
 #import "HSUTexturedView.h"
 #import "HSUStatusCell.h"
-#import "HSUBaseDataSource.h"
 #import "HSUStatusViewController.h"
 #import "HSURefreshControl.h"
-#import "HSUBaseDataSource.h"
-#import "HSUTableCellData.h"
 #import <QuartzCore/QuartzCore.h>
 
 @interface HSUBaseViewController ()
@@ -86,7 +83,6 @@
     if ([data.dataType isEqualToString:@"LoadMore"]) {
         [self.dataSource loadMore];
     }
-    
 }
 
 - (Class)cellClassForDataType:(NSString *)dataType

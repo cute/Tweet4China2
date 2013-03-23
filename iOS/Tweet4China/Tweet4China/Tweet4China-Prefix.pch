@@ -12,7 +12,6 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "HSUDefinitions.h"
-    #import "HSUCommonTools.h"
     #import "UIImageView+Addition.h"
     #import "HSUNetworkActivityIndicatorManager.h"
 #endif

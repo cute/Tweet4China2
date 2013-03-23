@@ -10,7 +10,6 @@
 #import "TTTAttributedLabel.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+Addition.h"
-#import "HSUTableCellData.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define ambient_H 21

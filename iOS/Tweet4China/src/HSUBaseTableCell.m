@@ -7,9 +7,6 @@
 //
 
 #import "HSUBaseTableCell.h"
-#import "HSUTableCellActionHander.h"
-#import "HSUTableCellData.h"
-#import "HSUUIEvent.h"
 
 @implementation HSUBaseTableCell
 {

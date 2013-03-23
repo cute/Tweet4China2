@@ -103,7 +103,6 @@
 		967A55EA16FCD3DA00581274 /* HSUUIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 967A55E916FCD3D900581274 /* HSUUIEvent.m */; };
 		968EC06116ECB0830068A6A0 /* HSUPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06016ECB0830068A6A0 /* HSUPersonCell.m */; };
 		968EC06516ECB62A0068A6A0 /* HSUStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06416ECB62A0068A6A0 /* HSUStatusViewController.m */; };
-		968EC06816ECD2150068A6A0 /* HSUTableCellActionHander.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06716ECD2150068A6A0 /* HSUTableCellActionHander.m */; };
 		9696D7F016F0A4EB005D7AAB /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9696D7EA16F0A4EB005D7AAB /* RIButtonItem.m */; };
 		9696D7F116F0A4EB005D7AAB /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9696D7EC16F0A4EB005D7AAB /* UIActionSheet+Blocks.m */; };
 		9696D7F216F0A4EB005D7AAB /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9696D7EE16F0A4EB005D7AAB /* UIAlertView+Blocks.m */; };
@@ -262,8 +261,6 @@
 		968EC06016ECB0830068A6A0 /* HSUPersonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUPersonCell.m; sourceTree = "<group>"; };
 		968EC06316ECB62A0068A6A0 /* HSUStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUStatusViewController.h; sourceTree = "<group>"; };
 		968EC06416ECB62A0068A6A0 /* HSUStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUStatusViewController.m; sourceTree = "<group>"; };
-		968EC06616ECD2150068A6A0 /* HSUTableCellActionHander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUTableCellActionHander.h; sourceTree = "<group>"; };
-		968EC06716ECD2150068A6A0 /* HSUTableCellActionHander.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUTableCellActionHander.m; sourceTree = "<group>"; };
 		9696D7E816F0A4EB005D7AAB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		9696D7E916F0A4EB005D7AAB /* RIButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RIButtonItem.h; sourceTree = "<group>"; };
 		9696D7EA16F0A4EB005D7AAB /* RIButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RIButtonItem.m; sourceTree = "<group>"; };
@@ -632,8 +629,6 @@
 				96BE217316EC8FDA00226799 /* HSUBaseTableCell.m */,
 				968EC05F16ECB0830068A6A0 /* HSUPersonCell.h */,
 				968EC06016ECB0830068A6A0 /* HSUPersonCell.m */,
-				968EC06616ECD2150068A6A0 /* HSUTableCellActionHander.h */,
-				968EC06716ECD2150068A6A0 /* HSUTableCellActionHander.m */,
 			);
 			name = TableCell_Level1;
 			sourceTree = "<group>";
@@ -773,7 +768,6 @@
 				96BE217416EC8FDA00226799 /* HSUBaseTableCell.m in Sources */,
 				968EC06116ECB0830068A6A0 /* HSUPersonCell.m in Sources */,
 				968EC06516ECB62A0068A6A0 /* HSUStatusViewController.m in Sources */,
-				968EC06816ECD2150068A6A0 /* HSUTableCellActionHander.m in Sources */,
 				9696D7F016F0A4EB005D7AAB /* RIButtonItem.m in Sources */,
 				9696D7F116F0A4EB005D7AAB /* UIActionSheet+Blocks.m in Sources */,
 				9696D7F216F0A4EB005D7AAB /* UIAlertView+Blocks.m in Sources */,

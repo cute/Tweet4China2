@@ -10,7 +10,6 @@
 #import "FHSTwitterEngine.h"
 #import "HSUStatusCell.h"
 #import "TTTAttributedLabel.h"
-#import "HSUTableCellData.h"
 
 @implementation HSUHomeDataSource
 {
@@ -49,8 +48,9 @@
             id result = [twEngine getHomeTimelineSinceID:latestIdStr count:200];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
+                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
-                        [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:result];
+                        [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:result];
                     } else {
 //                        L(result);
                         NSArray *tweets = result;
@@ -66,10 +66,10 @@
                             HSUTableCellData *cellData = [[HSUTableCellData alloc] init];
                             cellData.rawData = tweet;
                             cellData.renderData = [@{@"data_type": @"Status"} mutableCopy];
-                            [self.data insertObject:cellData atIndex:0];
+                            [strongSelf.data insertObject:cellData atIndex:0];
                         }
-                        [weakSelf saveCache];
-                        [weakSelf.delegate dataSource:weakSelf didFinishUpdateWithError:nil];
+                        [strongSelf saveCache];
+                        [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:nil];
                     }
                 }
             });
