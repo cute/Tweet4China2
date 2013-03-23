@@ -42,8 +42,9 @@
     
     __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
+        __strong __typeof(&*weakSelf)strongSelf = weakSelf;
         @autoreleasepool {
-            NSString *latestIdStr = [self rawDataAtIndex:0][@"id_str"];
+            NSString *latestIdStr = [strongSelf rawDataAtIndex:0][@"id_str"];
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
@@ -69,7 +70,7 @@
                             [strongSelf.data insertObject:cellData atIndex:0];
                         }
                         
-                        HSUTableCellData *lastCellData = self.data.lastObject;
+                        HSUTableCellData *lastCellData = strongSelf.data.lastObject;
                         if (![lastCellData.dataType isEqualToString:kDataType_LoadMore]) {
                             HSUTableCellData *loadMoreCellData = [[HSUTableCellData alloc] init];
                             loadMoreCellData.rawData = @{@"status": @(kLoadMoreCellStatus_Done)};
@@ -93,24 +94,25 @@
     __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
         @autoreleasepool {
-            HSUTableCellData *lastStatusData = [self dataAtIndex:self.count-2];
+            __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+            HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
             NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
             id result =  [twEngine getHomeTimelineMaxId:lastStatusId count:20];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
-                        [self.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Error;
+                        [strongSelf.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Error;
                         [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:result];
                     } else {
                         for (NSDictionary *tweet in result) {
                             HSUTableCellData *cellData =
                                 [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
-                            [strongSelf.data insertObject:cellData atIndex:(self.count-2)];
+                            [strongSelf.data insertObject:cellData atIndex:(strongSelf.count-2)];
                         }
                         
                         [strongSelf saveCache];
-                        [self.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Done;
+                        [strongSelf.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Done;
                         [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:nil];
                     }
                 }
