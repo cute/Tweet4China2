@@ -34,6 +34,7 @@
 		962AB00D16FB345B00D44566 /* psst1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 962AB00B16FB345B00D44566 /* psst1.wav */; };
 		9639B91B16FDF0B10032177F /* ic_inset_larry@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9639B91A16FDF0B10032177F /* ic_inset_larry@2x.png */; };
 		9639B91F16FDF5DE0032177F /* FHSTwitterEngine+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Addition.m */; };
+		9639B92216FE1AD20032177F /* UIView+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B92116FE1AD20032177F /* UIView+Addition.m */; };
 		9648276116E230910002345B /* bg_tab_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9648275F16E230910002345B /* bg_tab_bar@2x.png */; };
 		9648276816E23A0D0002345B /* ic_tab_home_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9648276416E23A0D0002345B /* ic_tab_home_default@2x.png */; };
 		9648276A16E23A0D0002345B /* ic_tab_home_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9648276616E23A0D0002345B /* ic_tab_home_selected@2x.png */; };
@@ -165,6 +166,8 @@
 		9639B91A16FDF0B10032177F /* ic_inset_larry@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_inset_larry@2x.png"; sourceTree = "<group>"; };
 		9639B91D16FDF5DE0032177F /* FHSTwitterEngine+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FHSTwitterEngine+Addition.h"; sourceTree = "<group>"; };
 		9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FHSTwitterEngine+Addition.m"; sourceTree = "<group>"; };
+		9639B92016FE1AD20032177F /* UIView+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Addition.h"; sourceTree = "<group>"; };
+		9639B92116FE1AD20032177F /* UIView+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Addition.m"; sourceTree = "<group>"; };
 		9648275F16E230910002345B /* bg_tab_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_tab_bar@2x.png"; sourceTree = "<group>"; };
 		9648276416E23A0D0002345B /* ic_tab_home_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_tab_home_default@2x.png"; sourceTree = "<group>"; };
 		9648276616E23A0D0002345B /* ic_tab_home_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_tab_home_selected@2x.png"; sourceTree = "<group>"; };
@@ -635,6 +638,8 @@
 				96F92D8316FB02070026284D /* TTTAttributedLabel.m */,
 				962AB00416FB324D00D44566 /* HSURefreshControl.h */,
 				962AB00516FB324D00D44566 /* HSURefreshControl.m */,
+				9639B92016FE1AD20032177F /* UIView+Addition.h */,
+				9639B92116FE1AD20032177F /* UIView+Addition.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -822,6 +827,7 @@
 				967A55EA16FCD3DA00581274 /* HSUUIEvent.m in Sources */,
 				967A55FB16FDB2AD00581274 /* HSULoadMoreCell.m in Sources */,
 				9639B91F16FDF5DE0032177F /* FHSTwitterEngine+Addition.m in Sources */,
+				9639B92216FE1AD20032177F /* UIView+Addition.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -907,7 +913,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tweet4China/Tweet4China-Prefix.pch";
 				INFOPLIST_FILE = "Tweet4China/Tweet4China-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -919,7 +925,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tweet4China/Tweet4China-Prefix.pch";
 				INFOPLIST_FILE = "Tweet4China/Tweet4China-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

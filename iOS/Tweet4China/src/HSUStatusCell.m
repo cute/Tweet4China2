@@ -6,13 +6,15 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "HSUStatusCell.h"
 #import "TTTAttributedLabel.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+Addition.h"
-#import <QuartzCore/QuartzCore.h>
+#import "UIView+Addition.h"
 
-#define ambient_H 21
+#define ambient_H 14
 #define info_H 16
 #define font_S 13
 #define margin_W 10
@@ -49,23 +51,18 @@
         self.backgroundColor = kWhiteColor;
         
         contentArea = [[UIView alloc] init];
-        contentArea.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:contentArea];
         
         ambientArea = [[UIView alloc] init];
-        ambientArea.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:ambientArea];
         
         infoArea = [[UIView alloc] init];
-        infoArea.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:infoArea];
         
         ambientI = [[UIImageView alloc] init];
-        ambientI.translatesAutoresizingMaskIntoConstraints = NO;
         [ambientArea addSubview:ambientI];
         
         ambientL = [[UILabel alloc] init];
-        ambientL.translatesAutoresizingMaskIntoConstraints = NO;
         [ambientArea addSubview:ambientL];
         ambientL.font = [UIFont systemFontOfSize:font_S];
         ambientL.textColor = [UIColor grayColor];
@@ -73,13 +70,11 @@
         ambientL.backgroundColor = kClearColor;
         
         avatarI = [[UIImageView alloc] init];
-        avatarI.translatesAutoresizingMaskIntoConstraints = NO;
         [contentArea addSubview:avatarI];
         avatarI.layer.cornerRadius = 5;
         avatarI.layer.masksToBounds = YES;
         
         nameL = [[UILabel alloc] init];
-        nameL.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:nameL];
         nameL.font = [UIFont boldSystemFontOfSize:14];
         nameL.textColor = [UIColor blackColor];
@@ -87,7 +82,6 @@
         nameL.backgroundColor = kClearColor;
         
         screenNameL = [[UILabel alloc] init];
-        screenNameL.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:screenNameL];
         screenNameL.font = [UIFont systemFontOfSize:12];
         screenNameL.textColor = [UIColor grayColor];
@@ -95,11 +89,9 @@
         screenNameL.backgroundColor = kClearColor;
         
         attrI = [[UIImageView alloc] init];
-        attrI.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:attrI];
         
         timeL = [[UILabel alloc] init];
-        timeL.translatesAutoresizingMaskIntoConstraints = NO;
         [infoArea addSubview:timeL];
         timeL.font = [UIFont systemFontOfSize:11];
         timeL.textColor = [UIColor grayColor];
@@ -121,63 +113,49 @@
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
         textAL.lineHeightMultiple = 1.2;
         
-        NSDictionary *vs;
-        NSString *vf;
-        NSArray *cs;
         
-        vs = NSDictionaryOfVariableBindings(contentArea);
-        vf = [NSString stringWithFormat:@"|-%d-[contentArea]-%d-|", padding_S, padding_S];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [self.contentView addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(contentArea);
-        vf = [NSString stringWithFormat:@"V:|-%d-[contentArea]-%d-|", padding_S, padding_S];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [self.contentView addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(ambientArea);
-        vf = [NSString stringWithFormat:@"|-0-[ambientArea]-0-|"];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [contentArea addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(ambientI, ambientL);
-        vf = [NSString stringWithFormat:@"|-%d-[ambientI]-%d-[ambientL]-(>=0)-|", (avatar_S - ambient_S), padding_S];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:NSLayoutFormatAlignAllCenterY metrics:nil views:vs];
-        [ambientArea addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(infoArea);
-        vf = [NSString stringWithFormat:@"|-%d-[infoArea]-0-|", (avatar_S + padding_S)];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [contentArea addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(avatarI);
-        vf = [NSString stringWithFormat:@"V:[avatarI(%d)]", avatar_S];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [contentArea addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(avatarI);
-        vf = [NSString stringWithFormat:@"|-0-[avatarI(%d)]", avatar_S];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [contentArea addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(ambientArea);
-        vf = [NSString stringWithFormat:@"V:|-0-[ambientArea(%d)]", ambient_H];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        ambientAreaConstraints = cs;
-        
-        vs = NSDictionaryOfVariableBindings(ambientArea, avatarI);
-        vf = [NSString stringWithFormat:@"V:[ambientArea]-2-[avatarI(%d)]", avatar_S];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [contentArea addConstraints:cs];
-        
-        vs = NSDictionaryOfVariableBindings(ambientArea, infoArea);
-        vf = [NSString stringWithFormat:@"V:[ambientArea]-0-[infoArea]"];
-        cs = [NSLayoutConstraint constraintsWithVisualFormat:vf options:0 metrics:nil views:vs];
-        [contentArea addConstraints:cs];
+        contentArea.frame = ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0);
+        CGFloat cw = contentArea.width;
+        ambientArea.frame = ccr(0, 0, cw, ambient_H);
+        ambientI.frame = ccr(avatar_S-ambient_S, (ambient_H-ambient_S)/2, ambient_S, ambient_S);
+        ambientL.frame = ccr(avatar_S+padding_S, 0, cw-ambientI.right-padding_S, ambient_H);
+        avatarI.frame = ccr(0, 0, avatar_S, avatar_S);
+        infoArea.frame = ccr(ambientL.left, 0, cw-ambientL.left, info_H);
+        attrI.frame = ccr(0, 0, 0, 16);
+        textAL.frame = ccr(ambientL.left, 0, infoArea.width, 0);
     }
     return self;
 }
 
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    contentArea.frame = ccr(contentArea.left, contentArea.top, contentArea.width, self.contentView.height-padding_S*2);
+    ambientArea.frame = ccr(0, 0, contentArea.width, ambient_S);
+    
+    if (ambientArea.hidden) {
+        avatarI.frame = ccr(avatarI.left, 0, avatarI.width, avatarI.height);
+    } else {
+        avatarI.frame = ccr(avatarI.left, ambientArea.bottom, avatarI.width, avatarI.height);
+    }
+    
+    infoArea.frame = ccr(infoArea.left, avatarI.top, infoArea.width, infoArea.height);
+    textAL.frame = ccr(textAL.left, infoArea.bottom, textAL.width, contentArea.height-infoArea.bottom);
+    
+    [timeL sizeToFit];
+    timeL.frame = ccr(infoArea.width-timeL.width, 0, timeL.width, timeL.height);
+    
+    [attrI sizeToFit];
+    attrI.frame = ccr(timeL.left-attrI.width-3, -1, attrI.width, attrI.height);
+    
+    [nameL sizeToFit];
+    nameL.frame = ccr(0, -3, MIN(attrI.left-3, nameL.width), nameL.height);
+    
+    [screenNameL sizeToFit];
+    screenNameL.frame = ccr(nameL.right+3, 0, attrI.left-nameL.right, screenNameL.height);
+}
 
 - (void)setupWithData:(HSUTableCellData *)data
 {
@@ -190,18 +168,14 @@
     NSDictionary *retweetedStatus = rawData[@"retweeted_status"];
     if (retweetedStatus) {
         ambientI.imageName = retweeted_R;
-        [ambientI sizeToFit];
         NSString *ambientText = [NSString stringWithFormat:@"%@ retweeted", rawData[@"user"][@"name"]];
         ambientL.text = ambientText;
-        [ambientL sizeToFit];
         ambientArea.hidden = NO;
-        [contentArea addConstraints:ambientAreaConstraints];
     } else {
         ambientI.imageName = nil;
         ambientL.text = nil;
         ambientArea.hidden = YES;
         ambientArea.bounds = CGRectZero;
-        [contentArea removeConstraints:ambientAreaConstraints];
     }
     
     // avatar
@@ -211,11 +185,8 @@
     
     // info
     nameL.text = rawData[@"user"][@"name"];
-    [nameL sizeToFit];
     screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
-    [screenNameL sizeToFit];
     attrI.imageName = nil;
-    [attrI sizeToFit];
     NSArray *medias = rawData[@"entities"][@"media"];
     if (medias && medias.count) {
         NSDictionary *media = medias[0];
@@ -226,15 +197,6 @@
     }
     NSDate *createdDate = [NSDate dateFromTwitterCreatedAt:rawData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
-    [timeL sizeToFit];
-    
-    if (infoAreaConstraints) {
-        [infoArea removeConstraints:infoAreaConstraints];
-    }
-    NSDictionary *vs = NSDictionaryOfVariableBindings(nameL, screenNameL, attrI, timeL);
-    NSString *vf = [NSString stringWithFormat:@"|-0-[nameL]-3-[screenNameL]-(>=3)-[attrI]-3-[timeL(%g)]-0-|", timeL.bounds.size.width];
-    infoAreaConstraints = [NSLayoutConstraint constraintsWithVisualFormat:vf options:NSLayoutFormatAlignAllCenterY metrics:nil views:vs];
-    [infoArea addConstraints:infoAreaConstraints];
     
     // text
     NSString *text = rawData[@"text"];
@@ -303,7 +265,7 @@
     height += ceilf([text sizeWithFont:[UIFont systemFontOfSize:font_S] constrainedToSize:CGSizeMake(cellWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping].height); // add text
     
     height += padding_S; // add padding-bottom
-    height *= 1.3;
+    height *= 1.2;
     leftHeight += padding_S;
     
     leftHeight += avatar_S;
@@ -312,13 +274,6 @@
     renderData[@"height"] = @(cellHeight);
     
     return cellHeight;
-}
-
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    textAL.frame = ccr((padding_S+avatar_S), info_H+(ambientArea.hidden ? 0 : ambient_H), self.bounds.size.width-(margin_W*2+padding_S*3+avatar_S), self.bounds.size.height-(padding_S+info_H+(ambientArea.hidden ? 0 : ambient_H)));
 }
 
 - (TTTAttributedLabel *)contentLabel

@@ -10,4 +10,8 @@
 
 @interface UIView (Addition)
 
+@property (nonatomic, readonly) CGFloat left, right, top, bottom, width, height;
+
+- (NSString *)frameStr;
+
 @end
