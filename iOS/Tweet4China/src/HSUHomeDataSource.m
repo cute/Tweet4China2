@@ -48,7 +48,7 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [twEngine getHomeTimelineSinceID:latestIdStr count:20];
+            id result = [twEngine getHomeTimelineSinceID:latestIdStr count:kRequestDataCount];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -80,6 +80,7 @@
                         
                         [strongSelf saveCache];
                         [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:nil];
+                        strongSelf.loading = NO;
                     }
                 }
             });
@@ -97,23 +98,28 @@
             __strong __typeof(&*weakSelf)strongSelf = weakSelf;
             HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
             NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
-            id result =  [twEngine getHomeTimelineMaxId:lastStatusId count:20];
+            id result =  [twEngine getHomeTimelineMaxId:lastStatusId count:kRequestDataCount];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
-                        [strongSelf.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Error;
+                        [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
                         [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:result];
                     } else {
+                        [result removeObjectAtIndex:0];
+                        id loadMoreCellData = strongSelf.data.lastObject;
+                        [strongSelf.data removeLastObject];
                         for (NSDictionary *tweet in result) {
                             HSUTableCellData *cellData =
                                 [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
-                            [strongSelf.data insertObject:cellData atIndex:(strongSelf.count-2)];
+                            [strongSelf.data addObject:cellData];
                         }
+                        [strongSelf.data addObject:loadMoreCellData];
                         
                         [strongSelf saveCache];
-                        [strongSelf.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Done;
+                        [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Done);
                         [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:nil];
+                        strongSelf.loading = NO;
                     }
                 }
             });
@@ -123,6 +129,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!self.isLoading) {
+        HSUTableCellData *cellData = [self dataAtIndex:indexPath.row];
+        if ([cellData.dataType isEqualToString:kDataType_LoadMore]) {
+            cellData.renderData[@"status"] = @(kLoadMoreCellStatus_Loading);
+            [self loadMore];
+        }
+    }
+    
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 }
 

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define kRequestDataCount 20
+
 @protocol HSUBaseDataSourceDelegate;
 @class HSUEnumerationItem;
 @class HSUTableCellData;
@@ -19,6 +21,7 @@
 @property (nonatomic, readonly) NSArray *allData;
 @property (atomic, strong) NSMutableArray *data;
 @property (atomic, readonly) NSArray *cacheData;
+@property (nonatomic, assign, getter = isLoading) BOOL loading;
 
 - (NSDictionary *)rawDataAtIndex:(NSInteger)index;
 - (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;

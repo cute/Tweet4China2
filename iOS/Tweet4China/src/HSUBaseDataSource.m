@@ -27,6 +27,7 @@
     HSUTableCellData *cellData = [self dataAtIndex:indexPath.row];
     HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:cellData.dataType];
     [cell setupWithData:cellData];
+    
     return cell;
 }
 
@@ -83,12 +84,14 @@
 
 - (void)refresh
 {
+    self.loading = YES;
 	[HSUNetworkActivityIndicatorManager oneMore];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNNStartRefreshing object:nil];
 }
 
 - (void)loadMore
 {
+    self.loading = YES;
     [HSUNetworkActivityIndicatorManager oneMore];
 }
 
@@ -123,7 +126,7 @@
 + (id)dataSource
 {
     HSUBaseDataSource *dataSource = [[self alloc] init];
-    return dataSource;
+//    return dataSource;
     NSArray *data = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
     if (data) {
         NSMutableArray *mData = [@[] mutableCopy];

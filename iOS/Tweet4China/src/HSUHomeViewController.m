@@ -107,14 +107,4 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    HSUTableCellData *cellData = [self.dataSource dataAtIndex:indexPath.row];
-    if ([cellData.dataType isEqualToString:kDataType_LoadMore]) {
-        cellData.renderData[@"status"] = @(kLoadMoreCellStatus_Loading);
-        
-        [self.dataSource loadMore];
-    }
-}
-
 @end
