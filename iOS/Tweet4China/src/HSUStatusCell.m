@@ -93,7 +93,7 @@
         
         timeL = [[UILabel alloc] init];
         [infoArea addSubview:timeL];
-        timeL.font = [UIFont systemFontOfSize:11];
+        timeL.font = [UIFont systemFontOfSize:12];
         timeL.textColor = [UIColor grayColor];
         timeL.highlightedTextColor = kWhiteColor;
         timeL.backgroundColor = kClearColor;
@@ -145,7 +145,7 @@
     textAL.frame = ccr(textAL.left, infoArea.bottom, textAL.width, contentArea.height-infoArea.bottom);
     
     [timeL sizeToFit];
-    timeL.frame = ccr(infoArea.width-timeL.width, 0, timeL.width, timeL.height);
+    timeL.frame = ccr(infoArea.width-timeL.width, -1, timeL.width, timeL.height);
     
     [attrI sizeToFit];
     attrI.frame = ccr(timeL.left-attrI.width-3, -1, attrI.width, attrI.height);
@@ -154,7 +154,7 @@
     nameL.frame = ccr(0, -3, MIN(attrI.left-3, nameL.width), nameL.height);
     
     [screenNameL sizeToFit];
-    screenNameL.frame = ccr(nameL.right+3, 0, attrI.left-nameL.right, screenNameL.height);
+    screenNameL.frame = ccr(nameL.right+3, -1, attrI.left-nameL.right, screenNameL.height);
 }
 
 - (void)setupWithData:(HSUTableCellData *)data
