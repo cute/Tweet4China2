@@ -100,6 +100,7 @@
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
+                        [self.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Error;
                         [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:result];
                     } else {
                         for (NSDictionary *tweet in result) {
@@ -109,6 +110,7 @@
                         }
                         
                         [strongSelf saveCache];
+                        [self.data.lastObject renderData][@"status"] = kLoadMoreCellStatus_Done;
                         [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:nil];
                     }
                 }
