@@ -94,7 +94,7 @@
             titleLabel.textColor = kWhiteColor;
             [titleLabel sizeToFit];
             titleLabel.center = tabBarItem.center;
-            titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, buttonItemHeight-titleLabel.bounds.size.height+5, titleLabel.bounds.size.width, titleLabel.bounds.size.height);
+            titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, buttonItemHeight-titleLabel.bounds.size.height+4, titleLabel.bounds.size.width, titleLabel.bounds.size.height);
             [tabBarItem addSubview:titleLabel];
             
             [tabBar addSubview:tabBarItem];

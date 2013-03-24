@@ -16,11 +16,12 @@
 
 #define ambient_H 14
 #define info_H 16
-#define font_S 13
+#define textAL_font_S 14
 #define margin_W 10
 #define padding_S 10
 #define avatar_S 48
 #define ambient_S 20
+#define textAL_LHM 1.3
 
 #define retweeted_R @"ic_ambient_retweet"
 #define avatarPlaceholder_R @"avatar_pressed"
@@ -64,7 +65,7 @@
         
         ambientL = [[UILabel alloc] init];
         [ambientArea addSubview:ambientL];
-        ambientL.font = [UIFont systemFontOfSize:font_S];
+        ambientL.font = [UIFont systemFontOfSize:13];
         ambientL.textColor = [UIColor grayColor];
         ambientL.highlightedTextColor = kWhiteColor;
         ambientL.backgroundColor = kClearColor;
@@ -100,7 +101,7 @@
         
         textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
         [contentArea addSubview:textAL];
-        textAL.font = [UIFont systemFontOfSize:14];
+        textAL.font = [UIFont systemFontOfSize:textAL_font_S];
         textAL.backgroundColor = kClearColor;
         textAL.textColor = uic(38, 38, 38, 1);
         textAL.highlightedTextColor = kWhiteColor;
@@ -111,7 +112,7 @@
         textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgc(215, 230, 242, 1),
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
-        textAL.lineHeightMultiple = 1.2;
+        textAL.lineHeightMultiple = textAL_LHM;
         
         
         contentArea.frame = ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0);
@@ -184,8 +185,13 @@
     [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
     
     // info
-    nameL.text = rawData[@"user"][@"name"];
-    screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
+    if (retweetedStatus) {
+        nameL.text = rawData[@"retweeted_status"][@"user"][@"name"];
+        screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"retweeted_status"][@"user"][@"screen_name"]];
+    } else {
+        nameL.text = rawData[@"user"][@"name"];
+        screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
+    }
     attrI.imageName = nil;
     NSArray *medias = rawData[@"entities"][@"media"];
     if (medias && medias.count) {
@@ -257,18 +263,22 @@
             for (NSDictionary *urlDict in urls) {
                 NSString *url = urlDict[@"url"];
                 NSString *displayUrl = urlDict[@"display_url"];
-                text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
+                if (url && url.length && displayUrl && displayUrl.length) {
+                    text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
+                }
             }
         }
     }
-    CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S - avatar_S;
-    height += ceilf([text sizeWithFont:[UIFont systemFontOfSize:font_S] constrainedToSize:CGSizeMake(cellWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping].height); // add text
+    CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S * 3 - avatar_S;
+    height += ceilf([text sizeWithFont:[UIFont systemFontOfSize:textAL_font_S] constrainedToSize:CGSizeMake(cellWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping].height); // add text
+    
+    leftHeight += avatar_S; // add avatar
     
     height += padding_S; // add padding-bottom
-    height *= 1.2;
     leftHeight += padding_S;
     
-    leftHeight += avatar_S;
+    height *= textAL_LHM;
+    height -= (textAL_LHM - 1) * textAL_font_S;
     
     CGFloat cellHeight = MAX(height, leftHeight);
     renderData[@"height"] = @(cellHeight);

@@ -23,14 +23,6 @@
     return self;
 }
 
-- (void)startRefreshing
-{
-    if (beginRefreshingPlayer == nil) {
-        beginRefreshingPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"psst1" withExtension:@"wav"] error:nil];
-    }
-    [beginRefreshingPlayer play];
-}
-
 - (void)beginRefreshing
 {
     [super beginRefreshing];
