@@ -14,6 +14,7 @@
 #import "UIActionSheet+Blocks.h"
 #import "HSURefreshControl.h"
 #import "HSULoadMoreCell.h"
+#import "HSUTabController.h"
 
 @interface HSUHomeViewController () <TTTAttributedLabelDelegate, MFMailComposeViewControllerDelegate>
 
@@ -49,7 +50,9 @@
         [self.refreshControl beginRefreshing];
         [self.dataSource refresh];
     } else {
-        [self.dataSource checkUnread];
+        if (![((HSUTabController *)self.navigationController.tabBarController) hasUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem]) {
+            [self.dataSource checkUnread];
+        }
     }
 }
 

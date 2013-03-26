@@ -12,5 +12,6 @@
 
 - (void)showUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem;
 - (void)hideUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem;
+- (BOOL)hasUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem;
 
 @end

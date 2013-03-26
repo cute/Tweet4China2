@@ -185,13 +185,39 @@
     for (UIView *subView in self.tabBar.subviews) {
         if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
             if (idx == curIdx) {
-                [subView.subviews.lastObject removeFromSuperview];
+                if ([subView.subviews.lastObject isKindOfClass:[UIImageView class]]) {
+                    [subView.subviews.lastObject removeFromSuperview];
+                }
                 break;
             } else {
                 curIdx ++;
             }
         }
     }
+}
+
+- (BOOL)hasUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem
+{
+    uint idx = [self.tabBar.items indexOfObject:tabBarItem];
+    if (idx == NSNotFound) {
+        return NO;
+    }
+    
+    UIImage *indicatorImage = [UIImage imageNamed:@"bg_dm_count"];
+    indicatorImage = [indicatorImage stretchableImageWithLeftCapWidth:indicatorImage.size.width/2 topCapHeight:indicatorImage.size.height/2];
+    uint curIdx = 0;
+    for (UIView *subView in self.tabBar.subviews) {
+        if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
+            if (idx == curIdx) {
+                if ([subView.subviews.lastObject isKindOfClass:[UIImageView class]]) {
+                    return YES;
+                }
+            } else {
+                curIdx ++;
+            }
+        }
+    }
+    return NO;
 }
 
 @end
