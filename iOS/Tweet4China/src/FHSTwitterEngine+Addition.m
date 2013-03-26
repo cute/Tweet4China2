@@ -17,12 +17,16 @@
     OAConsumer *consumer = [[OAConsumer alloc]initWithKey:kTwitterAppKey secret:kTwitterAppSecret];
     OAMutableURLRequest *request = [[OAMutableURLRequest alloc]initWithURL:baseURL consumer:consumer token:self.accessToken realm:nil signatureProvider:nil];
     
-    OARequestParameter *max_id = [OARequestParameter requestParameterWithName:@"max_id" value:maxId];
     OARequestParameter *countParam = [OARequestParameter requestParameterWithName:@"count" value:[NSString stringWithFormat:@"%d", count]];
     
-    NSArray *params = [NSArray arrayWithObjects:max_id, countParam, nil];
-    
-    return [self sendGETRequest:request withParameters:params];
+    if (!maxId) {
+        NSArray *params = [NSArray arrayWithObjects:countParam, nil];
+        return [self sendGETRequest:request withParameters:params];
+    } else {
+        OARequestParameter *max_id = [OARequestParameter requestParameterWithName:@"max_id" value:maxId];
+        NSArray *params = [NSArray arrayWithObjects:max_id, countParam, nil];
+        return [self sendGETRequest:request withParameters:params];
+    }
 }
 
 @end

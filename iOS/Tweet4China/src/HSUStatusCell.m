@@ -26,6 +26,8 @@
 #define retweeted_R @"ic_ambient_retweet"
 #define avatarPlaceholder_R @"avatar_pressed"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
+#define attr_convo_R @"ic_tweet_attr_convo_default"
+#define attr_summary_R @"ic_tweet_attr_summary_default"
 
 @implementation HSUStatusCell
 {
@@ -179,35 +181,60 @@
         ambientArea.bounds = CGRectZero;
     }
     
-    // avatar
-    NSString *avatarUrl = rawData[@"user"][@"profile_image_url_https"];
-    avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
-    [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
+    NSDictionary *entities = rawData[@"entities"];
     
     // info
     if (retweetedStatus) {
+        NSString *avatarUrl = rawData[@"retweeted_status"][@"user"][@"profile_image_url_https"];
+        avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
+        [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
+        
         nameL.text = rawData[@"retweeted_status"][@"user"][@"name"];
         screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"retweeted_status"][@"user"][@"screen_name"]];
     } else {
+        NSString *avatarUrl = rawData[@"user"][@"profile_image_url_https"];
+        avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
+        [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
+        
         nameL.text = rawData[@"user"][@"name"];
         screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
     }
+    
+    // attr
     attrI.imageName = nil;
-    NSArray *medias = rawData[@"entities"][@"media"];
-    if (medias && medias.count) {
-        NSDictionary *media = medias[0];
-        NSString *type = media[@"type"];
-        if ([type isEqualToString:@"photo"]) {
-            attrI.imageName = attr_photo_R;
+    while (YES) {
+        if ([rawData[@"in_reply_to_status_id_str"] length]) {
+            attrI.imageName = attr_convo_R;
+            break;
         }
+        NSArray *medias = rawData[@"entities"][@"media"];
+        if (medias && medias.count) {
+            NSDictionary *media = medias[0];
+            NSString *type = media[@"type"];
+            if ([type isEqualToString:@"photo"]) {
+                attrI.imageName = attr_photo_R;
+                break;
+            }
+        }
+        if (entities) {
+            NSArray *urls = entities[@"urls"];
+            if (urls && urls.count) {
+                for (NSDictionary *urlDict in urls) {
+                    NSString *expandedUrl = urlDict[@"expanded_url"];
+                    attrI.imageName = S(@"ic_tweet_attr_%@_default", [HSUStatusCell attrForUrl:expandedUrl]);
+                }
+            }
+        }
+        break;
     }
+    
+    // time
     NSDate *createdDate = [NSDate dateFromTwitterCreatedAt:rawData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
     
     // text
     NSString *text = rawData[@"text"];
     textAL.text = text;
-    NSDictionary *entities = rawData[@"entities"];
     if (entities) {
         NSArray *urls = entities[@"urls"];
         if (urls && urls.count) {
@@ -289,6 +316,20 @@
 - (TTTAttributedLabel *)contentLabel
 {
     return textAL;
+}
+
++ (NSString *)attrForUrl:(NSString *)url
+{
+    if ([url hasPrefix:@"http://4sq.com"] ||
+        [url hasPrefix:@"http://youtube.com"]) {
+        return @"summary";
+    } else if ([url hasPrefix:@"http://youtube.com"] ||
+               [url hasPrefix:@"http://snpy.tv"]) {
+        return @"video";
+    } else if ([url hasPrefix:@"http://instagram.com"] || [url hasPrefix:@"http://instagr.am"]) {
+        return @"photo";
+    }
+    return nil;
 }
 
 @end

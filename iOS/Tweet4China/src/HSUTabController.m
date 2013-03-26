@@ -32,21 +32,25 @@
         homeNav.viewControllers = @[[[HSUHomeViewController alloc] init]];
         homeNav.tabBarItem.title = @"Home";
         [homeNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_home_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_home_default"]];
+        [homeNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
         
         UINavigationController *connectNav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavitationBar class] toolbarClass:nil];
         connectNav.viewControllers = @[[[HSUConnectViewController alloc] init]];
         connectNav.tabBarItem.title = @"Connect";
         [connectNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_at_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_at_default"]];
+        [connectNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
         
         UINavigationController *discoverNav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavitationBar class] toolbarClass:nil];
         discoverNav.viewControllers = @[[[HSUDiscoverViewController alloc] init]];
         discoverNav.tabBarItem.title = @"Discover";
         [discoverNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_hash_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_hash_default"]];
+        [discoverNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
         
         UINavigationController *meNav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavitationBar class] toolbarClass:nil];
         meNav.viewControllers = @[[[HSUProfileViewController alloc] init]];
         meNav.tabBarItem.title = @"Me";
         [meNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_profile_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_profile_default"]];
+        [meNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
         
         self.viewControllers = @[homeNav, connectNav, discoverNav, meNav];
     }
@@ -65,10 +69,10 @@
     
     if ([HSUCommonTools isIPad]) {
         [self.tabBar setHidden:YES];
-        ((UIView *)[self.view.subviews objectAtIndex:0]).frame = CGRectMake(kIPadTabBarWidth, 0, [HSUCommonTools winWidth], [HSUCommonTools winHeight]);
+        ((UIView *)[self.view.subviews objectAtIndex:0]).frame = CGRectMake(kIPadTabBarWidth, 0, kWinWidth, kWinHeight);
         
         UIImageView *tabBar = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_tab_bar"]];
-        tabBar.frame = CGRectMake(0, 0, kIPadTabBarWidth, [HSUCommonTools winHeight]);
+        tabBar.frame = CGRectMake(0, 0, kIPadTabBarWidth, kWinHeight);
         tabBar.userInteractionEnabled = YES;
         [self.view addSubview:tabBar];
         
@@ -94,7 +98,7 @@
             titleLabel.textColor = kWhiteColor;
             [titleLabel sizeToFit];
             titleLabel.center = tabBarItem.center;
-            titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, buttonItemHeight-titleLabel.bounds.size.height+4, titleLabel.bounds.size.width, titleLabel.bounds.size.height);
+            titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, buttonItemHeight-titleLabel.bounds.size.height+5, titleLabel.bounds.size.width, titleLabel.bounds.size.height);
             [tabBarItem addSubview:titleLabel];
             
             [tabBar addSubview:tabBarItem];
@@ -109,9 +113,14 @@
     } else {
         [[UITabBar appearance] setBackgroundImage:[UIImage imageNamed:@"bg_tab_bar"]];
         [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"bg_tab_bar_selected"]];
-        self.tabBar.frame = CGRectMake(0, [HSUCommonTools winHeight]-kTabBarHeight, [HSUCommonTools winWidth], kTabBarHeight);
-        ((UIView *)[self.view.subviews objectAtIndex:0]).frame = CGRectMake(0, 0, [HSUCommonTools winWidth], [HSUCommonTools winHeight]-kTabBarHeight);
+        self.tabBar.frame = CGRectMake(0, kWinHeight-kTabBarHeight, kWinWidth, kTabBarHeight);
+        ((UIView *)[self.view.subviews objectAtIndex:0]).frame = CGRectMake(0, 0, kWinWidth, kWinHeight-kTabBarHeight);
     }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)iPadTabBarItemTouched:(id)sender
@@ -137,6 +146,52 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+- (void)showUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem
+{
+    uint idx = [self.tabBar.items indexOfObject:tabBarItem];
+    if (idx == NSNotFound) {
+        return;
+    }
+    
+    UIImage *indicatorImage = [UIImage imageNamed:@"bg_dm_count"];
+    indicatorImage = [indicatorImage stretchableImageWithLeftCapWidth:indicatorImage.size.width/2 topCapHeight:indicatorImage.size.height/2];
+    UIImageView *indicator = [[UIImageView alloc] initWithImage:indicatorImage];
+    uint curIdx = 0;
+    for (UIView *subView in self.tabBar.subviews) {
+        if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
+            if (idx == curIdx) {
+                indicator.center = ccp(subView.center.x, subView.height+7);
+                [subView addSubview:indicator];
+                break;
+            } else {
+                curIdx ++;
+            }
+        }
+    }
+}
+
+- (void)hideUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem
+{
+    uint idx = [self.tabBar.items indexOfObject:tabBarItem];
+    if (idx == NSNotFound) {
+        return;
+    }
+    
+    UIImage *indicatorImage = [UIImage imageNamed:@"bg_dm_count"];
+    indicatorImage = [indicatorImage stretchableImageWithLeftCapWidth:indicatorImage.size.width/2 topCapHeight:indicatorImage.size.height/2];
+    uint curIdx = 0;
+    for (UIView *subView in self.tabBar.subviews) {
+        if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
+            if (idx == curIdx) {
+                [subView.subviews.lastObject removeFromSuperview];
+                break;
+            } else {
+                curIdx ++;
+            }
+        }
+    }
 }
 
 @end

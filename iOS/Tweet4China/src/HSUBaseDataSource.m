@@ -82,6 +82,11 @@
     }
 }
 
+- (void)checkUnread
+{
+    [HSUNetworkActivityIndicatorManager oneMore];
+}
+
 - (void)refresh
 {
     self.loading = YES;
@@ -102,9 +107,9 @@
 
 - (NSArray *)cacheData
 {
-    NSMutableArray *cacheData = [NSMutableArray arrayWithCapacity:200];
+    NSMutableArray *cacheData = [NSMutableArray arrayWithCapacity:kRequestDataCount];
     for (HSUTableCellData *cellData in self.data) {
-        if (cacheData.count > 200) {
+        if (cacheData.count > kRequestDataCount) {
             break;
         }
         [cacheData addObject:cellData.cacheData];

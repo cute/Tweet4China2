@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define kRequestDataCount 20
+#define kRequestDataCount 200
 
 @protocol HSUBaseDataSourceDelegate;
 @class HSUEnumerationItem;
@@ -28,6 +28,7 @@
 - (HSUTableCellData *)dataAtIndex:(NSInteger)index;
 - (void)addEvent:(HSUUIEvent *)event;
 
+- (void)checkUnread;
 - (void)refresh;
 - (void)loadMore;
 - (void)loadFromIndex:(NSInteger)startIndex toIndex:(NSInteger)endIndex;
@@ -40,6 +41,8 @@
 
 @protocol HSUBaseDataSourceDelegate <NSObject>
 
-- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error;
+- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error;
+- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishLoadMoreWithError:(NSError *)error;
+- (void)dataSourceDidFindUnread:(HSUBaseDataSource *)dataSource;
 
 @end

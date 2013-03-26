@@ -48,12 +48,19 @@
     if (self.dataSource.count == 0) {
         [self.refreshControl beginRefreshing];
         [self.dataSource refresh];
+    } else {
+        [self.dataSource checkUnread];
     }
 }
 
-- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error
+- (void)dataSourceDidFindUnread:(HSUBaseDataSource *)dataSource
 {
-    [super dataSource:dataSource didFinishUpdateWithError:error];
+    [super dataSourceDidFindUnread:dataSource];
+}
+
+- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
+{
+    [super dataSource:dataSource didFinishRefreshWithError:error];
     
     for (HSUTableCellData *cellData in self.dataSource.allData) {
         cellData.renderData[@"attributed_label_delegate"] = self;
@@ -81,7 +88,7 @@
             mailCont.mailComposeDelegate = self;
             [mailCont setSubject:subject];
             [mailCont setMessageBody:body isHTML:YES];
-            [self presentModalViewController:mailCont animated:YES];
+            [self presentViewController:mailCont animated:YES completion:^{}];
         } else {
             NSString *url = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@",
                              [subject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
@@ -104,7 +111,7 @@
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 @end

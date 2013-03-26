@@ -36,6 +36,35 @@
     }
 }
 
+- (void)checkUnread
+{
+    [super checkUnread];
+    
+    __weak __typeof(&*self)weakSelf = self;
+    dispatch_async(GCDBackgroundThread, ^{
+        __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+        @autoreleasepool {
+            NSString *latestIdStr = [strongSelf rawDataAtIndex:0][@"id_str"];
+            if (!latestIdStr) {
+                latestIdStr = @"1";
+            }
+            id result = [twEngine getHomeTimelineSinceID:latestIdStr count:1];
+            dispatch_sync(GCDMainThread, ^{
+                @autoreleasepool {
+                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                    if (![result isKindOfClass:[NSError class]]) {
+                        NSArray *tweets = result;
+                        NSString *lastIdStr = tweets.lastObject[@"id_str"];
+                        if (![latestIdStr isEqualToString:lastIdStr]) { // updated
+                            [strongSelf.delegate dataSourceDidFindUnread:strongSelf];
+                        }
+                    }
+                }
+            });
+        }
+    });
+}
+
 - (void)refresh
 {
     [super refresh];
@@ -53,21 +82,25 @@
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
-                        [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:result];
+                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:result];
                     } else {
-//                        L(result);
                         NSArray *tweets = result;
                         NSString *lastIdStr = tweets.lastObject[@"id_str"];
                         uint newTweetCount = tweets.count;
-                        if (![latestIdStr isEqualToString:lastIdStr]) {
-//                            [self.data insertObject:nil atIndex:0];
-                        } else {
+                        if ([latestIdStr isEqualToString:lastIdStr]) { // throw old tweets
                             newTweetCount --;
-                        }
-                        for (int i=newTweetCount-1; i>=0; i--) {
-                            HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
-                            [strongSelf.data insertObject:cellData atIndex:0];
+                            for (int i=newTweetCount-1; i>=0; i--) {
+                                HSUTableCellData *cellData =
+                                    [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
+                                [strongSelf.data insertObject:cellData atIndex:0];
+                            }
+                        } else {
+                            [strongSelf.data removeAllObjects];
+                            for (NSDictionary *tweet in tweets) {
+                                HSUTableCellData *cellData =
+                                    [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
+                                [strongSelf.data addObject:cellData];
+                            }
                         }
                         
                         HSUTableCellData *lastCellData = strongSelf.data.lastObject;
@@ -79,7 +112,7 @@
                         }
                         
                         [strongSelf saveCache];
-                        [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:nil];
+                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:nil];
                         strongSelf.loading = NO;
                     }
                 }
@@ -104,7 +137,7 @@
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
-                        [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:result];
+                        [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:result];
                     } else {
                         [result removeObjectAtIndex:0];
                         id loadMoreCellData = strongSelf.data.lastObject;
@@ -118,7 +151,7 @@
                         
                         [strongSelf saveCache];
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Done);
-                        [strongSelf.delegate dataSource:strongSelf didFinishUpdateWithError:nil];
+                        [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:nil];
                         strongSelf.loading = NO;
                     }
                 }

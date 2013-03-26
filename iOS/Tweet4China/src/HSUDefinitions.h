@@ -36,12 +36,16 @@ _Pragma("clang diagnostic pop") \
 #define S(f,...) [NSString stringWithFormat:f,##__VA_ARGS__]
 #define kWhiteColor [UIColor whiteColor]
 #define kClearColor [UIColor clearColor]
+#define kWinWidth [HSUCommonTools winWidth]
+#define kWinHeight [HSUCommonTools winHeight]
+#define kStrechedImage(imageName, capWidth, capHeight) [[UIImage imageNamed:imageName] stretchableImageWithLeftCapWidth:capWidth topCapHeight:capHeight]
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 
 #import "HSUTableCellData.h"
 #import "HSUUIEvent.h"
 #import "HSUCommonTools.h"
+#import "UIView+Addition.h"
 
 #define kDataType_Status @"Status"
 #define kDataType_LoadMore @"LoadMore"

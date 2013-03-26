@@ -10,4 +10,7 @@
 
 @interface HSUTabController : UITabBarController
 
+- (void)showUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem;
+- (void)hideUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem;
+
 @end

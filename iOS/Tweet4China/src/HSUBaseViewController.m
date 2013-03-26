@@ -14,6 +14,7 @@
 #import "HSUStatusViewController.h"
 #import "HSURefreshControl.h"
 #import "HSULoadMoreCell.h"
+#import "HSUTabController.h"
 
 @interface HSUBaseViewController ()
 
@@ -67,9 +68,7 @@
     UIView *background = [[HSUTexturedView alloc] initWithFrame:self.view.bounds texture:texture];
     [self.view insertSubview:background atIndex:0];
     
-    self.tableView.frame = self.view.bounds;//ccr(10, 10, self.view.bounds.size.width-20, self.view.bounds.size.height-10);
-//    self.tableView.scrollIndicatorInsets = edi(-10, -10, 0, -10);
-//    self.tableView.clipsToBounds = NO;
+    self.tableView.frame = self.view.bounds;
 }
 
 
@@ -94,7 +93,7 @@
     return NSClassFromString([NSString stringWithFormat:@"HSU%@Cell", dataType]);
 }
 
-- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishUpdateWithError:(NSError *)error
+- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
 {
     if (error) {
         NSLog(@"%@", error);
@@ -102,6 +101,24 @@
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     }
+    [((HSUTabController *)self.tabBarController) hideUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];
+    [HSUNetworkActivityIndicatorManager oneLess];
+}
+
+- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishLoadMoreWithError:(NSError *)error
+{
+    if (error) {
+        NSLog(@"%@", error);
+    } else {
+        [self.tableView reloadData];
+        [self.refreshControl endRefreshing];
+    }
+    [HSUNetworkActivityIndicatorManager oneLess];
+}
+
+- (void)dataSourceDidFindUnread:(HSUBaseDataSource *)dataSource
+{
+    [((HSUTabController *)self.tabBarController) showUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];
     [HSUNetworkActivityIndicatorManager oneLess];
 }
 
