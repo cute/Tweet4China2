@@ -7,11 +7,14 @@
 //
 
 #import "HSUAppDelegate.h"
+#import "HSUProxyURLProtocol.h"
 
 @implementation HSUAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [NSURLProtocol registerClass:[HSUProxyURLProtocol class]];
+    
     // Init global variables
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];

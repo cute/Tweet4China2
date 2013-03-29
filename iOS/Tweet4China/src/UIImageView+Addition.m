@@ -24,4 +24,17 @@
     }
 }
 
++ (id)viewNamed:(NSString *)name
+{
+    return [[UIImageView alloc] initWithImage:[UIImage imageNamed:name]];
+}
+
++ (id)viewStrechedNamed:(NSString *)name
+{
+    UIImage *img = [UIImage imageNamed:name];
+    img = [img stretchableImageWithLeftCapWidth:img.size.width/2 topCapHeight:img.size.height/2];
+    return [[UIImageView alloc] initWithImage:img];
+}
+
+
 @end

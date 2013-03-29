@@ -12,4 +12,7 @@
 
 @property (nonatomic, readwrite) NSString *imageName;
 
++ (id)viewNamed:(NSString *)name;
++ (id)viewStrechedNamed:(NSString *)name;
+
 @end

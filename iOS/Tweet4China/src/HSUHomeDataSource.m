@@ -162,7 +162,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.isLoading) {
+    if (!self.isLoading && self.count > 1) {
         HSUTableCellData *cellData = [self dataAtIndex:indexPath.row];
         if ([cellData.dataType isEqualToString:kDataType_LoadMore]) {
             cellData.renderData[@"status"] = @(kLoadMoreCellStatus_Loading);
