@@ -9,17 +9,7 @@
 #ifndef Tweet4China_HSUDefinitions_h
 #define Tweet4China_HSUDefinitions_h
 
-// Define Proxy Url
-// Deploy the proxy program on your host before this.
-// You can find the scripts for the server side in directory Tweet4China/Server/.
-// If you do not define here, the App will ask for your input at the first time.
-//#define PROXY_URL
-
-// Define twitter application consumer key & secret.
-// Access level of your twitter application should contains Read, write, and direct messages
-// if you want to use all of the features.
-#define kTwitterAppKey
-#define kTwitterAppSecret
+#include "HSUAppDefinitions.h"
 
 #define kTabBarHeight 44
 #define kIPadTabBarWidth 84
@@ -42,7 +32,7 @@ _Pragma("clang diagnostic pop") \
 #define cgrgb(r, g, b) [[UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1] CGColor]
 #define rgba(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
 #define rgb(r, g, b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1]
-#define bw(w) [UIColor colorWithWhite:w alpha:1]
+#define bw(w) [UIColor colorWithWhite:w/255.0f alpha:1]
 #define L(s) NSLog(@"%@", s);
 #define LR(rect) NSLog(@"%@", NSStringFromCGRect(rect));
 #define LF(f,...) NSLog(f,##__VA_ARGS__);
