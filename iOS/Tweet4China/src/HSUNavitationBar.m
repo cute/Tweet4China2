@@ -7,6 +7,7 @@
 //
 
 #import "HSUNavitationBar.h"
+#import "HSUComposeViewController.h"
 
 @implementation HSUNavitationBar
 {
@@ -31,7 +32,8 @@
         [tweetButton sizeToFit];
         tweetButton.showsTouchWhenHighlighted = YES;
         [self addSubview:tweetButton];
-        
+        [tweetButton addTarget:self action:@selector(composeButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+
         searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
         searchButton.tag = searchTag;
         [searchButton setImage:[UIImage imageNamed:@"ic_title_search"] forState:UIControlStateNormal];
@@ -73,6 +75,11 @@
 
 - (CGSize)sizeThatFits:(CGSize)size {
     return CGSizeMake(self.frame.size.width, 47);
+}
+
+- (void)composeButtonTouched
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kHSUNotification_Compose object:self];
 }
 
 @end

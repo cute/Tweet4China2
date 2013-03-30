@@ -29,4 +29,10 @@
     }
 }
 
++ (id)engine {
+    FHSTwitterEngine *engine = [[FHSTwitterEngine alloc] initWithConsumerKey:kTwitterAppKey andSecret:kTwitterAppSecret];
+    [engine loadAccessToken];
+    return engine;
+ }
+
 @end

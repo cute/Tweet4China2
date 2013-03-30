@@ -105,13 +105,13 @@
         [contentArea addSubview:textAL];
         textAL.font = [UIFont systemFontOfSize:textAL_font_S];
         textAL.backgroundColor = kClearColor;
-        textAL.textColor = uic(38, 38, 38, 1);
+        textAL.textColor = rgb(38, 38, 38);
         textAL.highlightedTextColor = kWhiteColor;
         textAL.lineBreakMode = NSLineBreakByWordWrapping;
         textAL.numberOfLines = 0;
         textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
-                                  (NSString *)kCTForegroundColorAttributeName: (id)cgc(30, 98, 164, 1)};
-        textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgc(215, 230, 242, 1),
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164)};
+        textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
         textAL.lineHeightMultiple = textAL_LHM;

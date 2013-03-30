@@ -8,23 +8,39 @@
 
 #import "HSUProxyURLProtocol.h"
 #import "Base64.h"
+#import "UIAlertView+Blocks.h"
+
+#define kProxyURL_key @"proxy_url"
+#define kOAuthRequest_url @"https://api.twitter.com/oauth"
 
 @implementation HSUProxyURLProtocol
 {
     NSURLConnection *connection;
     NSMutableData *proRespData;
-    NSString *proxyUrl;
 }
 
-- (id)initWithRequest:(NSURLRequest *)request cachedResponse:(NSCachedURLResponse *)cachedResponse client:(id<NSURLProtocolClient>)client
+static NSString *sProxyUrl = nil;
++ (void)initialize
 {
-    self = [super initWithRequest:request cachedResponse:cachedResponse client:client];
-    if (self) {
 #ifdef PROXY_URL
-        proxyUrl = PROXY_URL;
+    sProxyUrl = PROXY_URL;
+#else
+    sProxyUrl = [[NSUserDefaults standardUserDefaults] objectForKey:kProxyURL_key];
 #endif
+    if (sProxyUrl == nil) {
+        RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+        cancelItem.action = ^{};
+        RIButtonItem *doneItem = [RIButtonItem itemWithLabel:@"Done"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Proxy Found" message:@"Input below or define in source code" cancelButtonItem:cancelItem otherButtonItems:doneItem, nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alert show];
+        doneItem.action = ^{
+            NSString *text = [[alert textFieldAtIndex:0] text];
+            [[NSUserDefaults standardUserDefaults] setObject:text forKey:kProxyURL_key];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            sProxyUrl = text;
+        };
     }
-    return self;
 }
 
 - (void)startLoading
@@ -38,7 +54,7 @@
     // URL
     NSData *origPath = [[[proxyRequest URL] description] dataUsingEncoding:NSASCIIStringEncoding];
     NSString *base64edPath = [origPath base64EncodedString];
-    NSURL *proxyURL = [[NSURL alloc] initWithString:proxyUrl];
+    NSURL *proxyURL = [[NSURL alloc] initWithString:sProxyUrl];
     [proxyRequest setURL:proxyURL];
     
     // Header
@@ -102,10 +118,9 @@
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request
 {
-#ifdef PROXY_URL
-    return [request.URL.absoluteString rangeOfString:PROXY_URL].location == NSNotFound;
-#endif
-    return NO;
+    if (sProxyUrl == nil) return NO;
+    if ([request.URL.absoluteString rangeOfString:sProxyUrl].location != NSNotFound) return NO;
+    if ([request.URL.absoluteString hasPrefix:kOAuthRequest_url]) return NO;
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request

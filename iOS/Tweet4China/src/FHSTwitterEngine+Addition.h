@@ -11,5 +11,6 @@
 @interface FHSTwitterEngine (Addition)
 
 - (id)getHomeTimelineMaxId:(NSString *)maxId count:(int)count;
++ (id)engine;
 
 @end

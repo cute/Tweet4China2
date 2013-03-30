@@ -15,6 +15,7 @@
 #import "HSURefreshControl.h"
 #import "HSULoadMoreCell.h"
 #import "HSUTabController.h"
+#import "HSUComposeViewController.h"
 
 @interface HSUBaseViewController ()
 
@@ -35,7 +36,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(composeButtonTouched:) name:kHSUNotification_Compose object:nil];
+
     if (!self.dataSource) {
         self.dataSource = [self.dataSourceClass dataSource];
         self.dataSource.delegate = self;
@@ -50,7 +53,7 @@
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     tableView.backgroundColor = [UIColor clearColor];
     tableView.backgroundView = nil;
-    tableView.separatorColor = uic(206, 206, 206, 1);
+    tableView.separatorColor = rgb(206, 206, 206);
     [self.view addSubview:tableView];
     self.tableView = tableView;
     
@@ -123,5 +126,14 @@
 }
 
 #pragma mark - Actions
+- (void)composeButtonTouched:(NSNotification *)notification
+{
+    if (notification.object == self.navigationController.navigationBar) {
+        HSUComposeViewController *composeViewController = [[HSUComposeViewController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
+        [self presentViewController:nav animated:YES completion:nil];
+    }
+}
+
 
 @end
