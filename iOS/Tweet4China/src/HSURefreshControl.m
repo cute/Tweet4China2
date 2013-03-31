@@ -10,9 +10,6 @@
 #import <AVFoundation/AVFoundation.h>
 
 @implementation HSURefreshControl
-{
-    AVAudioPlayer *beginRefreshingPlayer, *endRefreshingPlayer;
-}
 
 - (id)init
 {
@@ -25,20 +22,19 @@
 
 - (void)startRefreshing
 {
-    if (beginRefreshingPlayer == nil) {
-        beginRefreshingPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"psst1" withExtension:@"wav"] error:nil];
-    }
-    [beginRefreshingPlayer play];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"psst1" ofType:@"wav"];
+    SystemSoundID soundID;
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath: soundPath], &soundID);
+    AudioServicesPlaySystemSound(soundID);
 }
 
 - (void)endRefreshing
 {
     [super endRefreshing];
-    
-    if (endRefreshingPlayer == nil) {
-        endRefreshingPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"pop" withExtension:@"wav"] error:nil];
-    }
-    [endRefreshingPlayer play];
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"pop" ofType:@"wav"];
+    SystemSoundID soundID;
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath: soundPath], &soundID);
+    AudioServicesPlaySystemSound(soundID);
 }
 
 @end

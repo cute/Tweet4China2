@@ -41,7 +41,7 @@
     return staticEngine;
  }
 
-+ (id)auth {
++ (void)auth {
     [[self engine] showOAuthLoginControllerFromViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
 }
 

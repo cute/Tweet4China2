@@ -11,7 +11,7 @@
 @interface FHSTwitterEngine (Addition)
 
 + (id)engine;
-+ (id)auth;
++ (void)auth;
 + (void)dealWithError:(NSError *)error errTitle:(NSString *)errTitle;
 - (id)getHomeTimelineMaxId:(NSString *)maxId count:(int)count;
 
