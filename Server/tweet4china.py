@@ -10,15 +10,10 @@ class proxy(object):
     
     def POST(self):
         req_parameters = web.input()
-        #print req_parameters
         method = req_parameters['method']
-        #print 'method ----', method
         url = b64.decodestring(req_parameters['encoded_path'])
-        #print 'url ----', url
         header = b64.decodestring(req_parameters['headers'])
-        #print 'header ----', header
         body = b64.decodestring(req_parameters['postdata'])
-        #print 'body ----', body
         
         (scm, netloc, path, params, query, fragment) = urlparse.urlparse(url)
         if scm == 'http':
@@ -39,14 +34,11 @@ class proxy(object):
                 value = ':'.join(parts[1:])
             headers[name] = value
         
-        #print method, uri, body, headers
         conn.request(method, uri, body, headers)
         resp = conn.getresponse()
-        #print 'URI: %s, %s, %s' % (uri, resp.status, headers)
         resp_body = resp.read()
-        #print 'resp body ========'
-        #print resp_body
         output_body = b64.encodestring(resp_body)
+        web.header('Content-Type', 'text/html')
         return output_body
 
 

@@ -7,34 +7,11 @@
 //
 
 #import "HSUHomeDataSource.h"
-#import "FHSTwitterEngine.h"
 #import "HSUStatusCell.h"
-#import "TTTAttributedLabel.h"
 #import "HSULoadMoreCell.h"
 #import "FHSTwitterEngine+Addition.h"
 
 @implementation HSUHomeDataSource
-{
-    FHSTwitterEngine *twEngine;
-}
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        twEngine = [[FHSTwitterEngine alloc] initWithConsumerKey:kTwitterAppKey andSecret:kTwitterAppSecret];
-        [twEngine loadAccessToken];
-    }
-    return self;
-}
-
-- (void)authenticate
-{
-    if (!twEngine.isAuthorized) {
-        [twEngine showOAuthLoginControllerFromViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
-        return;
-    }
-}
 
 - (void)checkUnread
 {
@@ -48,7 +25,7 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [twEngine getHomeTimelineSinceID:latestIdStr count:1];
+            id result = [self.twEngine getHomeTimelineSinceID:latestIdStr count:1];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -58,6 +35,8 @@
                         if (![latestIdStr isEqualToString:lastIdStr]) { // updated
                             [strongSelf.delegate dataSourceDidFindUnread:strongSelf];
                         }
+                    } else {
+                        [strongSelf authenticate];
                     }
                 }
             });
@@ -77,12 +56,13 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [twEngine getHomeTimelineSinceID:latestIdStr count:kRequestDataCount];
+            id result = [self.twEngine getHomeTimelineSinceID:latestIdStr count:kRequestDataCount];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
                         [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:result];
+                        [strongSelf authenticate];
                     } else {
                         NSArray *tweets = result;
                         NSString *lastIdStr = tweets.lastObject[@"id_str"];
@@ -131,13 +111,14 @@
             __strong __typeof(&*weakSelf)strongSelf = weakSelf;
             HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
             NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
-            id result =  [twEngine getHomeTimelineMaxId:lastStatusId count:kRequestDataCount];
+            id result =  [self.twEngine getHomeTimelineMaxId:lastStatusId count:kRequestDataCount];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
                         [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:result];
+                        [strongSelf authenticate];
                     } else {
                         [result removeObjectAtIndex:0];
                         id loadMoreCellData = strongSelf.data.lastObject;

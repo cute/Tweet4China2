@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9612AF5A17086D710038935C /* encrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 9612AF4417086D710038935C /* encrypt.c */; };
+		9612AF6417086D710038935C /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 9612AF5517086D710038935C /* md5.c */; };
+		9612AF6517086D710038935C /* rc4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9612AF5717086D710038935C /* rc4.c */; };
+		9612AF6717086E320038935C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9612AF6617086E320038935C /* CFNetwork.framework */; };
 		9620089717056C5100D54BF7 /* HSUProxyURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620089617056C5100D54BF7 /* HSUProxyURLProtocol.m */; };
 		9620089B17056D5300D54BF7 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 9620089A17056D5300D54BF7 /* Base64.m */; };
 		9628175016DE5EDC00ABF0AD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9628174F16DE5EDC00ABF0AD /* UIKit.framework */; };
@@ -141,6 +145,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9612AF4417086D710038935C /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = encrypt.c; sourceTree = "<group>"; };
+		9612AF4517086D710038935C /* encrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encrypt.h; sourceTree = "<group>"; };
+		9612AF5517086D710038935C /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = md5.c; sourceTree = "<group>"; };
+		9612AF5617086D710038935C /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
+		9612AF5717086D710038935C /* rc4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rc4.c; sourceTree = "<group>"; };
+		9612AF5817086D710038935C /* rc4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc4.h; sourceTree = "<group>"; };
+		9612AF6617086E320038935C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		9620089517056C5100D54BF7 /* HSUProxyURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUProxyURLProtocol.h; sourceTree = "<group>"; };
 		9620089617056C5100D54BF7 /* HSUProxyURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUProxyURLProtocol.m; sourceTree = "<group>"; };
 		9620089917056D5300D54BF7 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
@@ -339,6 +350,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9612AF6717086E320038935C /* CFNetwork.framework in Frameworks */,
 				962AB00816FB330A00D44566 /* AVFoundation.framework in Frameworks */,
 				96B55E9C16F9D5230084667B /* MessageUI.framework in Frameworks */,
 				9696D84116F21DB6005D7AAB /* CoreText.framework in Frameworks */,
@@ -353,6 +365,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9612AF4217086D710038935C /* libshadow */ = {
+			isa = PBXGroup;
+			children = (
+				9612AF4417086D710038935C /* encrypt.c */,
+				9612AF4517086D710038935C /* encrypt.h */,
+				9612AF5517086D710038935C /* md5.c */,
+				9612AF5617086D710038935C /* md5.h */,
+				9612AF5717086D710038935C /* rc4.c */,
+				9612AF5817086D710038935C /* rc4.h */,
+			);
+			name = libshadow;
+			path = MobileShadowSocks/MobileShadowSocks/libshadow;
+			sourceTree = "<group>";
+		};
 		9620089817056D5300D54BF7 /* Base64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,6 +413,7 @@
 		9628174E16DE5EDC00ABF0AD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9612AF6617086E320038935C /* CFNetwork.framework */,
 				962AB00716FB330A00D44566 /* AVFoundation.framework */,
 				96B55E9B16F9D5220084667B /* MessageUI.framework */,
 				9696D84016F21DB6005D7AAB /* CoreText.framework */,
@@ -434,6 +461,7 @@
 		9628177516DE5FDF00ABF0AD /* 3th-party */ = {
 			isa = PBXGroup;
 			children = (
+				9612AF4217086D710038935C /* libshadow */,
 				9620089817056D5300D54BF7 /* Base64 */,
 				9664994916F307A700BC901A /* FHSTwitterEngine */,
 				9664994516F3079800BC901A /* TTTAttributedLabel */,
@@ -907,6 +935,9 @@
 				96E34B4417015ECD0066CD5E /* HSUComposeViewController.m in Sources */,
 				9620089717056C5100D54BF7 /* HSUProxyURLProtocol.m in Sources */,
 				9620089B17056D5300D54BF7 /* Base64.m in Sources */,
+				9612AF5A17086D710038935C /* encrypt.c in Sources */,
+				9612AF6417086D710038935C /* md5.c in Sources */,
+				9612AF6517086D710038935C /* rc4.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

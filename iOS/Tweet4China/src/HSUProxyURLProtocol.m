@@ -8,10 +8,9 @@
 
 #import "HSUProxyURLProtocol.h"
 #import "Base64.h"
-#import "UIAlertView+Blocks.h"
 
 #define kProxyURL_key @"proxy_url"
-#define kOAuthRequest_url @"https://api.twitter.com/oauth"
+#define kTwitterAPI_url @"https://api.twitter.com"
 
 @implementation HSUProxyURLProtocol
 {
@@ -120,7 +119,8 @@ static NSString *sProxyUrl = nil;
 {
     if (sProxyUrl == nil) return NO;
     if ([request.URL.absoluteString rangeOfString:sProxyUrl].location != NSNotFound) return NO;
-    if ([request.URL.absoluteString hasPrefix:kOAuthRequest_url]) return NO;
+    if ([request.URL.absoluteString rangeOfString:kTwitterAPI_url].location != NSNotFound) return YES;
+    return NO;
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request

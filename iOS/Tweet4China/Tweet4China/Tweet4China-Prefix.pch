@@ -14,4 +14,5 @@
     #import "HSUDefinitions.h"
     #import "UIImageView+Addition.h"
     #import "HSUNetworkActivityIndicatorManager.h"
+    #import "UIAlertView+Blocks.h"
 #endif

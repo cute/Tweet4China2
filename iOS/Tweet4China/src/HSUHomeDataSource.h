@@ -13,6 +13,4 @@
 
 @property (nonatomic, weak) id<TTTAttributedLabelDelegate> attributeLabelDelegate;
 
-- (void)authenticate;
-
 @end

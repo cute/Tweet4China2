@@ -10,6 +10,8 @@
 #import "FHSTwitterEngine.h"
 #import "FHSTwitterEngine+Addition.h"
 
+#define kMaxWordLen 140
+
 @interface HSUComposeViewController () <UITextViewDelegate>
 
 @end
@@ -20,7 +22,7 @@
     UIImageView *contentShadowV;
     UIView *toolbar;
     UIButton *photoBnt;
-    UIButton *locationBnt;
+    UIButton *geoBnt;
     UIButton *memtionBnt;
     UIButton *tagBnt;
     UILabel *wordCountL;
@@ -41,11 +43,16 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardAppearance:)
-                                                 name:UIKeyboardDidShowNotification
+                                                 name:UIKeyboardWillChangeFrameNotification
                                                object:nil];
 
 //    setup navigation bar
+    self.title = @"New Tweet";
     self.navigationController.navigationBar.tintColor = bw(212);
+    NSDictionary *attributes = @{UITextAttributeTextColor: bw(50),
+            UITextAttributeTextShadowColor: kWhiteColor,
+            UITextAttributeTextShadowOffset: [NSValue valueWithCGPoint:ccp(0, 1)]};
+    self.navigationController.navigationBar.titleTextAttributes = attributes;
 
     UIBarButtonItem *cancelButtonItem = [[UIBarButtonItem alloc] init];
     cancelButtonItem.title = @"Cancel";
@@ -62,32 +69,70 @@
     sendButtonItem.enabled = NO;
     self.navigationItem.rightBarButtonItem = sendButtonItem;
 
-    NSDictionary *attributes = @{UITextAttributeTextColor: bw(43),
-            UITextAttributeTextShadowOffset: [NSValue valueWithCGPoint:ccp(0, 0)]};
     NSDictionary *disabledAttributes = @{UITextAttributeTextColor: bw(129),
-            UITextAttributeTextShadowOffset: [NSValue valueWithCGPoint:ccp(0, 0)]};
+            UITextAttributeTextShadowColor: kWhiteColor,
+            UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:ccs(0, 1)]};
     [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
     [cancelButtonItem setTitleTextAttributes:disabledAttributes forState:UIControlStateDisabled];
+
+    attributes = @{UITextAttributeTextColor: kWhiteColor,
+            UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:ccs(0, -1)]};
+    disabledAttributes = @{UITextAttributeTextColor: bw(129),
+            UITextAttributeTextShadowColor: kWhiteColor,
+            UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:ccs(0, 1)]};
     [sendButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [sendButtonItem setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
     [sendButtonItem setTitleTextAttributes:disabledAttributes forState:UIControlStateDisabled];
 
 //    setup view
     self.view.backgroundColor = kWhiteColor;
     contentTV = [[UITextView alloc] init];
     [self.view addSubview:contentTV];
-    contentTV.contentInset = UIEdgeInsetsMake(5, 5, 5, 5);
     contentTV.font = [UIFont systemFontOfSize:16];
-    contentTV.textColor = bw(43);
     contentTV.delegate = self;
 
 //    contentShadowV = [UIImageView viewNamed:@""];
     toolbar =[UIImageView viewStrechedNamed:@"button-bar-background"];
     [self.view addSubview:toolbar];
+
     photoBnt = [[UIButton alloc] init];
-    locationBnt = [[UIButton alloc] init];
+    [toolbar addSubview:photoBnt];
+    [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera"] forState:UIControlStateNormal];
+    [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera-glow"] forState:UIControlStateHighlighted];
+    [photoBnt sizeToFit];
+    photoBnt.center = ccp(25, 20);
+
+    geoBnt = [[UIButton alloc] init];
+    [toolbar addSubview:geoBnt];
+    [geoBnt setImage:[UIImage imageNamed:@"compose-geo"] forState:UIControlStateNormal];
+    [geoBnt setImage:[UIImage imageNamed:@"compose-geo-highlighted"] forState:UIControlStateHighlighted];
+    [geoBnt sizeToFit];
+    geoBnt.center = ccp(85, 20);
+
     memtionBnt = [[UIButton alloc] init];
+    [toolbar addSubview:memtionBnt];
+    [memtionBnt setImage:[UIImage imageNamed:@"button-bar-at"] forState:UIControlStateNormal];
+    [memtionBnt sizeToFit];
+    memtionBnt.center = ccp(145, 20);
+
     tagBnt = [[UIButton alloc] init];
+    [toolbar addSubview:tagBnt];
+    [tagBnt setImage:[UIImage imageNamed:@"button-bar-hashtag"] forState:UIControlStateNormal];
+    [tagBnt sizeToFit];
+    tagBnt.center = ccp(205, 20);
+
     wordCountL = [[UILabel alloc] init];
+    [toolbar addSubview:wordCountL];
+    wordCountL.font = [UIFont systemFontOfSize:14];
+    wordCountL.textColor = bw(140);
+    wordCountL.shadowColor = kWhiteColor;
+    wordCountL.shadowOffset = ccs(0, 1);
+    wordCountL.backgroundColor = kClearColor;
+    wordCountL.text = S(@"%d", kMaxWordLen);
+    [wordCountL sizeToFit];
+    wordCountL.center = ccp(294, 20);
+
     takePhotoBnt = [[UIButton alloc] init];
     selectPhotoBnt = [[UIButton alloc] init];
     locationView = [[UIView alloc] init];
@@ -115,9 +160,8 @@
 
 - (void)keyboardAppearance:(NSNotification *)notification
 {
-    NSValue* keyboardFrameBegin = [notification.userInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-    keyboardHeight = keyboardFrameBegin.CGRectValue.size.height;
-
+    NSValue* keyboardFrame = [notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
+    keyboardHeight = keyboardFrame.CGRectValue.size.height;
     [self.view setNeedsLayout];
 }
 
@@ -128,13 +172,33 @@
 
 - (void)sendTweet
 {
-    FHSTwitterEngine *twitterEngine = [FHSTwitterEngine engine];
-    NSError *error = [twitterEngine postTweet:contentTV.text];
+    if (contentTV.text == nil) return;
+    dispatch_async(GCDBackgroundThread, ^{
+        NSError *err = [[FHSTwitterEngine engine] postTweet:contentTV.text];
+        [FHSTwitterEngine dealWithError:err errTitle:@"Send status failed"];
+    });
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    NSString *newText = [contentTV.text stringByReplacingCharactersInRange:range withString:text];
+    return ([self wordLengthWithStatus:newText] <= 140);
+}
+
 - (void)textViewDidChange:(UITextView *)textView {
-    self.navigationItem.rightBarButtonItem.enabled = contentTV.text.length > 0;
+    NSUInteger wordLen = [self wordLengthWithStatus:contentTV.text];
+    if (wordLen > 0) {
+        self.navigationItem.rightBarButtonItem.enabled = YES;
+        self.navigationItem.rightBarButtonItem.tintColor = rgb(52, 172, 232);
+    } else {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+        self.navigationItem.rightBarButtonItem.tintColor = bw(220);
+    }
+    wordCountL.text = S(@"%d", kMaxWordLen-wordLen);
+}
+
+- (NSUInteger)wordLengthWithStatus:(NSString *)status {
+    return status.length;
 }
 
 @end

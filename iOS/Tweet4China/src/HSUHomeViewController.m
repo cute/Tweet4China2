@@ -13,7 +13,6 @@
 #import "TTTAttributedLabel.h"
 #import "UIActionSheet+Blocks.h"
 #import "HSURefreshControl.h"
-#import "HSULoadMoreCell.h"
 #import "HSUTabController.h"
 
 @interface HSUHomeViewController () <TTTAttributedLabelDelegate, MFMailComposeViewControllerDelegate>

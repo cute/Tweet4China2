@@ -19,3 +19,6 @@
 [submodule "iOS/Tweet4China/3th-party/Base64"]
 	path = iOS/Tweet4China/3th-party/Base64
 	url = git://github.com/nicklockwood/Base64.git
+[submodule "iOS/Tweet4China/3th-party/MobileShadowSocks"]
+	path = iOS/Tweet4China/3th-party/MobileShadowSocks
+	url = git://github.com/linusyang/MobileShadowSocks.git

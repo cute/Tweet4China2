@@ -30,9 +30,39 @@
 }
 
 + (id)engine {
-    FHSTwitterEngine *engine = [[FHSTwitterEngine alloc] initWithConsumerKey:kTwitterAppKey andSecret:kTwitterAppSecret];
-    [engine loadAccessToken];
-    return engine;
+    static FHSTwitterEngine *staticEngine = nil;
+    static dispatch_once_t pred;
+
+    dispatch_once(&pred, ^{
+        staticEngine = [[self alloc] initWithConsumerKey:kTwitterAppKey andSecret:kTwitterAppSecret];
+        [staticEngine loadAccessToken];
+    });
+
+    return staticEngine;
  }
+
++ (id)auth {
+    [[self engine] showOAuthLoginControllerFromViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+}
+
++ (void)dealWithError:(NSError *)error errTitle:(NSString *)errTitle {
+    if (error == nil) return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (error.code == 401) {
+            RIButtonItem *cancelBnt = [RIButtonItem itemWithLabel:@"Cancel"];
+            RIButtonItem *confirmBnt = [RIButtonItem itemWithLabel:@"Sign in"];
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:errTitle message:error.localizedDescription cancelButtonItem:cancelBnt otherButtonItems:confirmBnt, nil];
+            [alertView show];
+
+            confirmBnt.action = ^{
+                [self auth];
+            };
+
+        } else {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:errTitle message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
+    });
+}
 
 @end

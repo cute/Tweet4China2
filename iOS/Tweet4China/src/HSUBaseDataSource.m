@@ -8,7 +8,7 @@
 
 #import "HSUBaseDataSource.h"
 #import "HSUBaseTableCell.h"
-#import "UIAlertView+Blocks.h"
+#import "FHSTwitterEngine+Addition.h"
 
 @implementation HSUBaseDataSource
 
@@ -17,8 +17,16 @@
     self = [super init];
     if (self) {
         self.data = [[NSMutableArray alloc] init];
+        self.twEngine = [FHSTwitterEngine engine];
     }
     return self;
+}
+
+- (void)authenticate
+{
+    if (!self.twEngine.isAuthorized) {
+        [FHSTwitterEngine auth];
+    }
 }
 
 #pragma mark - TableView
