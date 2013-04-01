@@ -22,3 +22,6 @@
 [submodule "iOS/Tweet4China/3th-party/MobileShadowSocks"]
 	path = iOS/Tweet4China/3th-party/MobileShadowSocks
 	url = git://github.com/linusyang/MobileShadowSocks.git
+[submodule "iOS/Tweet4China/3th-party/twitter-text-objc"]
+	path = iOS/Tweet4China/3th-party/twitter-text-objc
+	url = git://github.com/twitter/twitter-text-objc.git

@@ -91,6 +91,7 @@
     [self.view addSubview:contentTV];
     contentTV.font = [UIFont systemFontOfSize:16];
     contentTV.delegate = self;
+    contentTV.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"draft"];
 
 //    contentShadowV = [UIImageView viewNamed:@""];
     toolbar =[UIImageView viewStrechedNamed:@"button-bar-background"];
@@ -147,6 +148,7 @@
     [super viewWillAppear:animated];
 
     [contentTV becomeFirstResponder];
+    [self textViewDidChange:contentTV];
 }
 
 - (void)viewDidLayoutSubviews
@@ -167,7 +169,24 @@
 
 - (void)cancelCompose
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if (contentTV.text.length) {
+        RIButtonItem *cancelBnt = [RIButtonItem itemWithLabel:@"Cancel"];
+        RIButtonItem *giveUpBnt = [RIButtonItem itemWithLabel:@"Don't save"];
+        giveUpBnt.action = ^{
+            [self dismissViewControllerAnimated:YES completion:nil];
+        };
+        RIButtonItem *saveBnt = [RIButtonItem itemWithLabel:@"Save draft"];
+        saveBnt.action = ^{
+            [[NSUserDefaults standardUserDefaults] setObject:contentTV.text forKey:@"draft"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        };
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelBnt destructiveButtonItem:nil otherButtonItems:giveUpBnt, saveBnt, nil];
+        actionSheet.destructiveButtonIndex = 0;
+        [actionSheet showInView:self.view.window];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (void)sendTweet
@@ -182,11 +201,11 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     NSString *newText = [contentTV.text stringByReplacingCharactersInRange:range withString:text];
-    return ([self wordLengthWithStatus:newText] <= 140);
+    return ([FHSTwitterEngine twitterTextLength:newText] <= 140);
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-    NSUInteger wordLen = [self wordLengthWithStatus:contentTV.text];
+    NSUInteger wordLen = [FHSTwitterEngine twitterTextLength:contentTV.text];
     if (wordLen > 0) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = rgb(52, 172, 232);
@@ -195,10 +214,6 @@
         self.navigationItem.rightBarButtonItem.tintColor = bw(220);
     }
     wordCountL.text = S(@"%d", kMaxWordLen-wordLen);
-}
-
-- (NSUInteger)wordLengthWithStatus:(NSString *)status {
-    return status.length;
 }
 
 @end

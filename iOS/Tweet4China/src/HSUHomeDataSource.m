@@ -36,7 +36,7 @@
                             [strongSelf.delegate dataSourceDidFindUnread:strongSelf];
                         }
                     } else {
-                        [strongSelf authenticate];
+
                     }
                 }
             });
@@ -61,8 +61,9 @@
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
-                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:result];
-                        [strongSelf authenticate];
+//                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:result];
+//                        [strongSelf authenticate];
+                        [FHSTwitterEngine dealWithError:result errTitle:@"Load failed"];
                     } else {
                         NSArray *tweets = result;
                         NSString *lastIdStr = tweets.lastObject[@"id_str"];
@@ -117,8 +118,9 @@
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([result isKindOfClass:[NSError class]]) {
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
-                        [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:result];
-                        [strongSelf authenticate];
+//                        [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:result];
+//                        [strongSelf authenticate];
+                        [FHSTwitterEngine dealWithError:result errTitle:@"Load failed"];
                     } else {
                         [result removeObjectAtIndex:0];
                         id loadMoreCellData = strongSelf.data.lastObject;

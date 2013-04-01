@@ -14,5 +14,6 @@
 + (void)auth;
 + (void)dealWithError:(NSError *)error errTitle:(NSString *)errTitle;
 - (id)getHomeTimelineMaxId:(NSString *)maxId count:(int)count;
++ (NSUInteger)twitterTextLength:(NSString *)text;
 
 @end

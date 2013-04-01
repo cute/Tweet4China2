@@ -8,6 +8,7 @@
 
 #import "FHSTwitterEngine+Addition.h"
 #import "OAuthConsumer.h"
+#import "TwitterText.h"
 
 @implementation FHSTwitterEngine (Addition)
 
@@ -63,6 +64,10 @@
             [alertView show];
         }
     });
+}
+
++ (NSUInteger)twitterTextLength:(NSString *)text {
+    return [TwitterText tweetLength:text];
 }
 
 @end
