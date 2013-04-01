@@ -56,7 +56,7 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [self.twEngine getHomeTimelineSinceID:latestIdStr count:kRequestDataCount];
+            id result = [self.twEngine getHomeTimelineSinceID:latestIdStr count:[self.class requestDataCount]];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -112,7 +112,7 @@
             __strong __typeof(&*weakSelf)strongSelf = weakSelf;
             HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
             NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
-            id result =  [self.twEngine getHomeTimelineMaxId:lastStatusId count:kRequestDataCount];
+            id result =  [self.twEngine getHomeTimelineMaxId:lastStatusId count:[self.class requestDataCount]];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;

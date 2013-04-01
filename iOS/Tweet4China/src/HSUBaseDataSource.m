@@ -9,6 +9,7 @@
 #import "HSUBaseDataSource.h"
 #import "HSUBaseTableCell.h"
 #import "FHSTwitterEngine+Addition.h"
+#import "Reachability.h"
 
 @implementation HSUBaseDataSource
 
@@ -115,9 +116,9 @@
 
 - (NSArray *)cacheData
 {
-    NSMutableArray *cacheData = [NSMutableArray arrayWithCapacity:kRequestDataCount];
+    NSMutableArray *cacheData = [NSMutableArray arrayWithCapacity:kRequestDataCountViaWifi];
     for (HSUTableCellData *cellData in self.data) {
-        if (cacheData.count > kRequestDataCount) {
+        if (cacheData.count > kRequestDataCountViaWifi) {
             break;
         }
         [cacheData addObject:cellData.cacheData];
@@ -150,6 +151,14 @@
         dataSource.data = mData;
     }
     return dataSource;
+}
+
++ (NSUInteger)requestDataCount {
+    if ([Reachability reachabilityForInternetConnection].isReachableViaWiFi) {
+        return kRequestDataCountViaWifi;
+    } else {
+        return kRequestDataCountViaWWAN;
+    }
 }
 
 @end

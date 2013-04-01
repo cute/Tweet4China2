@@ -4,18 +4,12 @@
 [submodule "iOS/Tweet4China/3th-party/UIAlertView-Blocks"]
 	path = iOS/Tweet4China/3th-party/UIAlertView-Blocks
 	url = git://github.com/jivadevoe/UIAlertView-Blocks.git
-[submodule "iOS/Tweet4China/3th-party/JSONKit"]
-	path = iOS/Tweet4China/3th-party/JSONKit
-	url = git://github.com/johnezang/JSONKit.git
 [submodule "iOS/Tweet4China/3th-party/TTTAttributedLabel"]
 	path = iOS/Tweet4China/3th-party/TTTAttributedLabel
 	url = git://github.com/mattt/TTTAttributedLabel.git
 [submodule "iOS/Tweet4China/3th-party/AFNetworking"]
 	path = iOS/Tweet4China/3th-party/AFNetworking
 	url = git://github.com/AFNetworking/AFNetworking.git
-[submodule "iOS/Tweet4China/3th-party/Moment"]
-	path = iOS/Tweet4China/3th-party/Moment
-	url = git://github.com/kmussel/Moment.git
 [submodule "iOS/Tweet4China/3th-party/Base64"]
 	path = iOS/Tweet4China/3th-party/Base64
 	url = git://github.com/nicklockwood/Base64.git
@@ -25,3 +19,6 @@
 [submodule "iOS/Tweet4China/3th-party/twitter-text-objc"]
 	path = iOS/Tweet4China/3th-party/twitter-text-objc
 	url = git://github.com/twitter/twitter-text-objc.git
+[submodule "iOS/Tweet4China/3th-party/Reachability"]
+	path = iOS/Tweet4China/3th-party/Reachability
+	url = git://github.com/tonymillion/Reachability.git

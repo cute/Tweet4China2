@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define kRequestDataCount 200
+#define kRequestDataCountViaWifi 200
+#define kRequestDataCountViaWWAN 20
 
 @protocol HSUBaseDataSourceDelegate;
 @class HSUTableCellData;
@@ -36,6 +37,8 @@
 + (id)dataSource;
 + (NSString *)cacheKey;
 - (void)authenticate;
+
++ (NSUInteger)requestDataCount;
 
 @end
 

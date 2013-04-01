@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		603900029BF5678F715D6B1E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390395A624BBF085B20271 /* Reachability.m */; };
 		6039074570C80762F16B96A3 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390C735C7755F632A4D314 /* TwitterTextEntity.m */; };
 		60390D9E8041365ACB74444B /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390160979A8630388CF67A /* TwitterText.m */; };
 		9612AF5A17086D710038935C /* encrypt.c in Sources */ = {isa = PBXBuildFile; fileRef = 9612AF4417086D710038935C /* encrypt.c */; };
@@ -148,8 +149,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		603900A30CF70825111188BE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		60390160979A8630388CF67A /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterText.m; sourceTree = "<group>"; };
 		603902347B8B001FBF1FFEB2 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterText.h; sourceTree = "<group>"; };
+		60390395A624BBF085B20271 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		60390C735C7755F632A4D314 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterTextEntity.m; sourceTree = "<group>"; };
 		60390FD20A0FA23B9288C784 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTextEntity.h; sourceTree = "<group>"; };
 		9612AF4417086D710038935C /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = encrypt.c; sourceTree = "<group>"; };
@@ -386,6 +389,15 @@
 			path = "twitter-text-objc/twitter-text-objc";
 			sourceTree = "<group>";
 		};
+		60390BC7A7A04EBB18CF669F /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				603900A30CF70825111188BE /* Reachability.h */,
+				60390395A624BBF085B20271 /* Reachability.m */,
+			);
+			path = Reachability;
+			sourceTree = "<group>";
+		};
 		9612AF4217086D710038935C /* libshadow */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +502,7 @@
 				9664992816F3078800BC901A /* AFNetworking */,
 				9696D7E716F0A4EB005D7AAB /* UIAlertView-Blocks */,
 				60390461B87364936D8EF6A8 /* twitter-text-objc */,
+				60390BC7A7A04EBB18CF669F /* Reachability */,
 			);
 			path = "3th-party";
 			sourceTree = "<group>";
@@ -963,6 +976,7 @@
 				9612AF6517086D710038935C /* rc4.c in Sources */,
 				60390D9E8041365ACB74444B /* TwitterText.m in Sources */,
 				6039074570C80762F16B96A3 /* TwitterTextEntity.m in Sources */,
+				603900029BF5678F715D6B1E /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
