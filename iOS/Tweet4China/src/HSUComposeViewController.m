@@ -173,6 +173,8 @@
         RIButtonItem *cancelBnt = [RIButtonItem itemWithLabel:@"Cancel"];
         RIButtonItem *giveUpBnt = [RIButtonItem itemWithLabel:@"Don't save"];
         giveUpBnt.action = ^{
+            [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"draft"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
             [self dismissViewControllerAnimated:YES completion:nil];
         };
         RIButtonItem *saveBnt = [RIButtonItem itemWithLabel:@"Save draft"];
