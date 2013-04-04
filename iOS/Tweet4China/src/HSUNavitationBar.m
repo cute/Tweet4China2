@@ -11,49 +11,16 @@
 
 @implementation HSUNavitationBar
 {
-    BOOL customSubviewsCreated;
+    UIImageView *logo;
 }
 
 - (void)layoutSubviews
 {
-    NSInteger logoTag = 1, tweetTag = 2, searchTag = 3;
-    UIImageView *logo = nil;
-    UIButton *tweetButton = nil;
-    UIButton *searchButton = nil;
-    
-    if (!customSubviewsCreated) {
+    if (!logo) {
         logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_title_logo"]];
-        logo.tag = logoTag;
         [self addSubview:logo];
-        
-        tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        tweetButton.tag = tweetTag;
-        [tweetButton setImage:[UIImage imageNamed:@"ic_title_tweet"] forState:UIControlStateNormal];
-        [tweetButton sizeToFit];
-        tweetButton.showsTouchWhenHighlighted = YES;
-        [self addSubview:tweetButton];
-        [tweetButton addTarget:self action:@selector(composeButtonTouched) forControlEvents:UIControlEventTouchUpInside];
-
-        searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        searchButton.tag = searchTag;
-        [searchButton setImage:[UIImage imageNamed:@"ic_title_search"] forState:UIControlStateNormal];
-        [searchButton sizeToFit];
-        searchButton.showsTouchWhenHighlighted = YES;
-        [self addSubview:searchButton];
-        
-        self.userInteractionEnabled = YES;
-        customSubviewsCreated = YES;
-    } else {
-        logo = (UIImageView *)[self viewWithTag:logoTag];
-        tweetButton = (UIButton *)[self viewWithTag:tweetTag];
-        searchButton = (UIButton *)[self viewWithTag:searchTag];
     }
-    
     logo.frame = CGRectMake(self.bounds.size.width/2-logo.bounds.size.width/2, 10, logo.bounds.size.width, logo.bounds.size.height);
-    CGFloat right1 = [HSUCommonTools isIPhone] ? 10 : 14;
-    CGFloat right2 = [HSUCommonTools isIPhone] ? 22 : 30;
-    tweetButton.frame = CGRectMake([HSUCommonTools winWidth]-right1-tweetButton.bounds.size.width, 12, tweetButton.bounds.size.width, tweetButton.bounds.size.height);
-    searchButton.frame = CGRectMake(tweetButton.frame.origin.x-right2-searchButton.bounds.size.width, 12, searchButton.bounds.size.width, searchButton.bounds.size.height);
 }
 
 - (void)drawRect:(CGRect)rect

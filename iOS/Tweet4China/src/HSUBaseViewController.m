@@ -126,13 +126,16 @@
 }
 
 #pragma mark - Actions
-- (void)composeButtonTouched:(NSNotification *)notification
+- (void)composeButtonTouched
 {
-    if (notification.object == self.navigationController.navigationBar) {
-        HSUComposeViewController *composeViewController = [[HSUComposeViewController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
-        [self presentViewController:nav animated:YES completion:nil];
-    }
+    HSUComposeViewController *composeViewController = [[HSUComposeViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
+- (void)searchButtonTouched
+{
+    L(@"search button touched");
 }
 
 
