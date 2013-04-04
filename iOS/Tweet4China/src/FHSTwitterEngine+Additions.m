@@ -6,11 +6,12 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import "FHSTwitterEngine+Addition.h"
+#import "FHSTwitterEngine+Additions.h"
 #import "OAuthConsumer.h"
 #import "TwitterText.h"
+#import "OAMutableURLRequest.h"
 
-@implementation FHSTwitterEngine (Addition)
+@implementation FHSTwitterEngine (Additions)
 
 - (id)getHomeTimelineMaxId:(NSString *)maxId count:(int)count
 {
@@ -68,6 +69,12 @@
 
 + (NSUInteger)twitterTextLength:(NSString *)text {
     return [TwitterText tweetLength:text];
+}
+
+- (OAMutableURLRequest *)requestWithBaseURL:(NSURL *)baseURL {
+    OAConsumer *consumer = [[OAConsumer alloc]initWithKey:kTwitterAppKey secret:kTwitterAppSecret];
+    OAMutableURLRequest *request = [[OAMutableURLRequest alloc] initWithURL:baseURL consumer:consumer token:self.accessToken realm:nil signatureProvider:nil];
+    return request;
 }
 
 @end

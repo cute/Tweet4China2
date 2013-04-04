@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDate (Addition)
+@interface NSDate (Additions)
 
 + (NSDate *)dateFromTwitterCreatedAt:(NSString *)twitterDate;
 

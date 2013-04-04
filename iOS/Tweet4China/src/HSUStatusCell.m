@@ -11,8 +11,8 @@
 #import "HSUStatusCell.h"
 #import "TTTAttributedLabel.h"
 #import "UIImageView+AFNetworking.h"
-#import "NSDate+Addition.h"
-#import "UIView+Addition.h"
+#import "NSDate+Additions.h"
+#import "UIView+Additions.h"
 
 #define ambient_H 14
 #define info_H 16

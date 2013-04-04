@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import "NSDate+Addition.h"
+#import "NSDate+Additions.h"
 
-@implementation NSDate (Addition)
+@implementation NSDate (Additions)
 
 + (NSDate *)dateFromTwitterCreatedAt:(NSString *)twitterDate
 {

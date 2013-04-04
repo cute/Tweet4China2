@@ -8,12 +8,15 @@
 
 #import "FHSTwitterEngine.h"
 
-@interface FHSTwitterEngine (Addition)
+@class OAMutableURLRequest;
+
+@interface FHSTwitterEngine (Additions)
 
 + (id)engine;
 + (void)auth;
 + (void)dealWithError:(NSError *)error errTitle:(NSString *)errTitle;
 - (id)getHomeTimelineMaxId:(NSString *)maxId count:(int)count;
 + (NSUInteger)twitterTextLength:(NSString *)text;
+- (OAMutableURLRequest *)requestWithBaseURL:(NSURL *)baseURL;
 
 @end

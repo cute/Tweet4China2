@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import "UIImageView+Addition.h"
+#import "UIImageView+Additions.h"
 
-@implementation UIImageView (Addition)
+@implementation UIImageView (Additions)
 
 - (NSString *)imageName
 {

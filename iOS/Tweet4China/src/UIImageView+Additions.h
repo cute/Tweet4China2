@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIImageView (Addition)
+@interface UIImageView (Additions)
 
 @property (nonatomic, readwrite) NSString *imageName;
 
