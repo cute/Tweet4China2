@@ -13,7 +13,6 @@
 #import "OARequestParameter.h"
 #import "OAMutableURLRequest.h"
 #import <MapKit/MapKit.h>
-#import <CoreLocation/CoreLocation.h>
 
 #define kMaxWordLen 140
 
@@ -54,6 +53,7 @@
     UIView *toolbar;
     UIButton *photoBnt;
     UIButton *geoBnt;
+    UIActivityIndicatorView *geoLoadingV;
     UIButton *memtionBnt;
     UIButton *tagBnt;
     UILabel *wordCountL;
@@ -65,7 +65,7 @@
     UIButton *previewCloseBnt;
     MKMapView *mapView;
     UIImageView *mapOutlineIV;
-    UILabel *locationL;
+//    UILabel *locationL;
     UIButton *toggleLocationBnt;
     UITableView *contactsTV;
     UITableView *tagsTV;
@@ -80,8 +80,16 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardAppearance:)
+                                             selector:@selector(keyboardFrameChanged:)
                                                  name:UIKeyboardWillChangeFrameNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
                                                object:nil];
 
 //    setup navigation bar
@@ -139,6 +147,7 @@
     photoBnt = [[UIButton alloc] init];
     [toolbar addSubview:photoBnt];
     [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera"] forState:UIControlStateNormal];
+    photoBnt.showsTouchWhenHighlighted = YES;
     [photoBnt sizeToFit];
     photoBnt.center = ccp(25, 20);
     [photoBnt addTarget:self action:@selector(photoButtonTouched) forControlEvents:UIControlEventTouchUpInside];
@@ -146,19 +155,27 @@
     geoBnt = [[UIButton alloc] init];
     [toolbar addSubview:geoBnt];
     [geoBnt setImage:[UIImage imageNamed:@"compose-geo"] forState:UIControlStateNormal];
+    geoBnt.showsTouchWhenHighlighted = YES;
     [geoBnt sizeToFit];
     geoBnt.center = ccp(85, 20);
     [geoBnt addTarget:self action:@selector(geoButtonTouched) forControlEvents:UIControlEventTouchUpInside];
 
+    geoLoadingV = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [toolbar addSubview:geoLoadingV];
+    geoLoadingV.center = geoBnt.center;
+    geoLoadingV.hidesWhenStopped = YES;
+
     memtionBnt = [[UIButton alloc] init];
     [toolbar addSubview:memtionBnt];
     [memtionBnt setImage:[UIImage imageNamed:@"button-bar-at"] forState:UIControlStateNormal];
+    memtionBnt.showsTouchWhenHighlighted = YES;
     [memtionBnt sizeToFit];
     memtionBnt.center = ccp(145, 20);
 
     tagBnt = [[UIButton alloc] init];
     [toolbar addSubview:tagBnt];
     [tagBnt setImage:[UIImage imageNamed:@"button-bar-hashtag"] forState:UIControlStateNormal];
+    tagBnt.showsTouchWhenHighlighted = YES;
     [tagBnt sizeToFit];
     tagBnt.center = ccp(205, 20);
 
@@ -234,7 +251,19 @@
     [extraPanelSV addSubview:mapOutlineIV];
     mapOutlineIV.frame = mapView.frame;
 
-//    locationL = [[UILabel alloc] init];
+    /*
+    locationL = [[UILabel alloc] init];
+    [extraPanelSV addSubview:locationL];
+    locationL.backgroundColor = kClearColor;
+    locationL.font = [UIFont systemFontOfSize:14];
+    locationL.textColor = bw(140);
+    locationL.shadowColor = kWhiteColor;
+    locationL.shadowOffset = ccs(0, 1);
+    locationL.textAlignment = NSTextAlignmentCenter;
+    locationL.numberOfLines = 1;
+    locationL.frame = ccr(mapView.left, mapView.bottom, mapView.width, 30);
+    */
+
     toggleLocationBnt = [[UIButton alloc] init];
     [extraPanelSV addSubview:toggleLocationBnt];
     [toggleLocationBnt setTapTarget:self action:@selector(toggleLocationButtonTouched)];
@@ -267,6 +296,8 @@
     locationManager.delegate = self;
     locationManager.pausesLocationUpdatesAutomatically = YES;
     [locationManager startUpdatingLocation];
+    geoBnt.hidden = YES;
+    [geoLoadingV startAnimating];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -290,11 +321,19 @@
     toggleLocationBnt.bottom = extraPanelSV.height - 10;
 }
 
-- (void)keyboardAppearance:(NSNotification *)notification
+- (void)keyboardFrameChanged:(NSNotification *)notification
 {
     NSValue* keyboardFrame = [notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
     keyboardHeight = keyboardFrame.CGRectValue.size.height;
     [self.view setNeedsLayout];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    nippleIV.hidden = NO;
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    nippleIV.hidden = YES;
 }
 
 - (void)cancelCompose
@@ -378,7 +417,6 @@
 
 #pragma mark - Actions
 - (void)photoButtonTouched {
-    nippleIV.hidden = NO;
     [contentTV resignFirstResponder];
     [extraPanelSV setContentOffset:ccp(0, 0) animated:YES];
 }
@@ -399,6 +437,8 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
+    image = [image scaleToWidth:640];
+
     CGFloat height = previewIV.height / previewIV.width * image.size.width;
     CGFloat top = image.size.height/2 - height/2;
     CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, ccr(0, top, image.size.width, height));
@@ -418,44 +458,59 @@
 }
 
 - (void)previewCloseButtonTouched {
-    previewCloseBnt.hidden = YES;
-    [UIView animateWithDuration:0.2 animations:^{
-        previewIV.transform = CGAffineTransformMakeScale(0.01, 0.01);
-        previewIV.center = extraPanelSV.boundsCenter;
-    } completion:^(BOOL finished) {
-        previewIV.image = nil;
-        previewIV.hidden = YES;
-        takePhotoBnt.hidden = NO;
-        selectPhotoBnt.hidden = NO;
-        previewIV.transform = CGAffineTransformMakeTranslation(1, 1);
-        previewIV.center = extraPanelSV.boundsCenter;
-    }];
+    if (contentTV.isFirstResponder ||  extraPanelSV.contentOffset.x > 0) {
+        previewCloseBnt.hidden = YES;
+        [UIView animateWithDuration:0.2 animations:^{
+            previewIV.transform = CGAffineTransformMakeScale(0, 0);
+            previewIV.alpha = 0;
+            previewIV.center = extraPanelSV.boundsCenter;
+        } completion:^(BOOL finished) {
+            previewIV.image = nil;
+            previewIV.hidden = YES;
+            takePhotoBnt.hidden = NO;
+            selectPhotoBnt.hidden = NO;
+            previewIV.transform = CGAffineTransformMakeTranslation(1, 1);
+            previewIV.alpha = 1;
+            previewIV.center = extraPanelSV.boundsCenter;
+        }];
 
-    [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera"] forState:UIControlStateNormal];
+        [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera"] forState:UIControlStateNormal];
+    } else {
+        [contentTV becomeFirstResponder];
+    }
 }
 
 - (void)geoButtonTouched {
-    nippleIV.hidden = NO;
-    [contentTV resignFirstResponder];
-    [extraPanelSV setContentOffset:ccp(extraPanelSV.width, 0) animated:YES];
-    mapOutlineIV.backgroundColor = kClearColor;
+    if (contentTV.isFirstResponder ||  extraPanelSV.contentOffset.x == 0) {
+        if (contentTV.isFirstResponder) {
+            [locationManager startUpdatingLocation];
+            geoBnt.hidden = YES;
+            [geoLoadingV startAnimating];
+            [toggleLocationBnt setTitle:@"Turn off location" forState:UIControlStateNormal];
+            mapOutlineIV.backgroundColor = kClearColor;
+        }
 
-    [locationManager startUpdatingLocation];
-    // TODO 菊花
+        [extraPanelSV setContentOffset:ccp(extraPanelSV.width, 0) animated:YES];
+        [contentTV resignFirstResponder];
+    } else {
+        [contentTV becomeFirstResponder];
+    }
 }
 
 - (void)toggleLocationButtonTouched {
     if (toggleLocationBnt.tag) {
         [contentTV becomeFirstResponder];
-        nippleIV.hidden = YES;
         [geoBnt setImage:[UIImage imageNamed:@"compose-geo"] forState:UIControlStateNormal];
         [locationManager stopUpdatingLocation];
         [toggleLocationBnt setTitle:@"Turn on location" forState:UIControlStateNormal];
         [mapView removeAnnotations:mapView.annotations];
         mapOutlineIV.backgroundColor = rgba(1, 1, 1, 0.2);
         toggleLocationBnt.tag = 0;
+        [geoLoadingV stopAnimating];
     } else {
         [locationManager startUpdatingLocation];
+        geoBnt.hidden = YES;
+        [geoLoadingV startAnimating];
         [toggleLocationBnt setTitle:@"Turn off location" forState:UIControlStateNormal];
         mapOutlineIV.backgroundColor = kClearColor;
     }
@@ -463,6 +518,8 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [geoBnt setImage:[UIImage imageNamed:@"compose-geo-highlighted"] forState:UIControlStateNormal];
+    geoBnt.hidden = NO;
+    [geoLoadingV stopAnimating];
     toggleLocationBnt.tag = 1;
 
     location = manager.location.coordinate;

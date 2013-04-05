@@ -10,5 +10,6 @@
 @interface UIImage (Additions)
 
 - (UIImage *)stretchableImageFromCenter;
+- (UIImage*)scaleToWidth:(CGFloat)width;
 
 @end
