@@ -146,19 +146,21 @@
 
     photoBnt = [[UIButton alloc] init];
     [toolbar addSubview:photoBnt];
+    [photoBnt addTarget:self action:@selector(photoButtonTouched) forControlEvents:UIControlEventTouchUpInside];
     [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera"] forState:UIControlStateNormal];
     photoBnt.showsTouchWhenHighlighted = YES;
     [photoBnt sizeToFit];
     photoBnt.center = ccp(25, 20);
-    [photoBnt addTarget:self action:@selector(photoButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+    photoBnt.hitTestEdgeInsets = UIEdgeInsetsMake(0, -5, 0, -5);
 
     geoBnt = [[UIButton alloc] init];
     [toolbar addSubview:geoBnt];
+    [geoBnt addTarget:self action:@selector(geoButtonTouched) forControlEvents:UIControlEventTouchUpInside];
     [geoBnt setImage:[UIImage imageNamed:@"compose-geo"] forState:UIControlStateNormal];
     geoBnt.showsTouchWhenHighlighted = YES;
     [geoBnt sizeToFit];
     geoBnt.center = ccp(85, 20);
-    [geoBnt addTarget:self action:@selector(geoButtonTouched) forControlEvents:UIControlEventTouchUpInside];
+    geoBnt.hitTestEdgeInsets = UIEdgeInsetsMake(0, -5, 0, -5);
 
     geoLoadingV = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [toolbar addSubview:geoLoadingV];
@@ -167,17 +169,21 @@
 
     memtionBnt = [[UIButton alloc] init];
     [toolbar addSubview:memtionBnt];
+    [memtionBnt setTapTarget:self action:@selector(memtionButtonTouched)];
     [memtionBnt setImage:[UIImage imageNamed:@"button-bar-at"] forState:UIControlStateNormal];
     memtionBnt.showsTouchWhenHighlighted = YES;
     [memtionBnt sizeToFit];
     memtionBnt.center = ccp(145, 20);
+    memtionBnt.hitTestEdgeInsets = UIEdgeInsetsMake(0, -5, 0, -5);
 
     tagBnt = [[UIButton alloc] init];
     [toolbar addSubview:tagBnt];
+    [tagBnt setTapTarget:self action:@selector(tagButtonTouched)];
     [tagBnt setImage:[UIImage imageNamed:@"button-bar-hashtag"] forState:UIControlStateNormal];
     tagBnt.showsTouchWhenHighlighted = YES;
     [tagBnt sizeToFit];
     tagBnt.center = ccp(205, 20);
+    tagBnt.hitTestEdgeInsets = UIEdgeInsetsMake(0, -5, 0, -5);
 
     wordCountL = [[UILabel alloc] init];
     [toolbar addSubview:wordCountL];
@@ -532,6 +538,22 @@
     annotation.coordinate = location;
     [mapView removeAnnotations:mapView.annotations];
     [mapView addAnnotation:annotation];
+}
+
+- (void)memtionButtonTouched {
+    NSRange range = contentTV.selectedRange;
+    if (range.location == NSNotFound)
+        range.location = 0;
+    contentTV.text = [contentTV.text stringByReplacingCharactersInRange:range withString:@"@"];
+    [contentTV becomeFirstResponder];
+}
+
+- (void)tagButtonTouched {
+    NSRange range = contentTV.selectedRange;
+    if (range.location == NSNotFound)
+        range.location = 0;
+    contentTV.text = [contentTV.text stringByReplacingCharactersInRange:range withString:@"#"];
+    [contentTV becomeFirstResponder];
 }
 
 @end
