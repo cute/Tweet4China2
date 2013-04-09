@@ -23,6 +23,9 @@
 #import "HSUUIEvent.h"
 #import "HSUCommonTools.h"
 
+#import <SystemConfiguration/SystemConfiguration.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+
 #define kTabBarHeight 44
 #define kIPadTabBarWidth 84
 

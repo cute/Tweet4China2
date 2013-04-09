@@ -13,7 +13,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#ifndef NO_PROXY
     [NSURLProtocol registerClass:[HSUProxyURLProtocol class]];
+#endif
     
     // Init global variables
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
