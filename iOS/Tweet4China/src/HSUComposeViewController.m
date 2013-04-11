@@ -478,6 +478,11 @@
         NSInteger len = contentTV.selectedRange.location-filterLocation;
         if (len >= 0) {
             NSString *filterText = [contentTV.text substringWithRange:NSMakeRange(filterLocation, len)];
+            if ([filterText hasSuffix:@" "]) { // TODO more chars trigger this
+                suggestionType = 0;
+                filteredSuggestions = nil;
+                [self.view setNeedsLayout];
+            }
             if (suggestionType == kSuggestionType_Mention && friends) {
                 if (filterText && filterText.length) {
                     if (filteredSuggestions == nil) {
@@ -700,6 +705,17 @@
     }
 
     return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *friend = filteredSuggestions[indexPath.row];
+    NSString *screenName = S(@"%@ ", friend[@"screen_name"]);
+    if ([self textView:contentTV shouldChangeTextInRange:contentTV.selectedRange replacementText:screenName]) {
+        [contentTV replaceRange:contentTV.selectedTextRange withText:screenName];
+    }
+    suggestionType = 0;
+    filteredSuggestions = nil;
+    [self.view setNeedsLayout];
 }
 
 @end

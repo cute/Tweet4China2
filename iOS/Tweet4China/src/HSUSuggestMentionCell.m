@@ -36,6 +36,8 @@
         screenNameL.font = [UIFont systemFontOfSize:12];
         screenNameL.leftTop = ccp(nameL.left, nameL.top + 12 + 1);
         screenNameL.backgroundColor = kClearColor;
+
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }
