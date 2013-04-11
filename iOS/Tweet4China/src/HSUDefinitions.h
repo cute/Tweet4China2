@@ -54,7 +54,9 @@ _Pragma("clang diagnostic pop") \
 #define kClearColor [UIColor clearColor]
 #define kWinWidth [HSUCommonTools winWidth]
 #define kWinHeight [HSUCommonTools winHeight]
-#define kStrechedImage(imageName, capWidth, capHeight) [[UIImage imageNamed:imageName] stretchableImageWithLeftCapWidth:capWidth topCapHeight:capHeight]
+
+#define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
+
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 

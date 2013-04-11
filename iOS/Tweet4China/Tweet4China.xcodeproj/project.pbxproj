@@ -10,7 +10,10 @@
 		603900029BF5678F715D6B1E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390395A624BBF085B20271 /* Reachability.m */; };
 		6039013E59085F1E64EE3D93 /* UIBlackCloseButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 603907F6F8C74FBCB5DC8E7B /* UIBlackCloseButton@2x.png */; };
 		603903F81FA5C0E0228F51B9 /* UIBlackCloseButtonPressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60390DDCD1D611275C65A83C /* UIBlackCloseButtonPressed@2x.png */; };
+		603905961F1A442FC872C8B3 /* HSUSuggestMentionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 603908E9CA4AF63298EF4845 /* HSUSuggestMentionCell.m */; };
 		6039074570C80762F16B96A3 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390C735C7755F632A4D314 /* TwitterTextEntity.m */; };
+		603908B2C39FB3B9882CE8AC /* searches-top-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 603908A8B4865103CD83628F /* searches-top-shadow.png */; };
+		603909172DE0FB7D7730FFEB /* HSUSuggestTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390FAED306D4D1BEFD817B /* HSUSuggestTagCell.m */; };
 		603909459EA4EB003D8703B6 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 603907739530ED775E546DEA /* UIImage+Additions.m */; };
 		60390D8AB0504A6D5B54A453 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60390DCAE6A7A765BA1602FC /* MapKit.framework */; };
 		60390D9E8041365ACB74444B /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390160979A8630388CF67A /* TwitterText.m */; };
@@ -51,7 +54,7 @@
 		962AB00C16FB345B00D44566 /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 962AB00A16FB345B00D44566 /* pop.wav */; };
 		962AB00D16FB345B00D44566 /* psst1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 962AB00B16FB345B00D44566 /* psst1.wav */; };
 		9639B91B16FDF0B10032177F /* ic_inset_larry@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9639B91A16FDF0B10032177F /* ic_inset_larry@2x.png */; };
-		9639B91F16FDF5DE0032177F /* FHSTwitterEngine+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Additions.m */; };
+		9639B91F16FDF5DE0032177F /* FHSTwitterEngine+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Additions.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9639B92216FE1AD20032177F /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B92116FE1AD20032177F /* UIView+Additions.m */; };
 		9639B92617001FDF0032177F /* unread-indicator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9639B92517001FDF0032177F /* unread-indicator@2x.png */; };
 		9648276116E230910002345B /* bg_tab_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9648275F16E230910002345B /* bg_tab_bar@2x.png */; };
@@ -108,7 +111,6 @@
 		9664996216F307A700BC901A /* FHSTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 9664994B16F307A700BC901A /* FHSTwitterEngine.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		9664996316F307A700BC901A /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 9664994F16F307A700BC901A /* NSString+URLEncoding.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9664996416F307A700BC901A /* Base64TranscoderFHS.c in Sources */ = {isa = PBXBuildFile; fileRef = 9664995116F307A700BC901A /* Base64TranscoderFHS.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		9664996516F307A700BC901A /* OAAsynchronousDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9664995416F307A700BC901A /* OAAsynchronousDataFetcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9664996616F307A700BC901A /* OAConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = 9664995616F307A700BC901A /* OAConsumer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9664996716F307A700BC901A /* OAHMAC_SHA1SignatureProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9664995816F307A700BC901A /* OAHMAC_SHA1SignatureProvider.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9664996816F307A700BC901A /* OAMutableURLRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9664995A16F307A700BC901A /* OAMutableURLRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -165,6 +167,10 @@
 		603907739530ED775E546DEA /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		603907F6F8C74FBCB5DC8E7B /* UIBlackCloseButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBlackCloseButton@2x.png"; sourceTree = "<group>"; };
 		60390849599D4E2CDA2302ED /* UIButton+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Additions.m"; sourceTree = "<group>"; };
+		603908A8B4865103CD83628F /* searches-top-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searches-top-shadow.png"; sourceTree = "<group>"; };
+		603908E9CA4AF63298EF4845 /* HSUSuggestMentionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUSuggestMentionCell.m; sourceTree = "<group>"; };
+		603908FEEF7C2AAACE69AFF4 /* HSUSuggestMentionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUSuggestMentionCell.h; sourceTree = "<group>"; };
+		60390A59254270D4C2A0264D /* HSUSuggestTagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUSuggestTagCell.h; sourceTree = "<group>"; };
 		60390C735C7755F632A4D314 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterTextEntity.m; sourceTree = "<group>"; };
 		60390CA86378610ACFD11D36 /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
 		60390D64609E5798B654DD30 /* UIButton+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Additions.h"; sourceTree = "<group>"; };
@@ -172,6 +178,7 @@
 		60390DC451E27785677A1F2D /* icn_tweet_sheet_photo_remove_default@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icn_tweet_sheet_photo_remove_default@2x~ipad.png"; sourceTree = "<group>"; };
 		60390DCAE6A7A765BA1602FC /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		60390DDCD1D611275C65A83C /* UIBlackCloseButtonPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBlackCloseButtonPressed@2x.png"; sourceTree = "<group>"; };
+		60390FAED306D4D1BEFD817B /* HSUSuggestTagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUSuggestTagCell.m; sourceTree = "<group>"; };
 		60390FD20A0FA23B9288C784 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTextEntity.h; sourceTree = "<group>"; };
 		9612AF4417086D710038935C /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = encrypt.c; sourceTree = "<group>"; };
 		9612AF4517086D710038935C /* encrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encrypt.h; sourceTree = "<group>"; };
@@ -301,8 +308,6 @@
 		9664994F16F307A700BC901A /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
 		9664995116F307A700BC901A /* Base64TranscoderFHS.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Base64TranscoderFHS.c; sourceTree = "<group>"; };
 		9664995216F307A700BC901A /* Base64TranscoderFHS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64TranscoderFHS.h; sourceTree = "<group>"; };
-		9664995316F307A700BC901A /* OAAsynchronousDataFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAsynchronousDataFetcher.h; sourceTree = "<group>"; };
-		9664995416F307A700BC901A /* OAAsynchronousDataFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAsynchronousDataFetcher.m; sourceTree = "<group>"; };
 		9664995516F307A700BC901A /* OAConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConsumer.h; sourceTree = "<group>"; };
 		9664995616F307A700BC901A /* OAConsumer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAConsumer.m; sourceTree = "<group>"; };
 		9664995716F307A700BC901A /* OAHMAC_SHA1SignatureProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHMAC_SHA1SignatureProvider.h; sourceTree = "<group>"; };
@@ -593,6 +598,7 @@
 				60390DC451E27785677A1F2D /* icn_tweet_sheet_photo_remove_default@2x~ipad.png */,
 				60390DDCD1D611275C65A83C /* UIBlackCloseButtonPressed@2x.png */,
 				603907F6F8C74FBCB5DC8E7B /* UIBlackCloseButton@2x.png */,
+				603908A8B4865103CD83628F /* searches-top-shadow.png */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -690,8 +696,6 @@
 			children = (
 				9664994D16F307A700BC901A /* Categories */,
 				9664995016F307A700BC901A /* Crytpo */,
-				9664995316F307A700BC901A /* OAAsynchronousDataFetcher.h */,
-				9664995416F307A700BC901A /* OAAsynchronousDataFetcher.m */,
 				9664995516F307A700BC901A /* OAConsumer.h */,
 				9664995616F307A700BC901A /* OAConsumer.m */,
 				9664995716F307A700BC901A /* OAHMAC_SHA1SignatureProvider.h */,
@@ -734,6 +738,10 @@
 				968EC06416ECB62A0068A6A0 /* HSUStatusViewController.m */,
 				96E34B4217015ECD0066CD5E /* HSUComposeViewController.h */,
 				96E34B4317015ECD0066CD5E /* HSUComposeViewController.m */,
+				603908E9CA4AF63298EF4845 /* HSUSuggestMentionCell.m */,
+				603908FEEF7C2AAACE69AFF4 /* HSUSuggestMentionCell.h */,
+				60390FAED306D4D1BEFD817B /* HSUSuggestTagCell.m */,
+				60390A59254270D4C2A0264D /* HSUSuggestTagCell.h */,
 			);
 			name = Controller_Level2;
 			sourceTree = "<group>";
@@ -943,6 +951,7 @@
 				60390D9F7AB9A57DE245D58A /* icn_tweet_sheet_photo_remove_default@2x~ipad.png in Resources */,
 				603903F81FA5C0E0228F51B9 /* UIBlackCloseButtonPressed@2x.png in Resources */,
 				6039013E59085F1E64EE3D93 /* UIBlackCloseButton@2x.png in Resources */,
+				603908B2C39FB3B9882CE8AC /* searches-top-shadow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -986,7 +995,6 @@
 				9664996216F307A700BC901A /* FHSTwitterEngine.m in Sources */,
 				9664996316F307A700BC901A /* NSString+URLEncoding.m in Sources */,
 				9664996416F307A700BC901A /* Base64TranscoderFHS.c in Sources */,
-				9664996516F307A700BC901A /* OAAsynchronousDataFetcher.m in Sources */,
 				9664996616F307A700BC901A /* OAConsumer.m in Sources */,
 				9664996716F307A700BC901A /* OAHMAC_SHA1SignatureProvider.m in Sources */,
 				9664996816F307A700BC901A /* OAMutableURLRequest.m in Sources */,
@@ -1013,6 +1021,8 @@
 				603900029BF5678F715D6B1E /* Reachability.m in Sources */,
 				603909459EA4EB003D8703B6 /* UIImage+Additions.m in Sources */,
 				60390DA90C44901CEEB0F319 /* UIButton+Additions.m in Sources */,
+				603905961F1A442FC872C8B3 /* HSUSuggestMentionCell.m in Sources */,
+				603909172DE0FB7D7730FFEB /* HSUSuggestTagCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

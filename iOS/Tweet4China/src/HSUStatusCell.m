@@ -13,6 +13,8 @@
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+Additions.h"
 #import "UIView+Additions.h"
+#import "FHSTwitterEngine.h"
+#import "FHSTwitterEngine+Additions.h"
 
 #define ambient_H 14
 #define info_H 16
@@ -229,7 +231,7 @@
     }
     
     // time
-    NSDate *createdDate = [NSDate dateFromTwitterCreatedAt:rawData[@"created_at"]];
+    NSDate *createdDate = [[FHSTwitterEngine engine] getDateFromTwitterCreatedAt:rawData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
     
     // text

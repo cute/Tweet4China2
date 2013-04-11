@@ -10,8 +10,6 @@
 
 @interface NSDate (Additions)
 
-+ (NSDate *)dateFromTwitterCreatedAt:(NSString *)twitterDate;
-
 @property (nonatomic, readonly) NSString *twitterDisplay;
 
 @end

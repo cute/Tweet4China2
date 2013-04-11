@@ -10,19 +10,6 @@
 
 @implementation NSDate (Additions)
 
-+ (NSDate *)dateFromTwitterCreatedAt:(NSString *)twitterDate
-{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    [dateFormatter setLocale:usLocale];
-    [dateFormatter setDateStyle:NSDateFormatterLongStyle];
-    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
-    
-    [dateFormatter setDateFormat:@"EEE MMM dd HH:mm:ss ZZZZ yyyy"];
-    
-    return [dateFormatter dateFromString:twitterDate];
-}
-
 - (NSString *)twitterDisplay
 {
     NSTimeInterval cur = [[NSDate date] timeIntervalSince1970];

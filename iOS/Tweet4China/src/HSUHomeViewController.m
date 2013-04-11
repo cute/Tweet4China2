@@ -49,7 +49,7 @@
         [self.refreshControl beginRefreshing];
         [self.dataSource refresh];
     } else {
-//        return;
+        return;
         if (![((HSUTabController *)self.navigationController.tabBarController) hasUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem]) {
             [self.dataSource checkUnread];
         }

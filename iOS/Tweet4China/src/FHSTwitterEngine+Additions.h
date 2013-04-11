@@ -12,11 +12,17 @@
 
 @interface FHSTwitterEngine (Additions)
 
+@property (strong, nonatomic) OAConsumer *consumer;
+
 + (id)engine;
 + (void)auth;
 + (void)dealWithError:(NSError *)error errTitle:(NSString *)errTitle;
 - (id)getHomeTimelineMaxId:(NSString *)maxId count:(int)count;
 + (NSUInteger)twitterTextLength:(NSString *)text;
 - (OAMutableURLRequest *)requestWithBaseURL:(NSURL *)baseURL;
+
+- (id)getFriendsMoreThanID;
+
+- (NSArray *)generateRequestStringsFromArray:(NSArray *)array;
 
 @end
