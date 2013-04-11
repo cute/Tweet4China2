@@ -14,9 +14,11 @@
 		6039074570C80762F16B96A3 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390C735C7755F632A4D314 /* TwitterTextEntity.m */; };
 		603908B2C39FB3B9882CE8AC /* searches-top-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 603908A8B4865103CD83628F /* searches-top-shadow.png */; };
 		603909172DE0FB7D7730FFEB /* HSUSuggestTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390FAED306D4D1BEFD817B /* HSUSuggestTagCell.m */; };
+		6039049E0133294168660416 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603908AF3506DDB365AEF378 /* MobileCoreServices.framework */; };
+		603904A8E5BF948C08FDE9BC /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390DAB164A5E6D105FF57A /* TwitterTextEntity.m */; };
+		603906EFBCB411FCA3E06613 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 6039033279BF1A13B2804839 /* TwitterText.m */; };
 		603909459EA4EB003D8703B6 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 603907739530ED775E546DEA /* UIImage+Additions.m */; };
 		60390D8AB0504A6D5B54A453 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60390DCAE6A7A765BA1602FC /* MapKit.framework */; };
-		60390D9E8041365ACB74444B /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390160979A8630388CF67A /* TwitterText.m */; };
 		60390D9F7AB9A57DE245D58A /* icn_tweet_sheet_photo_remove_default@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 60390DC451E27785677A1F2D /* icn_tweet_sheet_photo_remove_default@2x~ipad.png */; };
 		60390DA90C44901CEEB0F319 /* UIButton+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390849599D4E2CDA2302ED /* UIButton+Additions.m */; };
 		60390E4B617A2E4F43375CF9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60390631E83238E3E4F8E8A7 /* CoreLocation.framework */; };
@@ -53,6 +55,7 @@
 		962AB00816FB330A00D44566 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 962AB00716FB330A00D44566 /* AVFoundation.framework */; };
 		962AB00C16FB345B00D44566 /* pop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 962AB00A16FB345B00D44566 /* pop.wav */; };
 		962AB00D16FB345B00D44566 /* psst1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 962AB00B16FB345B00D44566 /* psst1.wav */; };
+		9631AD191714738F006A4C0F /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 9631AD181714738F006A4C0F /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9639B91B16FDF0B10032177F /* ic_inset_larry@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9639B91A16FDF0B10032177F /* ic_inset_larry@2x.png */; };
 		9639B91F16FDF5DE0032177F /* FHSTwitterEngine+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Additions.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9639B92216FE1AD20032177F /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B92116FE1AD20032177F /* UIView+Additions.m */; };
@@ -160,9 +163,9 @@
 
 /* Begin PBXFileReference section */
 		603900A30CF70825111188BE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		60390160979A8630388CF67A /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterText.m; sourceTree = "<group>"; };
-		603902347B8B001FBF1FFEB2 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterText.h; sourceTree = "<group>"; };
+		6039033279BF1A13B2804839 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "twitter-text-objc/lib/TwitterText.m"; sourceTree = "<group>"; };
 		60390395A624BBF085B20271 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		603906116FBAA6DD6377D33C /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = "<group>"; };
 		60390631E83238E3E4F8E8A7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		603907739530ED775E546DEA /* UIImage+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Additions.m"; sourceTree = "<group>"; };
 		603907F6F8C74FBCB5DC8E7B /* UIBlackCloseButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBlackCloseButton@2x.png"; sourceTree = "<group>"; };
@@ -172,8 +175,11 @@
 		603908FEEF7C2AAACE69AFF4 /* HSUSuggestMentionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUSuggestMentionCell.h; sourceTree = "<group>"; };
 		60390A59254270D4C2A0264D /* HSUSuggestTagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUSuggestTagCell.h; sourceTree = "<group>"; };
 		60390C735C7755F632A4D314 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterTextEntity.m; sourceTree = "<group>"; };
+		603908AF3506DDB365AEF378 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		60390BCB4CF85C14603E6E39 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "twitter-text-objc/lib/TwitterText.h"; sourceTree = "<group>"; };
 		60390CA86378610ACFD11D36 /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
 		60390D64609E5798B654DD30 /* UIButton+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Additions.h"; sourceTree = "<group>"; };
+		60390DAB164A5E6D105FF57A /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = "<group>"; };
 		60390DB40B7855166EE945D8 /* icn_tweet_sheet_photo_remove_pressed@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icn_tweet_sheet_photo_remove_pressed@2x~ipad.png"; sourceTree = "<group>"; };
 		60390DC451E27785677A1F2D /* icn_tweet_sheet_photo_remove_default@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icn_tweet_sheet_photo_remove_default@2x~ipad.png"; sourceTree = "<group>"; };
 		60390DCAE6A7A765BA1602FC /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -230,6 +236,8 @@
 		962AB00716FB330A00D44566 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		962AB00A16FB345B00D44566 /* pop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pop.wav; sourceTree = "<group>"; };
 		962AB00B16FB345B00D44566 /* psst1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = psst1.wav; sourceTree = "<group>"; };
+		9631AD171714738F006A4C0F /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
+		9631AD181714738F006A4C0F /* GTMNSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
 		9639B91A16FDF0B10032177F /* ic_inset_larry@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_inset_larry@2x.png"; sourceTree = "<group>"; };
 		9639B91D16FDF5DE0032177F /* FHSTwitterEngine+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FHSTwitterEngine+Additions.h"; sourceTree = "<group>"; };
 		9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FHSTwitterEngine+Additions.m"; sourceTree = "<group>"; };
@@ -396,22 +404,22 @@
 				9628175416DE5EDC00ABF0AD /* CoreGraphics.framework in Frameworks */,
 				60390D8AB0504A6D5B54A453 /* MapKit.framework in Frameworks */,
 				60390E4B617A2E4F43375CF9 /* CoreLocation.framework in Frameworks */,
+				6039049E0133294168660416 /* MobileCoreServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		60390461B87364936D8EF6A8 /* twitter-text-objc */ = {
+		6039062922755FB9F6644E8C /* twitter-text-objc */ = {
 			isa = PBXGroup;
 			children = (
-				603902347B8B001FBF1FFEB2 /* TwitterText.h */,
-				60390160979A8630388CF67A /* TwitterText.m */,
-				60390FD20A0FA23B9288C784 /* TwitterTextEntity.h */,
-				60390C735C7755F632A4D314 /* TwitterTextEntity.m */,
+				60390BCB4CF85C14603E6E39 /* TwitterText.h */,
+				6039033279BF1A13B2804839 /* TwitterText.m */,
+				603906116FBAA6DD6377D33C /* TwitterTextEntity.h */,
+				60390DAB164A5E6D105FF57A /* TwitterTextEntity.m */,
 			);
 			name = "twitter-text-objc";
-			path = "twitter-text-objc/twitter-text-objc";
 			sourceTree = "<group>";
 		};
 		60390BC7A7A04EBB18CF669F /* Reachability */ = {
@@ -483,6 +491,7 @@
 				9628175316DE5EDC00ABF0AD /* CoreGraphics.framework */,
 				60390DCAE6A7A765BA1602FC /* MapKit.framework */,
 				60390631E83238E3E4F8E8A7 /* CoreLocation.framework */,
+				603908AF3506DDB365AEF378 /* MobileCoreServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -522,14 +531,15 @@
 		9628177516DE5FDF00ABF0AD /* 3th-party */ = {
 			isa = PBXGroup;
 			children = (
+				9631AD161714738F006A4C0F /* GTMNSString+HTML */,
 				9612AF4217086D710038935C /* libshadow */,
 				9620089817056D5300D54BF7 /* Base64 */,
 				9664994916F307A700BC901A /* FHSTwitterEngine */,
 				9664994516F3079800BC901A /* TTTAttributedLabel */,
 				9664992816F3078800BC901A /* AFNetworking */,
 				9696D7E716F0A4EB005D7AAB /* UIAlertView-Blocks */,
-				60390461B87364936D8EF6A8 /* twitter-text-objc */,
 				60390BC7A7A04EBB18CF669F /* Reachability */,
+				6039062922755FB9F6644E8C /* twitter-text-objc */,
 			);
 			path = "3th-party";
 			sourceTree = "<group>";
@@ -622,6 +632,15 @@
 				962AB00B16FB345B00D44566 /* psst1.wav */,
 			);
 			path = audio;
+			sourceTree = "<group>";
+		};
+		9631AD161714738F006A4C0F /* GTMNSString+HTML */ = {
+			isa = PBXGroup;
+			children = (
+				9631AD171714738F006A4C0F /* GTMNSString+HTML.h */,
+				9631AD181714738F006A4C0F /* GTMNSString+HTML.m */,
+			);
+			path = "GTMNSString+HTML";
 			sourceTree = "<group>";
 		};
 		9639B91C16FDF59E0032177F /* Additions */ = {
@@ -1016,13 +1035,14 @@
 				9612AF5A17086D710038935C /* encrypt.c in Sources */,
 				9612AF6417086D710038935C /* md5.c in Sources */,
 				9612AF6517086D710038935C /* rc4.c in Sources */,
-				60390D9E8041365ACB74444B /* TwitterText.m in Sources */,
-				6039074570C80762F16B96A3 /* TwitterTextEntity.m in Sources */,
 				603900029BF5678F715D6B1E /* Reachability.m in Sources */,
 				603909459EA4EB003D8703B6 /* UIImage+Additions.m in Sources */,
 				60390DA90C44901CEEB0F319 /* UIButton+Additions.m in Sources */,
 				603905961F1A442FC872C8B3 /* HSUSuggestMentionCell.m in Sources */,
 				603909172DE0FB7D7730FFEB /* HSUSuggestTagCell.m in Sources */,
+				603906EFBCB411FCA3E06613 /* TwitterText.m in Sources */,
+				603904A8E5BF948C08FDE9BC /* TwitterTextEntity.m in Sources */,
+				9631AD191714738F006A4C0F /* GTMNSString+HTML.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

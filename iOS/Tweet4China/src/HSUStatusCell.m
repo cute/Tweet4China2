@@ -15,6 +15,7 @@
 #import "UIView+Additions.h"
 #import "FHSTwitterEngine.h"
 #import "FHSTwitterEngine+Additions.h"
+#import "GTMNSString+HTML.h"
 
 #define ambient_H 14
 #define info_H 16
@@ -235,7 +236,7 @@
     timeL.text = createdDate.twitterDisplay;
     
     // text
-    NSString *text = rawData[@"text"];
+    NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
     textAL.text = text;
     if (entities) {
         NSArray *urls = entities[@"urls"];
@@ -283,8 +284,8 @@
         leftHeight += ambient_H;
     }
     height += info_H; // add info
-    
-    NSString *text = rawData[@"text"];
+
+    NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
     NSDictionary *entities = rawData[@"entities"];
     if (entities) {
         NSArray *urls = entities[@"urls"];
