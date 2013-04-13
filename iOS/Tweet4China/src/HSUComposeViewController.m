@@ -732,6 +732,7 @@
     if ([self textView:contentTV shouldChangeTextInRange:range replacementText:replacement]) {
         contentTV.text = [contentTV.text stringByReplacingCharactersInRange:range withString:replacement];
     }
+    [self textViewDidChange:contentTV];
     suggestionType = 0;
     filteredSuggestions = nil;
     [self.view setNeedsLayout];
