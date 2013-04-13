@@ -68,7 +68,7 @@
     UIButton *previewCloseBnt;
     MKMapView *mapView;
     UIImageView *mapOutlineIV;
-//    UILabel *locationL;
+    UILabel *locationL;
     UIButton *toggleLocationBnt;
     UITableView *suggestionsTV;
     UIImageView *contentShadowV;
@@ -264,7 +264,6 @@
     [extraPanelSV addSubview:mapOutlineIV];
     mapOutlineIV.frame = mapView.frame;
 
-    /*
     locationL = [[UILabel alloc] init];
     [extraPanelSV addSubview:locationL];
     locationL.backgroundColor = kClearColor;
@@ -275,7 +274,6 @@
     locationL.textAlignment = NSTextAlignmentCenter;
     locationL.numberOfLines = 1;
     locationL.frame = ccr(mapView.left, mapView.bottom, mapView.width, 30);
-    */
 
     toggleLocationBnt = [[UIButton alloc] init];
     [extraPanelSV addSubview:toggleLocationBnt];
@@ -636,6 +634,15 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    CLGeocoder * geoCoder = [[CLGeocoder alloc] init];
+    [geoCoder reverseGeocodeLocation:manager.location completionHandler:^(NSArray *placemarks, NSError *error) {
+        for (CLPlacemark * placemark in placemarks) {
+            locationL.text = placemark.name;
+            break;
+        }
+    }];
+
+
     [geoBnt setImage:[UIImage imageNamed:@"compose-geo-highlighted"] forState:UIControlStateNormal];
     geoBnt.hidden = NO;
     [geoLoadingV stopAnimating];
