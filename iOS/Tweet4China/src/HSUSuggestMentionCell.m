@@ -23,19 +23,19 @@
         [self addSubview:avatarIV];
         avatarIV.frame = ccr(0, 0, 37, 37);
 
-        nameL = [[UILabel alloc] init];
-        [self addSubview:nameL];
-        nameL.textColor = kBlackColor;
-        nameL.font = [UIFont boldSystemFontOfSize:12];
-        nameL.leftTop = ccp(avatarIV.right + 10, 6);
-        nameL.backgroundColor = kClearColor;
-
         screenNameL = [[UILabel alloc] init];
         [self addSubview:screenNameL];
-        screenNameL.textColor = bw(100);
+        screenNameL.textColor = kBlackColor;
         screenNameL.font = [UIFont systemFontOfSize:12];
-        screenNameL.leftTop = ccp(nameL.left, nameL.top + 12 + 1);
+        screenNameL.leftTop = ccp(avatarIV.right + 10, 6);
         screenNameL.backgroundColor = kClearColor;
+
+        nameL = [[UILabel alloc] init];
+        [self addSubview:nameL];
+        nameL.textColor = bw(100);
+        nameL.font = [UIFont boldSystemFontOfSize:12];
+        nameL.leftTop = ccp(screenNameL.left, screenNameL.top + 12 + 1);
+        nameL.backgroundColor = kClearColor;
 
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }

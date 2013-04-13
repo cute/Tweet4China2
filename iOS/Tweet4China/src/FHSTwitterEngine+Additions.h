@@ -22,6 +22,7 @@
 - (OAMutableURLRequest *)requestWithBaseURL:(NSURL *)baseURL;
 
 - (id)getFriendsMoreThanID;
+- (id)getTrends;
 
 - (NSArray *)generateRequestStringsFromArray:(NSArray *)array;
 

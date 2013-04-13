@@ -13,9 +13,7 @@
 #import "OARequestParameter.h"
 #import "OAMutableURLRequest.h"
 #import "HSUSuggestMentionCell.h"
-#import "HSUSuggestTagCell.h"
 #import <MapKit/MapKit.h>
-#import <Foundation/Foundation.h>
 
 #define kMaxWordLen 140
 #define kSingleLineHeight 45
@@ -343,12 +341,15 @@
     });
 
     dispatch_async(GCDBackgroundThread, ^{
-//        id result = [[FHSTwitterEngine engine] get];
-//        if ([result isKindOfClass:[NSArray class]]) {
-//            trends = result;
-//            L(@"Trends ----------------------------")
-//            L(trends);
-//        }
+        id result = [[FHSTwitterEngine engine] getTrends];
+        if ([result isKindOfClass:[NSArray class]] && [result count]) {
+            trends = result[0][@"trends"];
+            [[NSUserDefaults standardUserDefaults] setObject:trends forKey:@"trends"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self filterSuggestions];
+            });
+        }
     });
 }
 
@@ -478,7 +479,8 @@
         NSInteger len = contentTV.selectedRange.location-filterLocation;
         if (len >= 0) {
             NSString *filterText = [contentTV.text substringWithRange:NSMakeRange(filterLocation, len)];
-            if ([filterText hasSuffix:@" "]) { // TODO more chars trigger this
+            NSString *trimmedText = [filterText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            if (![trimmedText isEqualToString:filterText]) {
                 suggestionType = 0;
                 filteredSuggestions = nil;
                 [self.view setNeedsLayout];
@@ -500,16 +502,16 @@
                     filteredSuggestions = [friends mutableCopy];
                 }
             } else if (suggestionType == kSuggestionType_Tag && trends) {
-                if (filterText) {
+                if (filterText && filterText.length) {
                     if (filteredSuggestions == nil) {
                         filteredSuggestions = [NSMutableArray array];
                     } else {
                         [filteredSuggestions removeAllObjects];
                     }
                     for (NSDictionary *trend in trends) {
-                        NSString *tag = trend[@"tag"];
-                        if ([tag rangeOfString:filterText].location != NSNotFound) {
-                            [filteredSuggestions addObject:tag];
+                        NSString *tag = [[trend[@"name"] substringFromIndex:1] lowercaseString];
+                        if (tag && [tag rangeOfString:filterText].location != NSNotFound) {
+                            [filteredSuggestions addObject:trend];
                         }
                     }
                 } else {
@@ -533,8 +535,12 @@
 
 #pragma mark - Actions
 - (void)photoButtonTouched {
-    [contentTV resignFirstResponder];
-    [extraPanelSV setContentOffset:ccp(0, 0) animated:YES];
+    if (contentTV.isFirstResponder || extraPanelSV.contentOffset.x > 0) {
+        [contentTV resignFirstResponder];
+        [extraPanelSV setContentOffset:ccp(0, 0) animated:YES];
+    } else {
+        [contentTV becomeFirstResponder];
+    }
 }
 
 - (void)takePhotoButtonTouched {
@@ -574,26 +580,22 @@
 }
 
 - (void)previewCloseButtonTouched {
-    if (contentTV.isFirstResponder ||  extraPanelSV.contentOffset.x > 0) {
-        previewCloseBnt.hidden = YES;
-        [UIView animateWithDuration:0.2 animations:^{
-            previewIV.transform = CGAffineTransformMakeScale(0, 0);
-            previewIV.alpha = 0;
-            previewIV.center = extraPanelSV.boundsCenter;
-        } completion:^(BOOL finished) {
-            previewIV.image = nil;
-            previewIV.hidden = YES;
-            takePhotoBnt.hidden = NO;
-            selectPhotoBnt.hidden = NO;
-            previewIV.transform = CGAffineTransformMakeTranslation(1, 1);
-            previewIV.alpha = 1;
-            previewIV.center = extraPanelSV.boundsCenter;
-        }];
+    previewCloseBnt.hidden = YES;
+    [UIView animateWithDuration:0.2 animations:^{
+        previewIV.transform = CGAffineTransformMakeScale(0, 0);
+        previewIV.alpha = 0;
+        previewIV.center = extraPanelSV.boundsCenter;
+    } completion:^(BOOL finished) {
+        previewIV.image = nil;
+        previewIV.hidden = YES;
+        takePhotoBnt.hidden = NO;
+        selectPhotoBnt.hidden = NO;
+        previewIV.transform = CGAffineTransformMakeTranslation(1, 1);
+        previewIV.alpha = 1;
+        previewIV.center = extraPanelSV.boundsCenter;
+    }];
 
-        [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera"] forState:UIControlStateNormal];
-    } else {
-        [contentTV becomeFirstResponder];
-    }
+    [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera"] forState:UIControlStateNormal];
 }
 
 - (void)geoButtonTouched {
@@ -617,6 +619,7 @@
     if (toggleLocationBnt.tag) {
         [contentTV becomeFirstResponder];
         [geoBnt setImage:[UIImage imageNamed:@"compose-geo"] forState:UIControlStateNormal];
+        geoBnt.hidden = NO;
         [locationManager stopUpdatingLocation];
         [toggleLocationBnt setTitle:@"Turn on location" forState:UIControlStateNormal];
         [mapView removeAnnotations:mapView.annotations];
@@ -683,8 +686,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    LF(@"%u", filteredSuggestions.count);
-    return filteredSuggestions.count;
+    return MIN(filteredSuggestions.count, 30);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -697,9 +699,12 @@
         [cell setAvatar:avatar name:name screenName:screenName];
         return cell;
     } else if (suggestionType == kSuggestionType_Tag) {
-        HSUSuggestTagCell *cell = [tableView dequeueReusableCellWithIdentifier:[[HSUSuggestTagCell class] description] forIndexPath:indexPath];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"HSUSuggestTagCell"];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"HSUSuggestTagCell"];
+        }
         NSDictionary *trend = filteredSuggestions[indexPath.row];
-        NSString *tag = trend[@"tag"];
+        NSString *tag = [trend[@"name"] substringFromIndex:1];
         cell.textLabel.text = tag;
         return cell;
     }
@@ -708,10 +713,17 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary *friend = filteredSuggestions[indexPath.row];
-    NSString *screenName = S(@"%@ ", friend[@"screen_name"]);
-    if ([self textView:contentTV shouldChangeTextInRange:contentTV.selectedRange replacementText:screenName]) {
-        [contentTV replaceRange:contentTV.selectedTextRange withText:screenName];
+    NSString *replacement = nil;
+    if (suggestionType == kSuggestionType_Mention) {
+        NSDictionary *friend = filteredSuggestions[indexPath.row];
+        replacement = S(@"%@ ", friend[@"screen_name"]);
+    } else if (suggestionType == kSuggestionType_Tag) {
+        NSDictionary *trend = filteredSuggestions[indexPath.row];
+        replacement = S(@"%@ ", [trend[@"name"] substringFromIndex:1]);
+    }
+    NSRange range = NSMakeRange(filterLocation, contentTV.selectedRange.location - filterLocation);
+    if ([self textView:contentTV shouldChangeTextInRange:range replacementText:replacement]) {
+        contentTV.text = [contentTV.text stringByReplacingCharactersInRange:range withString:replacement];
     }
     suggestionType = 0;
     filteredSuggestions = nil;

@@ -147,4 +147,11 @@
     return users;
 }
 
+- (id)getTrends {
+    NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/trends/place.json"];
+    OAMutableURLRequest *request = [OAMutableURLRequest requestWithURL:baseURL consumer:self.consumer token:self.accessToken];
+    OARequestParameter *idP = [OARequestParameter requestParameterWithName:@"id" value:@"1"];
+    return [self sendGETRequest:request withParameters:[NSArray arrayWithObjects:idP, nil]];
+}
+
 @end

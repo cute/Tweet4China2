@@ -14,7 +14,6 @@
 		603904A8E5BF948C08FDE9BC /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390DAB164A5E6D105FF57A /* TwitterTextEntity.m */; };
 		603905961F1A442FC872C8B3 /* HSUSuggestMentionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 603908E9CA4AF63298EF4845 /* HSUSuggestMentionCell.m */; };
 		603906EFBCB411FCA3E06613 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 6039033279BF1A13B2804839 /* TwitterText.m */; };
-		6039074570C80762F16B96A3 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = 60390C735C7755F632A4D314 /* TwitterTextEntity.m */; };
 		603908B2C39FB3B9882CE8AC /* searches-top-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 603908A8B4865103CD83628F /* searches-top-shadow.png */; };
 		603909172DE0FB7D7730FFEB /* HSUSuggestTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 60390FAED306D4D1BEFD817B /* HSUSuggestTagCell.m */; };
 		603909459EA4EB003D8703B6 /* UIImage+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 603907739530ED775E546DEA /* UIImage+Additions.m */; };
@@ -176,7 +175,6 @@
 		603908FEEF7C2AAACE69AFF4 /* HSUSuggestMentionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUSuggestMentionCell.h; sourceTree = "<group>"; };
 		60390A59254270D4C2A0264D /* HSUSuggestTagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUSuggestTagCell.h; sourceTree = "<group>"; };
 		60390BCB4CF85C14603E6E39 /* TwitterText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterText.h; path = "twitter-text-objc/lib/TwitterText.h"; sourceTree = "<group>"; };
-		60390C735C7755F632A4D314 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterTextEntity.m; sourceTree = "<group>"; };
 		60390CA86378610ACFD11D36 /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
 		60390D64609E5798B654DD30 /* UIButton+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Additions.h"; sourceTree = "<group>"; };
 		60390DAB164A5E6D105FF57A /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = "<group>"; };
@@ -185,7 +183,6 @@
 		60390DCAE6A7A765BA1602FC /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		60390DDCD1D611275C65A83C /* UIBlackCloseButtonPressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIBlackCloseButtonPressed@2x.png"; sourceTree = "<group>"; };
 		60390FAED306D4D1BEFD817B /* HSUSuggestTagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUSuggestTagCell.m; sourceTree = "<group>"; };
-		60390FD20A0FA23B9288C784 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTextEntity.h; sourceTree = "<group>"; };
 		9612AF4417086D710038935C /* encrypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = encrypt.c; sourceTree = "<group>"; };
 		9612AF4517086D710038935C /* encrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encrypt.h; sourceTree = "<group>"; };
 		9612AF5517086D710038935C /* md5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = md5.c; sourceTree = "<group>"; };
@@ -1130,6 +1127,7 @@
 				INFOPLIST_FILE = "Tweet4China/Tweet4China-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1142,6 +1140,7 @@
 				INFOPLIST_FILE = "Tweet4China/Tweet4China-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
