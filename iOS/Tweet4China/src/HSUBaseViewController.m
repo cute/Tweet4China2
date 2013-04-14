@@ -104,6 +104,12 @@
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     }
+
+    [dataSource addEventWithName:@"reply" target:self action:@selector(reply:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"retweet" target:self action:@selector(retweet:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"favorite" target:self action:@selector(favorite:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"more" target:self action:@selector(more:) events:UIControlEventTouchUpInside];
+
     [((HSUTabController *)self.tabBarController) hideUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];
     [HSUNetworkActivityIndicatorManager oneLess];
 }
@@ -136,6 +142,20 @@
 - (void)searchButtonTouched
 {
     L(@"search button touched");
+}
+
+#pragma mark - Common actions
+- (void)reply:(HSUTableCellData *)cellData {
+    LF(@"reply with data: %@", cellData);
+}
+
+- (void)retweet:(HSUTableCellData *)cellData {
+}
+
+- (void)favorite:(HSUTableCellData *)cellData {
+}
+
+- (void)more:(HSUTableCellData *)cellData {
 }
 
 

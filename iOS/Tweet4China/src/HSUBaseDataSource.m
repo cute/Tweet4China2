@@ -83,11 +83,12 @@
     return [self dataAtIndex:index].rawData;
 }
 
-- (void)addEvent:(HSUUIEvent *)event
+- (void)addEventWithName:(NSString *)name target:(id)target action:(SEL)action events:(UIControlEvents)events
 {
     for (uint i=0; i<self.count; i++) {
-        event.cellData = [self dataAtIndex:i];
-        [self renderDataAtIndex:i][event.name] = event;
+        HSUUIEvent *cellEvent = [[HSUUIEvent alloc] initWithName:name target:target action:action events:events];
+        cellEvent.cellData = [self dataAtIndex:i];
+        [self renderDataAtIndex:i][name] = cellEvent;
     }
 }
 

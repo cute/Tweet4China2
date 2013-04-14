@@ -29,16 +29,18 @@
     // Configure the view for the selected state
 }
 
-- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data cleanOldEvents:(BOOL)clean
 {
-    NSDictionary *renderData = data.renderData;
-    HSUUIEvent *event = renderData[key];
-    [control addTarget:event.target action:event.action forControlEvents:event.events];
+    HSUUIEvent *event = data.renderData[key];
+    if (clean) {
+        [control removeTarget:nil action:NULL forControlEvents:event.events];
+    }
+    [control addTarget:event action:@selector(fire:) forControlEvents:event.events];
 }
 
 - (void)setupWithData:(HSUTableCellData *)data
 {
-    
+    self.data = data;
 }
 
 + (CGFloat)heightForData:(HSUTableCellData *)data

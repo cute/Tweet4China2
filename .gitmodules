@@ -22,3 +22,6 @@
 [submodule "iOS/Tweet4China/3th-party/Reachability"]
 	path = iOS/Tweet4China/3th-party/Reachability
 	url = git://github.com/tonymillion/Reachability.git
+[submodule "iOS/Tweet4China/3th-party/SDWebImage"]
+	path = iOS/Tweet4China/3th-party/SDWebImage
+	url = git://github.com/rs/SDWebImage.git

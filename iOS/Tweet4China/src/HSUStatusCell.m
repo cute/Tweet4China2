@@ -12,10 +12,10 @@
 #import "TTTAttributedLabel.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+Additions.h"
-#import "UIView+Additions.h"
 #import "FHSTwitterEngine.h"
 #import "FHSTwitterEngine+Additions.h"
 #import "GTMNSString+HTML.h"
+#import "UIButton+WebCache.h"
 
 #define ambient_H 14
 #define info_H 16
@@ -27,7 +27,6 @@
 #define textAL_LHM 1.3
 
 #define retweeted_R @"ic_ambient_retweet"
-#define avatarPlaceholder_R @"avatar_pressed"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
 #define attr_convo_R @"ic_tweet_attr_convo_default"
 #define attr_summary_R @"ic_tweet_attr_summary_default"
@@ -45,9 +44,11 @@
     UIImageView *attrI; // photo/video/geo/summary/audio/convo
     UILabel *timeL;
     TTTAttributedLabel *textAL;
-    
-    NSArray *ambientAreaConstraints;
-    NSArray *infoAreaConstraints;
+    UIImageView *flagIV;
+
+    UIView *actionV;
+    UIButton *replayB, *retweetB, *favoriteB, *moreB;
+    BOOL retweeted, favorited;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -118,8 +119,11 @@
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
         textAL.lineHeightMultiple = textAL_LHM;
-        
-        
+
+        flagIV = [[UIImageView alloc] init];
+        [self.contentView addSubview:flagIV];
+
+        // set frames
         contentArea.frame = ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0);
         CGFloat cw = contentArea.width;
         ambientArea.frame = ccr(0, 0, cw, ambient_H);
@@ -129,10 +133,15 @@
         infoArea.frame = ccr(ambientL.left, 0, cw-ambientL.left, info_H);
         attrI.frame = ccr(0, 0, 0, 16);
         textAL.frame = ccr(ambientL.left, 0, infoArea.width, 0);
+
+        UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(cellSwiped:)];
+        swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
+        [self addGestureRecognizer:swipeGesture];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherCellSwiped:) name:@"HSUStatusCell_OtherCellSwiped" object:nil];
     }
     return self;
 }
-
 
 - (void)layoutSubviews
 {
@@ -161,6 +170,9 @@
     
     [screenNameL sizeToFit];
     screenNameL.frame = ccr(nameL.right+3, -1, attrI.left-nameL.right, screenNameL.height);
+
+    [flagIV sizeToFit];
+    flagIV.rightTop = ccp(self.contentView.width, 0);
 }
 
 - (void)setupWithData:(HSUTableCellData *)data
@@ -168,6 +180,16 @@
     [super setupWithData:data];
     
     NSDictionary *rawData = data.rawData;
+    retweeted = [rawData[@"retweeted"] boolValue];
+    favorited = [rawData[@"favorited"] boolValue];
+
+    if (retweeted && favorited) {
+        flagIV.image = [UIImage imageNamed:@"ic_dogear_both"];
+    } else if (retweeted) {
+        flagIV.image = [UIImage imageNamed:@"ic_dogear_rt"];
+    } else if (favorited) {
+        flagIV.image = [UIImage imageNamed:@"ic_dogear_fave"];
+    }
     
     // ambient
     ambientI.hidden = NO;
@@ -187,48 +209,55 @@
     NSDictionary *entities = rawData[@"entities"];
     
     // info
+    NSString *avatarUrl = nil;
     if (retweetedStatus) {
-        NSString *avatarUrl = rawData[@"retweeted_status"][@"user"][@"profile_image_url_https"];
-        avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
-        [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
-        
+        avatarUrl = rawData[@"retweeted_status"][@"user"][@"profile_image_url_https"];
         nameL.text = rawData[@"retweeted_status"][@"user"][@"name"];
         screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"retweeted_status"][@"user"][@"screen_name"]];
     } else {
-        NSString *avatarUrl = rawData[@"user"][@"profile_image_url_https"];
-        avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
-        [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:avatarPlaceholder_R]];
-        
+        avatarUrl = rawData[@"user"][@"profile_image_url_https"];
         nameL.text = rawData[@"user"][@"name"];
         screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
     }
-    
+    avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
+    [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
+    UIButton *b;
+    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
+    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
+
+    NSDictionary *geo = rawData[@"geo"];
+
     // attr
     attrI.imageName = nil;
-    while (YES) {
-        if ([rawData[@"in_reply_to_status_id_str"] length]) {
-            attrI.imageName = attr_convo_R;
-            break;
-        }
-        NSArray *medias = rawData[@"entities"][@"media"];
+    NSString *attrName = nil;
+    if ([rawData[@"in_reply_to_status_id_str"] length]) {
+        attrName = @"convo";
+    } else if (entities) {
+        NSArray *medias = entities[@"media"];
+        NSArray *urls = entities[@"urls"];
         if (medias && medias.count) {
             NSDictionary *media = medias[0];
             NSString *type = media[@"type"];
             if ([type isEqualToString:@"photo"]) {
-                attrI.imageName = attr_photo_R;
-                break;
+                attrName = @"photo";
             }
-        }
-        if (entities) {
-            NSArray *urls = entities[@"urls"];
-            if (urls && urls.count) {
-                for (NSDictionary *urlDict in urls) {
-                    NSString *expandedUrl = urlDict[@"expanded_url"];
-                    attrI.imageName = S(@"ic_tweet_attr_%@_default", [HSUStatusCell attrForUrl:expandedUrl]);
+        } else if (urls && urls.count) {
+            for (NSDictionary *urlDict in urls) {
+                NSString *expandedUrl = urlDict[@"expanded_url"];
+                attrName = [HSUStatusCell attrForUrl:expandedUrl];
+                if (attrName) {
+                    break;
                 }
             }
         }
-        break;
+    } else if ([geo isKindOfClass:[NSDictionary class]]) {
+        attrName = @"geo";
+    }
+
+    if (attrName) {
+        attrI.imageName = S(@"ic_tweet_attr_%@_default", attrName);
+    } else {
+        attrI.imageName = nil;
     }
     
     // time
@@ -333,6 +362,94 @@
         return @"photo";
     }
     return nil;
+}
+
+- (void)cellSwiped:(UIGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        [self switchMode];
+    }
+}
+- (void)switchMode {
+    if (!actionV) { // set to default
+        actionV = [[UIView alloc] init];
+        UIImage *actionBG = [UIImage imageNamed:@"bg_swipe_tile"];
+        UIColor *actionBGC = [UIColor colorWithPatternImage:actionBG];
+        actionV.backgroundColor = actionBGC;
+
+        replayB = [[UIButton alloc] init];
+        replayB.showsTouchWhenHighlighted = YES;
+        [replayB setImage:[UIImage imageNamed:@"icn_tweet_action_reply"] forState:UIControlStateNormal];
+        [replayB sizeToFit];
+        [actionV addSubview:replayB];
+
+        retweetB = [[UIButton alloc] init];
+        retweetB.showsTouchWhenHighlighted = YES;
+        if (retweeted)
+            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_on"] forState:UIControlStateNormal];
+        else
+            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_off"] forState:UIControlStateNormal];
+        [retweetB sizeToFit];
+        [actionV addSubview:retweetB];
+
+        favoriteB = [[UIButton alloc] init];
+        favoriteB.showsTouchWhenHighlighted = YES;
+        if (favorited)
+            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_on"] forState:UIControlStateNormal];
+        else
+            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_off"] forState:UIControlStateNormal];
+        [favoriteB sizeToFit];
+        [actionV addSubview:favoriteB];
+
+        moreB = [[UIButton alloc] init];
+        moreB.showsTouchWhenHighlighted = YES;
+        [moreB setImage:[UIImage imageNamed:@"icn_tweet_action_more"] forState:UIControlStateNormal];
+        [moreB sizeToFit];
+        [actionV addSubview:moreB];
+
+        [self.contentView addSubview:actionV];
+        actionV.hidden = YES;
+    }
+
+    if (actionV.hidden) { // to action mode
+        [self setupControl:replayB forKey:@"reply" withData:self.data cleanOldEvents:YES];
+        [self setupControl:retweetB forKey:@"retweet" withData:self.data cleanOldEvents:YES];
+        [self setupControl:favoriteB forKey:@"favorite" withData:self.data cleanOldEvents:YES];
+        [self setupControl:moreB forKey:@"more" withData:self.data cleanOldEvents:YES];
+
+        actionV.frame = self.contentView.bounds;
+        replayB.center = ccp(actionV.width/8, actionV.height/2);
+        retweetB.center = ccp(actionV.width*3/8, actionV.height/2);
+        favoriteB.center = ccp(actionV.width*5/8, actionV.height/2);
+        moreB.center = ccp(actionV.width*7/8, actionV.height/2);
+
+        actionV.alpha = 0;
+        actionV.hidden = NO;
+
+        [UIView animateWithDuration:0.2 animations:^{
+            self.contentView.backgroundColor = bw(230);
+            contentArea.alpha = 0;
+            actionV.alpha = 1;
+        }];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"HSUStatusCell_OtherCellSwiped" object:self];
+
+    } else { // to default mode
+        [UIView animateWithDuration:0.2 animations:^{
+            self.contentView.backgroundColor = kClearColor;
+            contentArea.alpha = 1;
+            actionV.alpha = 0;
+        } completion:^(BOOL finish){
+            actionV.hidden = YES;
+        }];
+    }
+}
+
+- (void)otherCellSwiped:(NSNotification *)notification {
+    if (notification.object != self) {
+        if (actionV && !actionV.hidden) {
+            [self switchMode];
+        }
+    }
 }
 
 @end

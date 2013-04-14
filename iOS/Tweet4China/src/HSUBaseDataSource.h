@@ -28,7 +28,7 @@
 - (NSDictionary *)rawDataAtIndex:(NSInteger)index;
 - (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;
 - (HSUTableCellData *)dataAtIndex:(NSInteger)index;
-- (void)addEvent:(HSUUIEvent *)event;
+- (void)addEventWithName:(NSString *)name target:(id)target action:(SEL)action events:(UIControlEvents)events;
 
 - (void)checkUnread;
 - (void)refresh;

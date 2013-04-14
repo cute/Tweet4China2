@@ -19,4 +19,10 @@
 
 - (Class)cellClassForDataType:(NSString *)dataType;
 
+#pragma mark - Common actions
+- (void)reply:(HSUTableCellData *)cellData;
+- (void)retweet:(HSUTableCellData *)cellData;
+- (void)favorite:(HSUTableCellData *)cellData;
+- (void)more:(HSUTableCellData *)cellData;
+
 @end

@@ -53,9 +53,6 @@
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
 {
     [super dataSource:dataSource didFinishRefreshWithError:error];
-    
-    HSUUIEvent *event = [[HSUUIEvent alloc] initWithName:@"follow" target:self action:@selector(follow:) events:UIControlEventTouchUpInside];
-    [dataSource addEvent:event];
 }
 
 - (void)follow:(NSDictionary *)cellData

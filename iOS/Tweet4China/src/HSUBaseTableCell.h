@@ -11,8 +11,10 @@
 @class HSUTableCellData;
 @interface HSUBaseTableCell : UITableViewCell
 
+@property (nonatomic, strong) HSUTableCellData *data;
+
 - (void)setupWithData:(HSUTableCellData *)data;
 + (CGFloat)heightForData:(HSUTableCellData *)data;
-- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data;
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data cleanOldEvents:(BOOL)clean;
 
 @end

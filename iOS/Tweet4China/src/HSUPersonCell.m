@@ -26,8 +26,7 @@
 {
     [super setupWithData:data];
     
-    [followButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [self setupControl:followButton forKey:@"follow" withData:data];
+    [self setupControl:followButton forKey:@"follow" withData:data cleanOldEvents:YES];
 }
 
 @end
