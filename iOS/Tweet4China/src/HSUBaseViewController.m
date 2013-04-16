@@ -146,16 +146,60 @@
 
 #pragma mark - Common actions
 - (void)reply:(HSUTableCellData *)cellData {
-    LF(@"reply with data: %@", cellData);
+    NSDictionary *rawData = cellData.rawData;
+    NSString *screen_name = rawData[@"user"][@"screen_name"];
+    NSString *id_str = rawData[@"id_str"];
+    
+    HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
+    composeVC.defaultText = S(@"@%@ ", screen_name);
+    composeVC.inReplyToStatusId = id_str;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeVC];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)retweet:(HSUTableCellData *)cellData {
+    NSDictionary *rawData = cellData.rawData;
+    NSString *id_str = rawData[@"id_str"];
+    
+    dispatch_async(GCDBackgroundThread, ^{
+        NSError *error = [twe retweet:id_str];
+        [FHSTwitterEngine dealWithError:error errTitle:@"Reply tweet failed"];
+    });
 }
 
 - (void)favorite:(HSUTableCellData *)cellData {
+    NSDictionary *rawData = cellData.rawData;
+    NSString *id_str = rawData[@"id_str"];
+    BOOL favorited = [rawData[@"favorited"] boolValue];
+    
+    dispatch_async(GCDBackgroundThread, ^{
+        NSError *error = [twe markTweet:id_str asFavorite:!favorited];
+        [FHSTwitterEngine dealWithError:error errTitle:@"Favorite tweet failed"];
+    });
 }
 
 - (void)more:(HSUTableCellData *)cellData {
+    NSDictionary *rawData = cellData.rawData;
+    NSString *id_str = rawData[@"id_str"];
+    NSString *link = S(@"https://twitter.com/rtfocus/status/%@", id_str);
+    
+    RIButtonItem *copyLinkToTweetItem = [RIButtonItem itemWithLabel:@"Copy link to Tweet"];
+    copyLinkToTweetItem.action = ^{
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = link;
+    };
+    
+    RIButtonItem *mailTweetItem = [RIButtonItem itemWithLabel:@"Mail Tweet"];
+    mailTweetItem.action = ^{
+        NSString *body = S(@"<a href=\"%@\">%@</a><br><br>", link, link);
+        NSString *subject = @"Link from Twitter";
+        [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
+    };
+    
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:copyLinkToTweetItem, mailTweetItem, nil];
+    [actionSheet showInView:self.view.window];
 }
 
 

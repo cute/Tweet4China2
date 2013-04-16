@@ -187,14 +187,13 @@
         return;
     }
     
-    UIImage *indicatorImage = [UIImage imageNamed:@"bg_dm_count"];
-    indicatorImage = [indicatorImage stretchableImageWithLeftCapWidth:indicatorImage.size.width/2 topCapHeight:indicatorImage.size.height/2];
+    UIImage *indicatorImage = [UIImage imageNamed:@"unread-indicator"];
     UIImageView *indicator = [[UIImageView alloc] initWithImage:indicatorImage];
     uint curIdx = 0;
     for (UIView *subView in self.tabBar.subviews) {
         if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
             if (idx == curIdx) {
-                indicator.center = ccp(subView.center.x, subView.height+7);
+                indicator.bottomCenter = ccp(subView.center.x-2, subView.height);
                 [subView addSubview:indicator];
                 break;
             } else {
@@ -211,8 +210,6 @@
         return;
     }
     
-    UIImage *indicatorImage = [UIImage imageNamed:@"bg_dm_count"];
-    indicatorImage = [indicatorImage stretchableImageWithLeftCapWidth:indicatorImage.size.width/2 topCapHeight:indicatorImage.size.height/2];
     uint curIdx = 0;
     for (UIView *subView in self.tabBar.subviews) {
         if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
@@ -235,8 +232,6 @@
         return NO;
     }
     
-    UIImage *indicatorImage = [UIImage imageNamed:@"bg_dm_count"];
-    indicatorImage = [indicatorImage stretchableImageWithLeftCapWidth:indicatorImage.size.width/2 topCapHeight:indicatorImage.size.height/2];
     uint curIdx = 0;
     for (UIView *subView in self.tabBar.subviews) {
         if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {

@@ -13,7 +13,6 @@
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+Additions.h"
 #import "FHSTwitterEngine.h"
-#import "FHSTwitterEngine+Additions.h"
 #import "GTMNSString+HTML.h"
 #import "UIButton+WebCache.h"
 

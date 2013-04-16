@@ -8,7 +8,6 @@
 
 #import "HSUBaseDataSource.h"
 #import "HSUBaseTableCell.h"
-#import "FHSTwitterEngine+Additions.h"
 #import "Reachability.h"
 
 @implementation HSUBaseDataSource

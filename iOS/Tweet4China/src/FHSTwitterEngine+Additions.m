@@ -33,7 +33,7 @@
     }
 }
 
-+ (id)engine {
++ (FHSTwitterEngine *)engine {
     static FHSTwitterEngine *staticEngine = nil;
     static dispatch_once_t pred;
 

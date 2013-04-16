@@ -19,6 +19,8 @@
 #import "UIButton+Additions.h"
 #import "UIView+Additions.h"
 
+#import "FHSTwitterEngine+Additions.h"
+
 #import "HSUTableCellData.h"
 #import "HSUUIEvent.h"
 #import "HSUCommonTools.h"
@@ -57,6 +59,7 @@ _Pragma("clang diagnostic pop") \
 #define kClearColor [UIColor clearColor]
 #define kWinWidth [HSUCommonTools winWidth]
 #define kWinHeight [HSUCommonTools winHeight]
+#define twe [FHSTwitterEngine engine]
 
 #define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
 

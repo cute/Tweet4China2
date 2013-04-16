@@ -9,7 +9,6 @@
 #import "HSUHomeDataSource.h"
 #import "HSUStatusCell.h"
 #import "HSULoadMoreCell.h"
-#import "FHSTwitterEngine+Additions.h"
 
 @implementation HSUHomeDataSource
 

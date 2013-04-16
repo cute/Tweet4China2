@@ -10,4 +10,7 @@
 
 @interface HSUComposeViewController : UIViewController
 
+@property (nonatomic, copy) NSString *defaultText;
+@property (nonatomic, copy) NSString *inReplyToStatusId;
+
 @end

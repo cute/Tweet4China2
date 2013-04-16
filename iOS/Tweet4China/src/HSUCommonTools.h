@@ -17,4 +17,6 @@
 + (CGFloat)winWidth;
 + (CGFloat)winHeight;
 
++ (void)sendMailWithSubject:(NSString *)subject body:(NSString *)body presentFromViewController:(UIViewController *)viewController;
+
 @end

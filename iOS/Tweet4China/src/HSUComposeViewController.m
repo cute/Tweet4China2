@@ -9,7 +9,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import "HSUComposeViewController.h"
 #import "FHSTwitterEngine.h"
-#import "FHSTwitterEngine+Additions.h"
 #import "OARequestParameter.h"
 #import "OAMutableURLRequest.h"
 #import "HSUSuggestMentionCell.h"
@@ -52,6 +51,8 @@
 
 @implementation HSUComposeViewController
 {
+    uint lifeCycleCount;
+    
     UITextView *contentTV;
     UIView *toolbar;
     UIButton *photoBnt;
@@ -81,6 +82,11 @@
     NSUInteger suggestionType;
     NSMutableArray *filteredSuggestions;
     NSUInteger filterLocation;
+}
+
+- (void)dealloc
+{
+    [locationManager stopUpdatingLocation];
 }
 
 - (void)viewDidLoad
@@ -145,7 +151,11 @@
     [self.view addSubview:contentTV];
     contentTV.font = [UIFont systemFontOfSize:16];
     contentTV.delegate = self;
-    contentTV.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"draft"];
+    if (self.defaultText) {
+        contentTV.text = self.defaultText;
+    } else {
+        contentTV.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"draft"];
+    }
 
     toolbar =[UIImageView viewStrechedNamed:@"button-bar-background"];
     [self.view addSubview:toolbar];
@@ -310,8 +320,9 @@
 {
     [super viewWillAppear:animated];
 
-    if (!self.presentingViewController)
+    if (lifeCycleCount == 0) {
         [contentTV becomeFirstResponder];
+    }
     [self textViewDidChange:contentTV];
 }
 
@@ -320,11 +331,9 @@
 
     locationManager = [[CLLocationManager alloc] init];
     locationManager.delegate = self;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     locationManager.pausesLocationUpdatesAutomatically = YES;
-    [locationManager startUpdatingLocation];
-    geoBnt.hidden = YES;
-    [geoLoadingV startAnimating];
-
+    
     friends = [[NSUserDefaults standardUserDefaults] objectForKey:@"friends"];
     dispatch_async(GCDBackgroundThread, ^{
         id result = [[FHSTwitterEngine engine] getFriendsMoreThanID];
@@ -354,7 +363,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
 
-    [locationManager stopUpdatingLocation];
+    lifeCycleCount ++;
 }
 
 - (void)viewDidLayoutSubviews
@@ -431,6 +440,11 @@
 
         OARequestParameter *statusP = [OARequestParameter requestParameterWithName:@"status" value:contentTV.text];
         [params addObject:statusP];
+        
+        if (self.inReplyToStatusId) {
+            OARequestParameter *inReplyToStatusIdP = [OARequestParameter requestParameterWithName:@"in_reply_to_status_id" value:self.inReplyToStatusId];
+            [params addObject:inReplyToStatusIdP];
+        }
 
         if (previewIV.image) {
             OARequestParameter *mediaP = [OARequestParameter requestParameterWithName:@"media_data[]" value:[UIImageJPEGRepresentation(previewIV.image, 0.92) base64EncodingWithLineLength:0]];
@@ -634,6 +648,10 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    if (manager.location.horizontalAccuracy <= 50 && manager.location.verticalAccuracy <= 50) {
+        [manager stopUpdatingLocation];
+    }
+    
     CLGeocoder * geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:manager.location completionHandler:^(NSArray *placemarks, NSError *error) {
         for (CLPlacemark * placemark in placemarks) {

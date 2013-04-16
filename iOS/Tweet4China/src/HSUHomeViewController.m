@@ -6,8 +6,6 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import <MessageUI/MessageUI.h>
-
 #import "HSUHomeViewController.h"
 #import "HSUHomeDataSource.h"
 #import "TTTAttributedLabel.h"
@@ -15,7 +13,7 @@
 #import "HSURefreshControl.h"
 #import "HSUTabController.h"
 
-@interface HSUHomeViewController () <TTTAttributedLabelDelegate, MFMailComposeViewControllerDelegate>
+@interface HSUHomeViewController () <TTTAttributedLabelDelegate>
 
 @end
 
@@ -49,7 +47,7 @@
         [self.refreshControl beginRefreshing];
         [self.dataSource refresh];
     } else {
-        return;
+//        return;
         if (![((HSUTabController *)self.navigationController.tabBarController) hasUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem]) {
             [self.dataSource checkUnread];
         }
@@ -84,20 +82,9 @@
     };
     RIButtonItem *mailLinkItem = [RIButtonItem itemWithLabel:@"Mail Link"];
     mailLinkItem.action = ^{
-        NSString *body = [NSString stringWithFormat:@"<a href=\"%@\">%@</a><br><br>", url.absoluteString, url.absoluteString];
+        NSString *body = S(@"<a href=\"%@\">%@</a><br><br>", url.absoluteString, url.absoluteString);
         NSString *subject = @"Link from Twitter";
-        if([MFMailComposeViewController canSendMail]) {
-            MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
-            mailCont.mailComposeDelegate = self;
-            [mailCont setSubject:subject];
-            [mailCont setMessageBody:body isHTML:YES];
-            [self presentViewController:mailCont animated:YES completion:^{}];
-        } else {
-            NSString *url = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@",
-                             [subject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                             [body stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-        }
+        [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
     };
     RIButtonItem *openInSafariItem = [RIButtonItem itemWithLabel:@"Open in Safari"];
     openInSafariItem.action = ^{
@@ -110,11 +97,6 @@
 - (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithURL:(NSURL *)url
 {
     [[UIApplication sharedApplication] openURL:url];
-}
-
-- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
-{
-    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 @end

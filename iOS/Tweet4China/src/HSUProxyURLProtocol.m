@@ -7,7 +7,6 @@
 //
 
 #import "HSUProxyURLProtocol.h"
-#import "Base64.h"
 
 #define kProxyURL_key @"proxy_url"
 #define kTwitterAPI_url @"https://api.twitter.com"
@@ -52,7 +51,7 @@ static NSString *sProxyUrl = nil;
     
     // URL
     NSData *origPath = [[[proxyRequest URL] description] dataUsingEncoding:NSASCIIStringEncoding];
-    NSString *base64edPath = [origPath base64EncodedString];
+    NSString *base64edPath = [origPath base64EncodingWithLineLength:100];
     NSURL *proxyURL = [[NSURL alloc] initWithString:sProxyUrl];
     [proxyRequest setURL:proxyURL];
     
@@ -63,11 +62,11 @@ static NSString *sProxyUrl = nil;
         [headerStr appendFormat:@"%@:%@\n", head, [headers valueForKey:head]];
     }
     NSData *headerData = [headerStr dataUsingEncoding:NSASCIIStringEncoding];
-    NSString *base64edHeaderStr = [headerData base64EncodedString];
+    NSString *base64edHeaderStr = [headerData base64EncodingWithLineLength:100];
     
     // Body
     NSData *origBodyData = [proxyRequest HTTPBody];
-    NSString *base64edBodyStr = [origBodyData base64EncodedString];
+    NSString *base64edBodyStr = [origBodyData base64EncodingWithLineLength:100];
     if (base64edBodyStr == NULL) {
         base64edBodyStr = @"";
     }
