@@ -138,7 +138,7 @@
 {
     HSUBaseDataSource *dataSource = [[self alloc] init];
     // TODO crash reset policy
-    return dataSource;
+//    return dataSource;
     NSArray *cacheDataArr = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
     if (cacheDataArr) {
         NSMutableArray *mData = [NSMutableArray arrayWithCapacity:cacheDataArr.count];
