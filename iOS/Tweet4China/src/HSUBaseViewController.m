@@ -191,7 +191,11 @@
     
     RIButtonItem *mailTweetItem = [RIButtonItem itemWithLabel:@"Mail Tweet"];
     mailTweetItem.action = ^{
-        NSString *body = S(@"<a href=\"%@\">%@</a><br><br>", link, link);
+        NSURL *templatFileURL = [[NSBundle mainBundle] URLForResource:@"mail_tweet_template" withExtension:@"html"];
+        NSString *template = [[NSString alloc] initWithContentsOfURL:templatFileURL encoding:NSUTF8StringEncoding error:nil];
+        // TODO: replace template placeholders with contents
+        NSString *body = template;
+//        S(@"<a href=\"%@\">%@</a><br><br>", link, link);
         NSString *subject = @"Link from Twitter";
         [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
     };
