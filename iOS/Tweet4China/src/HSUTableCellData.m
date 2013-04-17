@@ -10,42 +10,43 @@
 
 @implementation HSUTableCellData
 
-- (id)initWithRawData:(NSDictionary *)rawData dataType:(NSString *)dataType
+- (id)init
 {
     self = [super init];
     if (self) {
+        self.renderData = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (id)initWithRawData:(NSDictionary *)rawData dataType:(NSString *)dataType
+{
+    self = [self init];
+    if (self) {
+        self.dataType = dataType;
         self.rawData = rawData;
-        self.renderData = [@{@"data_type": dataType} mutableCopy];
     }
     return self;
 }
 
 - (id)initWithCacheData:(NSDictionary *)cacheData
 {
-    self = [super init];
+    self = [self init];
     if (self) {
+        self.dataType = cacheData[@"data_type"];
         self.rawData = cacheData[@"raw_data"];
-        self.renderData = [cacheData[@"render_data"] mutableCopy];
     }
     return self;
+}
+
+- (NSDictionary *)cacheData
+{
+    return @{@"data_type": self.dataType, @"raw_data": self.rawData};
 }
 
 - (UIEvent *)eventWithName:(NSString *)name
 {
     return self.renderData[name];
-}
-
-- (NSDictionary *)cacheData
-{
-    NSDictionary *renderData = @{@"data_type": self.renderData[@"data_type"]};
-    NSDictionary *cacheDict = @{@"raw_data": self.rawData,
-                                @"render_data": renderData};
-    return cacheDict;
-}
-
-- (NSString *)dataType
-{
-    return self.renderData[@"data_type"];
 }
 
 @end

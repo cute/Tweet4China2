@@ -289,6 +289,10 @@
         }
     }
     textAL.delegate = data.renderData[@"attributed_label_delegate"];
+    
+    self.contentView.backgroundColor = kClearColor;
+    contentArea.alpha = 1;
+    actionV.hidden = YES;
 }
 
 + (CGFloat)heightForData:(HSUTableCellData *)data

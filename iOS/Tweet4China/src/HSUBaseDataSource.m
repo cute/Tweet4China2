@@ -114,21 +114,18 @@
     
 }
 
-- (NSArray *)cacheData
-{
-    NSMutableArray *cacheData = [NSMutableArray arrayWithCapacity:kRequestDataCountViaWifi];
-    for (HSUTableCellData *cellData in self.data) {
-        if (cacheData.count > kRequestDataCountViaWifi) {
-            break;
-        }
-        [cacheData addObject:cellData.cacheData];
-    }
-    return cacheData;
-}
-
 - (void)saveCache
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.cacheData forKey:self.class.cacheKey];
+    uint cacheSize = kRequestDataCountViaWifi;
+    NSMutableArray *cacheDataArr = [NSMutableArray arrayWithCapacity:cacheSize];
+    for (HSUTableCellData *cellData in self.data) {
+        if (cacheDataArr.count < cacheSize) {
+            [cacheDataArr addObject:cellData.cacheData];
+        } else {
+            break;
+        }
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:cacheDataArr forKey:self.class.cacheKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -140,13 +137,13 @@
 + (id)dataSource
 {
     HSUBaseDataSource *dataSource = [[self alloc] init];
-//    return dataSource;
-    NSArray *data = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
-    if (data) {
-        NSMutableArray *mData = [@[] mutableCopy];
-        for (NSDictionary *dataRow in data) {
-            HSUTableCellData *newData = [[HSUTableCellData alloc] initWithCacheData:dataRow];
-            [mData addObject:newData];
+    // TODO crash reset policy
+    return dataSource;
+    NSArray *cacheDataArr = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
+    if (cacheDataArr) {
+        NSMutableArray *mData = [NSMutableArray arrayWithCapacity:cacheDataArr.count];
+        for (NSDictionary *cacheData in cacheDataArr) {
+            [mData addObject:[[HSUTableCellData alloc] initWithCacheData:cacheData]];
         }
         dataSource.data = mData;
     }

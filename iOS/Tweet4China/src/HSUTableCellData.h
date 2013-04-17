@@ -11,14 +11,14 @@
 @class HSUUIEvent;
 @interface HSUTableCellData : NSObject
 
-- (id)initWithCacheData:(NSDictionary *)cacheData;
-- (id)initWithRawData:(NSDictionary *)rawData dataType:(NSString *)dataType;
-
-@property (nonatomic, readonly) NSString *dataType;
+@property (nonatomic, copy) NSString *dataType;
 @property (nonatomic, strong) NSDictionary *rawData;
 @property (nonatomic, strong) NSMutableDictionary *renderData;
-@property (nonatomic, readonly) NSDictionary *cacheData;
 
+- (id)initWithRawData:(NSDictionary *)rawData dataType:(NSString *)dataType;
+- (id)initWithCacheData:(NSDictionary *)cacheData;
+
+- (NSDictionary *)cacheData;
 - (UIEvent *)eventWithName:(NSString *)name;
 
 @end

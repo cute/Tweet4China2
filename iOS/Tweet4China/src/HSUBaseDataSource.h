@@ -22,7 +22,6 @@
 @property (nonatomic, weak) id<HSUBaseDataSourceDelegate> delegate;
 @property (nonatomic, readonly) NSArray *allData;
 @property (atomic, strong) NSMutableArray *data;
-@property (atomic, readonly) NSArray *cacheData;
 @property (nonatomic, assign, getter = isLoading) BOOL loading;
 
 - (NSDictionary *)rawDataAtIndex:(NSInteger)index;

@@ -87,7 +87,7 @@
                         if (![lastCellData.dataType isEqualToString:kDataType_LoadMore]) {
                             HSUTableCellData *loadMoreCellData = [[HSUTableCellData alloc] init];
                             loadMoreCellData.rawData = @{@"status": @(kLoadMoreCellStatus_Done)};
-                            loadMoreCellData.renderData = [@{@"data_type": kDataType_LoadMore} mutableCopy];
+                            loadMoreCellData.dataType = kDataType_LoadMore;
                             [strongSelf.data addObject:loadMoreCellData];
                         }
                         
