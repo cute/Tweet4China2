@@ -134,18 +134,22 @@
     return self.description.lowercaseString;
 }
 
-+ (id)dataSource
++ (id)dataSourceWithDelegate:(id<HSUBaseDataSourceDelegate>)delegate useCache:(BOOL)useCahce
 {
     HSUBaseDataSource *dataSource = [[self alloc] init];
+    dataSource.delegate = delegate;
     // TODO crash reset policy
 //    return dataSource;
-    NSArray *cacheDataArr = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
-    if (cacheDataArr) {
-        NSMutableArray *mData = [NSMutableArray arrayWithCapacity:cacheDataArr.count];
-        for (NSDictionary *cacheData in cacheDataArr) {
-            [mData addObject:[[HSUTableCellData alloc] initWithCacheData:cacheData]];
+    if (useCahce) {
+        NSArray *cacheDataArr = [[NSUserDefaults standardUserDefaults] arrayForKey:self.cacheKey];
+        if (cacheDataArr) {
+            NSMutableArray *mData = [NSMutableArray arrayWithCapacity:cacheDataArr.count];
+            for (NSDictionary *cacheData in cacheDataArr) {
+                [mData addObject:[[HSUTableCellData alloc] initWithCacheData:cacheData]];
+            }
+            dataSource.data = mData;
         }
-        dataSource.data = mData;
+        [dataSource.delegate preprocessDataSourceForRender:dataSource];
     }
     return dataSource;
 }

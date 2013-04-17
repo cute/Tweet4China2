@@ -33,7 +33,7 @@
 - (void)refresh;
 - (void)loadMore;
 - (void)saveCache;
-+ (id)dataSource;
++ (id)dataSourceWithDelegate:(id<HSUBaseDataSourceDelegate>)delegate useCache:(BOOL)useCahce;
 + (NSString *)cacheKey;
 - (void)authenticate;
 
@@ -47,5 +47,6 @@
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error;
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishLoadMoreWithError:(NSError *)error;
 - (void)dataSourceDidFindUnread:(HSUBaseDataSource *)dataSource;
+- (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource;
 
 @end

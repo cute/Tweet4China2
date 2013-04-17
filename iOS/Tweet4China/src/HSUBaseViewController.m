@@ -40,7 +40,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(composeButtonTouched:) name:kHSUNotification_Compose object:nil];
 
     if (!self.dataSource) {
-        self.dataSource = [self.dataSourceClass dataSource];
+        self.dataSource = [self.dataSourceClass dataSourceWithDelegate:self useCache:YES];
         self.dataSource.delegate = self;
     }
     
@@ -105,11 +105,6 @@
         [self.refreshControl endRefreshing];
     }
 
-    [dataSource addEventWithName:@"reply" target:self action:@selector(reply:) events:UIControlEventTouchUpInside];
-    [dataSource addEventWithName:@"retweet" target:self action:@selector(retweet:) events:UIControlEventTouchUpInside];
-    [dataSource addEventWithName:@"favorite" target:self action:@selector(favorite:) events:UIControlEventTouchUpInside];
-    [dataSource addEventWithName:@"more" target:self action:@selector(more:) events:UIControlEventTouchUpInside];
-
     [((HSUTabController *)self.tabBarController) hideUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];
     [HSUNetworkActivityIndicatorManager oneLess];
 }
@@ -129,6 +124,14 @@
 {
     [((HSUTabController *)self.tabBarController) showUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];
     [HSUNetworkActivityIndicatorManager oneLess];
+}
+
+- (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource
+{
+    [dataSource addEventWithName:@"reply" target:self action:@selector(reply:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"retweet" target:self action:@selector(retweet:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"favorite" target:self action:@selector(favorite:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"more" target:self action:@selector(more:) events:UIControlEventTouchUpInside];
 }
 
 #pragma mark - Actions

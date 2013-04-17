@@ -92,6 +92,7 @@
                         }
                         
                         [strongSelf saveCache];
+                        [strongSelf.delegate preprocessDataSourceForRender:self];
                         [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:nil];
                         strongSelf.loading = NO;
                     }
@@ -133,6 +134,7 @@
                         
                         [strongSelf saveCache];
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Done);
+                        [strongSelf.delegate preprocessDataSourceForRender:self];
                         [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:nil];
                         strongSelf.loading = NO;
                     }
