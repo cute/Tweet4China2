@@ -54,6 +54,7 @@
     }
 }
 
+#pragma mark - dataSource delegate
 - (void)dataSourceDidFindUnread:(HSUBaseDataSource *)dataSource
 {
     [super dataSourceDidFindUnread:dataSource];
@@ -68,6 +69,9 @@
     }
 }
 
+#pragma mark - TableView delegate
+
+#pragma mark - attributtedLabel delegate
 - (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
 {
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];

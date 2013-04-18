@@ -1,12 +1,14 @@
 //
-//  HSUStatusCell.m
+//  HSUStatusDetailCell.m
 //  Tweet4China
 //
-//  Created by Jason Hsu on 3/10/13.
+//  Created by Jason Hsu on 4/18/13.
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
 #import <QuartzCore/QuartzCore.h>
+
+#import "HSUMainStatusCell.h"
 
 #import "HSUStatusCell.h"
 #import "TTTAttributedLabel.h"
@@ -30,7 +32,7 @@
 #define attr_convo_R @"ic_tweet_attr_convo_default"
 #define attr_summary_R @"ic_tweet_attr_summary_default"
 
-@implementation HSUStatusCell
+@implementation HSUMainStatusCell
 {
     UIView *contentArea;
     UIView *ambientArea;
@@ -44,7 +46,7 @@
     UILabel *timeL;
     TTTAttributedLabel *textAL;
     UIImageView *flagIV;
-
+    
     UIView *actionV;
     UIButton *replayB, *retweetB, *favoriteB, *moreB;
     BOOL retweeted, favorited;
@@ -118,10 +120,10 @@
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
         textAL.lineHeightMultiple = textAL_LHM;
-
+        
         flagIV = [[UIImageView alloc] init];
         [self.contentView addSubview:flagIV];
-
+        
         // set frames
         contentArea.frame = ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0);
         CGFloat cw = contentArea.width;
@@ -132,11 +134,11 @@
         infoArea.frame = ccr(ambientL.left, 0, cw-ambientL.left, info_H);
         attrI.frame = ccr(0, 0, 0, 16);
         textAL.frame = ccr(ambientL.left, 0, infoArea.width, 0);
-
+        
         UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(cellSwiped:)];
         swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
         [self addGestureRecognizer:swipeGesture];
-
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherCellSwiped:) name:@"HSUStatusCell_OtherCellSwiped" object:nil];
     }
     return self;
@@ -169,7 +171,7 @@
     
     [screenNameL sizeToFit];
     screenNameL.frame = ccr(nameL.right+3, -1, attrI.left-nameL.right, screenNameL.height);
-
+    
     [flagIV sizeToFit];
     flagIV.rightTop = ccp(self.contentView.width, 0);
 }
@@ -181,7 +183,7 @@
     NSDictionary *rawData = data.rawData;
     retweeted = [rawData[@"retweeted"] boolValue];
     favorited = [rawData[@"favorited"] boolValue];
-
+    
     if (retweeted && favorited) {
         flagIV.image = [UIImage imageNamed:@"ic_dogear_both"];
     } else if (retweeted) {
@@ -223,9 +225,9 @@
     UIButton *b;
     [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
     [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
-
+    
     NSDictionary *geo = rawData[@"geo"];
-
+    
     // attr
     attrI.imageName = nil;
     NSString *attrName = nil;
@@ -252,7 +254,7 @@
     } else if ([geo isKindOfClass:[NSDictionary class]]) {
         attrName = @"geo";
     }
-
+    
     if (attrName) {
         attrI.imageName = S(@"ic_tweet_attr_%@_default", attrName);
     } else {
@@ -316,7 +318,7 @@
         leftHeight += ambient_H;
     }
     height += info_H; // add info
-
+    
     NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
     NSDictionary *entities = rawData[@"entities"];
     if (entities) {
@@ -378,13 +380,13 @@
         UIImage *actionBG = [UIImage imageNamed:@"bg_swipe_tile"];
         UIColor *actionBGC = [UIColor colorWithPatternImage:actionBG];
         actionV.backgroundColor = actionBGC;
-
+        
         replayB = [[UIButton alloc] init];
         replayB.showsTouchWhenHighlighted = YES;
         [replayB setImage:[UIImage imageNamed:@"icn_tweet_action_reply"] forState:UIControlStateNormal];
         [replayB sizeToFit];
         [actionV addSubview:replayB];
-
+        
         retweetB = [[UIButton alloc] init];
         retweetB.showsTouchWhenHighlighted = YES;
         if (retweeted)
@@ -393,7 +395,7 @@
             [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_off"] forState:UIControlStateNormal];
         [retweetB sizeToFit];
         [actionV addSubview:retweetB];
-
+        
         favoriteB = [[UIButton alloc] init];
         favoriteB.showsTouchWhenHighlighted = YES;
         if (favorited)
@@ -402,40 +404,40 @@
             [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_off"] forState:UIControlStateNormal];
         [favoriteB sizeToFit];
         [actionV addSubview:favoriteB];
-
+        
         moreB = [[UIButton alloc] init];
         moreB.showsTouchWhenHighlighted = YES;
         [moreB setImage:[UIImage imageNamed:@"icn_tweet_action_more"] forState:UIControlStateNormal];
         [moreB sizeToFit];
         [actionV addSubview:moreB];
-
+        
         [self.contentView addSubview:actionV];
         actionV.hidden = YES;
     }
-
+    
     if (actionV.hidden) { // to action mode
         [self setupControl:replayB forKey:@"reply" withData:self.data cleanOldEvents:YES];
         [self setupControl:retweetB forKey:@"retweet" withData:self.data cleanOldEvents:YES];
         [self setupControl:favoriteB forKey:@"favorite" withData:self.data cleanOldEvents:YES];
         [self setupControl:moreB forKey:@"more" withData:self.data cleanOldEvents:YES];
-
+        
         actionV.frame = self.contentView.bounds;
         replayB.center = ccp(actionV.width/8, actionV.height/2);
         retweetB.center = ccp(actionV.width*3/8, actionV.height/2);
         favoriteB.center = ccp(actionV.width*5/8, actionV.height/2);
         moreB.center = ccp(actionV.width*7/8, actionV.height/2);
-
+        
         actionV.alpha = 0;
         actionV.hidden = NO;
-
+        
         [UIView animateWithDuration:0.2 animations:^{
             self.contentView.backgroundColor = bw(230);
             contentArea.alpha = 0;
             actionV.alpha = 1;
         }];
-
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"HSUStatusCell_OtherCellSwiped" object:self];
-
+        
     } else { // to default mode
         [UIView animateWithDuration:0.2 animations:^{
             self.contentView.backgroundColor = kClearColor;

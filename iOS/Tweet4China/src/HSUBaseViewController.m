@@ -11,11 +11,11 @@
 #import "HSUBaseViewController.h"
 #import "HSUTexturedView.h"
 #import "HSUStatusCell.h"
-#import "HSUStatusViewController.h"
 #import "HSURefreshControl.h"
 #import "HSULoadMoreCell.h"
 #import "HSUTabController.h"
 #import "HSUComposeViewController.h"
+#import "HSUStatusViewController.h"
 
 @interface HSUBaseViewController ()
 
@@ -67,6 +67,7 @@
 {
     [super viewWillAppear:animated];
     
+    // TODO refector background
     UIImage *texture = [UIImage imageNamed:@"bg_texture"];
     UIView *background = [[HSUTexturedView alloc] initWithFrame:self.view.bounds texture:texture];
     [self.view insertSubview:background atIndex:0];
@@ -86,8 +87,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
-    if ([data.dataType isEqualToString:@"LoadMore"]) {
+    if ([data.dataType isEqualToString:kDataType_LoadMore]) {
         [self.dataSource loadMore];
+    } else if ([data.dataType isEqualToString:kDataType_Status]) {
+        HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] initWithStatus:data.rawData];
+        [self.navigationController pushViewController:statusVC animated:YES];
     }
 }
 

@@ -7,57 +7,40 @@
 //
 
 #import "HSUStatusViewController.h"
+#import "HSUStatusDataSource.h"
+#import "HSUMainStatusCell.h"
 
 @interface HSUStatusViewController ()
+
+@property (nonatomic, strong) NSDictionary *mainStatus;
 
 @end
 
 @implementation HSUStatusViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithStatus:(NSDictionary *)status
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super init];
     if (self) {
-        // Custom initialization
+        self.mainStatus = status;
+        self.dataSourceClass = [HSUStatusDataSource class];
     }
     return self;
 }
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    self.dataSource = [[self.dataSourceClass alloc] initWithStatus:self.mainStatus];
+    self.dataSource.delegate = self;
     
-    HSUTableCellData *cellData = [self.dataSource dataAtIndex:indexPath.row];
-    if ([cellData.dataType isEqualToString:kDataType_Status]) {
-        if ([HSUCommonTools isIPhone]) {
-            HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] init];
-            [self.navigationController pushViewController:statusVC animated:YES];
-        } else {
-            
-        }
-    }
+    [super viewDidLoad];
+    
+    [self.tableView registerClass:[HSUMainStatusCell class] forCellReuseIdentifier:kDataType_MainStatus];
 }
 
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
 {
     [super dataSource:dataSource didFinishRefreshWithError:error];
-}
-
-- (void)follow:(NSDictionary *)cellData
-{
-    NSLog(@"follow fired with data: %@", cellData);
 }
 
 @end

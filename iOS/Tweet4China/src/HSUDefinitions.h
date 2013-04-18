@@ -66,6 +66,7 @@ _Pragma("clang diagnostic pop") \
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 
+#define kDataType_MainStatus @"MainStatus"
 #define kDataType_Status @"Status"
 #define kDataType_LoadMore @"LoadMore"
 

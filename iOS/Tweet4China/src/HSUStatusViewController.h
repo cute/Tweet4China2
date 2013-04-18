@@ -11,4 +11,6 @@
 
 @interface HSUStatusViewController : HSUBaseViewController
 
+- (id)initWithStatus:(NSDictionary *)status;
+
 @end
