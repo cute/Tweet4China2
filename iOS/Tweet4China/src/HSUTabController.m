@@ -33,7 +33,6 @@
         homeNav.tabBarItem.title = @"Home";
         [homeNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_home_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_home_default"]];
         [homeNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
-        homeVC.navigationItem.rightBarButtonItems = [self createRightBarButtonItemsWithTarget:homeVC];
 
         UINavigationController *connectNav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavitationBar class] toolbarClass:nil];
         HSUConnectViewController *connectVC = [[HSUConnectViewController alloc] init];
@@ -41,7 +40,6 @@
         connectNav.tabBarItem.title = @"Connect";
         [connectNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_at_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_at_default"]];
         [connectNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
-        connectVC.navigationItem.rightBarButtonItems = [self createRightBarButtonItemsWithTarget:connectVC];
         
         UINavigationController *discoverNav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavitationBar class] toolbarClass:nil];
         HSUDiscoverViewController *discoverVC = [[HSUDiscoverViewController alloc] init];
@@ -49,7 +47,6 @@
         discoverNav.tabBarItem.title = @"Discover";
         [discoverNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_hash_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_hash_default"]];
         [discoverNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
-        discoverVC.navigationItem.rightBarButtonItems = [self createRightBarButtonItemsWithTarget:discoverVC];
         
         UINavigationController *meNav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavitationBar class] toolbarClass:nil];
         HSUProfileViewController *meVC = [[HSUProfileViewController alloc] init];
@@ -57,7 +54,6 @@
         meNav.tabBarItem.title = @"Me";
         [meNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"ic_tab_profile_selected"] withFinishedUnselectedImage:[UIImage imageNamed:@"ic_tab_profile_default"]];
         [meNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
-        meVC.navigationItem.rightBarButtonItems = [self createRightBarButtonItemsWithTarget:meVC];
         
         self.viewControllers = @[homeNav, connectNav, discoverNav, meNav];
     }
@@ -128,31 +124,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-}
-
-- (NSArray *)createRightBarButtonItemsWithTarget:(id)target
-{
-    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [searchButton setImage:[UIImage imageNamed:@"ic_title_search"] forState:UIControlStateNormal];
-    [searchButton sizeToFit];
-    searchButton.width *= 2.1;
-    searchButton.showsTouchWhenHighlighted = YES;
-    UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
-    if ([target respondsToSelector:@selector(searchButtonTouched)]) {
-        [searchButton addTarget:target action:@selector(searchButtonTouched) forControlEvents:UIControlEventTouchUpInside];
-    }
-
-    UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [composeButton setImage:[UIImage imageNamed:@"ic_title_tweet"] forState:UIControlStateNormal];
-    [composeButton sizeToFit];
-    composeButton.width *= 1.42;
-    composeButton.showsTouchWhenHighlighted = YES;
-    UIBarButtonItem *composeBarButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
-    if ([target respondsToSelector:@selector(composeButtonTouched)]) {
-        [composeButton addTarget:target action:@selector(composeButtonTouched) forControlEvents:UIControlEventTouchUpInside];
-    }
-
-    return @[composeBarButton, searchBarButton];
 }
 
 - (void)iPadTabBarItemTouched:(id)sender

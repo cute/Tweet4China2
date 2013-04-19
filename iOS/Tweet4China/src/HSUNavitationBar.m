@@ -44,9 +44,4 @@
     return CGSizeMake(self.frame.size.width, 47);
 }
 
-- (void)composeButtonTouched
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:kHSUNotification_Compose object:self];
-}
-
 @end

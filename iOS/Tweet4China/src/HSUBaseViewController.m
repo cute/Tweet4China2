@@ -24,11 +24,6 @@
 @implementation HSUBaseViewController
 
 #pragma mark - Liftstyle
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 - (id)init
 {
     self = [super init];
@@ -41,8 +36,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(composeButtonTouched:) name:kHSUNotification_Compose object:nil];
 
     if (!self.dataSource) {
         self.dataSource = [self.dataSourceClass dataSourceWithDelegate:self useCache:YES];
@@ -66,6 +59,11 @@
     [refreshControl addTarget:self.dataSource action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
     [tableView addSubview:refreshControl];
     self.refreshControl = refreshControl;
+    
+    self.navigationItem.rightBarButtonItems = [self _createRightBarButtonItems];
+    if ([self.navigationController.viewControllers objectAtIndex:0] != self) {
+        self.navigationItem.leftBarButtonItem = [self _createBackButton];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -79,7 +77,6 @@
     
     self.tableView.frame = self.view.bounds;
 }
-
 
 #pragma mark - TableView
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -143,15 +140,58 @@
     [dataSource addEventWithName:@"more" target:self action:@selector(more:) events:UIControlEventTouchUpInside];
 }
 
+#pragma mark - base view controller's methods
+- (NSArray *)_createRightBarButtonItems
+{
+    // Search BarButtonItem
+    UIButton *searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [searchButton setImage:[UIImage imageNamed:@"ic_title_search"] forState:UIControlStateNormal];
+    [searchButton sizeToFit];
+    searchButton.width *= 2.1;
+    searchButton.showsTouchWhenHighlighted = YES;
+    UIBarButtonItem *searchBarButton = [[UIBarButtonItem alloc] initWithCustomView:searchButton];
+    
+    [searchButton setTapTarget:self action:@selector(_searchButtonTouched)];
+    
+    // Compose BarButtonItem
+    UIButton *composeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [composeButton setImage:[UIImage imageNamed:@"ic_title_tweet"] forState:UIControlStateNormal];
+    [composeButton sizeToFit];
+    composeButton.width *= 1.42;
+    composeButton.showsTouchWhenHighlighted = YES;
+    [composeButton setTapTarget:self action:@selector(_composeButtonTouched)];
+    
+    UIBarButtonItem *composeBarButton = [[UIBarButtonItem alloc] initWithCustomView:composeButton];
+    
+    return @[composeBarButton, searchBarButton];
+}
+
+- (UIBarButtonItem *)_createBackButton
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backButton setImage:[UIImage imageNamed:@"icn_nav_bar_back"] forState:UIControlStateNormal];
+    [backButton sizeToFit];
+    backButton.width *= 1.6;
+    backButton.showsTouchWhenHighlighted = YES;
+    [backButton setTapTarget:self action:@selector(_backButtonTouched)];
+    
+    return [[UIBarButtonItem alloc] initWithCustomView:backButton];
+}
+
+- (void)_backButtonTouched
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Actions
-- (void)composeButtonTouched
+- (void)_composeButtonTouched
 {
     HSUComposeViewController *composeViewController = [[HSUComposeViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
     [self presentViewController:nav animated:YES completion:nil];
 }
 
-- (void)searchButtonTouched
+- (void)_searchButtonTouched
 {
     L(@"search button touched");
 }

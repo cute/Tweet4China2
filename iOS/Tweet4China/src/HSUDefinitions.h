@@ -71,6 +71,4 @@ _Pragma("clang diagnostic pop") \
 #define kDataType_LoadMore @"LoadMore"
 
 
-#define kHSUNotification_Compose (@"HSUNotification_Compose")
-
 #endif

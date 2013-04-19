@@ -16,6 +16,7 @@
 @property (nonatomic, strong) HSUBaseDataSource *dataSource;
 @property (nonatomic, weak) HSURefreshControl *refreshControl;
 @property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, assign) BOOL showBackButton;
 
 - (Class)cellClassForDataType:(NSString *)dataType;
 
