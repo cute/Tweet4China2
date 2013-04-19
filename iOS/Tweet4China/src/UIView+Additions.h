@@ -14,6 +14,7 @@
 @property (nonatomic, readwrite) CGPoint topCenter, bottomCenter, leftCenter, rightCenter;
 @property (nonatomic, readwrite) CGPoint leftTop, leftBottom, rightTop, rightBottom;
 @property (nonatomic, readonly) CGPoint boundsCenter;
+@property (nonatomic, readwrite) CGSize size;
 
 - (NSString *)frameStr;
 

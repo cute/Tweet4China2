@@ -41,10 +41,10 @@ _Pragma("clang diagnostic pop") \
 
 #define dp(filename) [([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]) stringByAppendingPathComponent:filename]
 #define tp(filename) [([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0])stringByAppendingPathComponent:filename]
-#define ccr(x, y, w, h) CGRectMake(x, y, w, h)
-#define ccp(x, y) CGPointMake(x, y)
-#define ccs(w, h) CGSizeMake(w, h)
-#define edi(top, left, bottom, right) UIEdgeInsetsMake(top, left, bottom, right)
+#define ccr(x, y, w, h) CGRectMake(floorf(x), floorf(y), floorf(w), floorf(h))
+#define ccp(x, y) CGPointMake(floorf(x), floorf(y))
+#define ccs(w, h) CGSizeMake(floorf(w), floorf(h))
+#define edi(top, left, bottom, right) UIEdgeInsetsMake(floorf(top), floorf(left), floorf(bottom), floorf(right))
 #define cgrgba(r, g, b, a) [[UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a] CGColor]
 #define cgrgb(r, g, b) [[UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1] CGColor]
 #define rgba(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]

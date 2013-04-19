@@ -140,6 +140,14 @@
     return ccp(self.center.x - self.left, self.center.y - self.top);
 }
 
+- (CGSize)size {
+    return self.frame.size;
+}
+
+- (void)setSize:(CGSize)size {
+    self.bounds = ccr(0, 0, size.width, size.height);
+}
+
 - (NSString *)frameStr
 {
     return NSStringFromCGRect(self.frame);

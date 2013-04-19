@@ -10,13 +10,16 @@
 
 @implementation HSUStatusDataSource
 
-- (id)initWithStatus:(NSDictionary *)status
+- (id)initWithDelegate:(id<HSUBaseDataSourceDelegate>)delegate status:(NSDictionary *)status
 {
     self = [super init];
     if (self) {
         HSUTableCellData *mainCellData = [[HSUTableCellData alloc] initWithRawData:status dataType:kDataType_MainStatus];
         [self.data addObject:mainCellData];
-        L(status);
+        
+        self.delegate = delegate;
+        [self.delegate preprocessDataSourceForRender:self];
+        
         return self;
         
         // load context data, then call finish on delegate

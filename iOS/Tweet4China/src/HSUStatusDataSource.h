@@ -10,6 +10,6 @@
 
 @interface HSUStatusDataSource : HSUBaseDataSource
 
-- (id)initWithStatus:(NSDictionary *)status;
+- (id)initWithDelegate:(id<HSUBaseDataSourceDelegate>)delegate status:(NSDictionary *)status;
 
 @end

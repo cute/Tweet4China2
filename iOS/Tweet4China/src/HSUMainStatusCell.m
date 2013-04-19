@@ -26,6 +26,7 @@
 #define avatar_S 48
 #define ambient_S 20
 #define textAL_LHM 1.3
+#define actionV_H 44
 
 #define retweeted_R @"ic_ambient_retweet"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
@@ -47,14 +48,10 @@
     TTTAttributedLabel *textAL;
     UIImageView *flagIV;
     
+    UIView *actionSeperatorV;
     UIView *actionV;
     UIButton *replayB, *retweetB, *favoriteB, *moreB;
     BOOL retweeted, favorited;
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -129,6 +126,44 @@
         flagIV = [[UIImageView alloc] init];
         [self.contentView addSubview:flagIV];
         
+        // action buttons
+        actionSeperatorV = [[UIView alloc] init];
+        actionSeperatorV.backgroundColor = bw(226);
+        [self.contentView addSubview:actionSeperatorV];
+        
+        actionV = [[UIView alloc] init];
+        [self.contentView addSubview:actionV];
+        
+        replayB = [[UIButton alloc] init];
+        replayB.showsTouchWhenHighlighted = YES;
+        [replayB setImage:[UIImage imageNamed:@"icn_tweet_action_reply"] forState:UIControlStateNormal];
+        [replayB sizeToFit];
+        [actionV addSubview:replayB];
+        
+        retweetB = [[UIButton alloc] init];
+        retweetB.showsTouchWhenHighlighted = YES;
+        if (retweeted)
+            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_on"] forState:UIControlStateNormal];
+        else
+            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_off"] forState:UIControlStateNormal];
+        [retweetB sizeToFit];
+        [actionV addSubview:retweetB];
+        
+        favoriteB = [[UIButton alloc] init];
+        favoriteB.showsTouchWhenHighlighted = YES;
+        if (favorited)
+            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_on"] forState:UIControlStateNormal];
+        else
+            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_off"] forState:UIControlStateNormal];
+        [favoriteB sizeToFit];
+        [actionV addSubview:favoriteB];
+        
+        moreB = [[UIButton alloc] init];
+        moreB.showsTouchWhenHighlighted = YES;
+        [moreB setImage:[UIImage imageNamed:@"icn_tweet_action_more"] forState:UIControlStateNormal];
+        [moreB sizeToFit];
+        [actionV addSubview:moreB];
+        
         // set frames
         contentArea.frame = ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0);
         CGFloat cw = contentArea.width;
@@ -139,12 +174,6 @@
         infoArea.frame = ccr(ambientL.left, 0, cw-ambientL.left, info_H);
         attrI.frame = ccr(0, 0, 0, 16);
         textAL.frame = ccr(ambientL.left, 0, infoArea.width, 0);
-        
-        UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(cellSwiped:)];
-        swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
-        [self addGestureRecognizer:swipeGesture];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherCellSwiped:) name:@"HSUStatusCell_OtherCellSwiped" object:nil];
     }
     return self;
 }
@@ -179,6 +208,16 @@
     
     [flagIV sizeToFit];
     flagIV.rightTop = ccp(self.contentView.width, 0);
+    
+    actionV.frame = ccr(0, 0, self.contentView.width, actionV_H);
+    actionV.bottom = self.contentView.height;
+    
+    actionSeperatorV.frame = ccr(9, actionV.top-1, actionV.width-9*2, 1);
+    
+    replayB.center = ccp(actionV.width/8, actionV.height/2);
+    retweetB.center = ccp(actionV.width*3/8, actionV.height/2);
+    favoriteB.center = ccp(actionV.width*5/8, actionV.height/2);
+    moreB.center = ccp(actionV.width*7/8, actionV.height/2);
 }
 
 - (void)setupWithData:(HSUTableCellData *)data
@@ -297,9 +336,11 @@
     }
     textAL.delegate = data.renderData[@"attributed_label_delegate"];
     
-    self.contentView.backgroundColor = kClearColor;
-    contentArea.alpha = 1;
-    actionV.hidden = YES;
+    // set action events
+    [self setupControl:replayB forKey:@"reply" withData:self.data cleanOldEvents:YES];
+    [self setupControl:retweetB forKey:@"retweet" withData:self.data cleanOldEvents:YES];
+    [self setupControl:favoriteB forKey:@"favorite" withData:self.data cleanOldEvents:YES];
+    [self setupControl:moreB forKey:@"more" withData:self.data cleanOldEvents:YES];
 }
 
 + (CGFloat)heightForData:(HSUTableCellData *)data
@@ -349,6 +390,9 @@
     height *= textAL_LHM;
     height -= (textAL_LHM - 1) * textAL_font_S;
     
+    height += actionV_H + 1;
+    leftHeight += actionV_H + 1;
+    
     CGFloat cellHeight = MAX(height, leftHeight);
     renderData[@"height"] = @(cellHeight);
     
@@ -372,94 +416,6 @@
         return @"photo";
     }
     return nil;
-}
-
-- (void)cellSwiped:(UIGestureRecognizer *)gesture {
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        [self switchMode];
-    }
-}
-- (void)switchMode {
-    if (!actionV) { // set to default
-        actionV = [[UIView alloc] init];
-        UIImage *actionBG = [UIImage imageNamed:@"bg_swipe_tile"];
-        UIColor *actionBGC = [UIColor colorWithPatternImage:actionBG];
-        actionV.backgroundColor = actionBGC;
-        
-        replayB = [[UIButton alloc] init];
-        replayB.showsTouchWhenHighlighted = YES;
-        [replayB setImage:[UIImage imageNamed:@"icn_tweet_action_reply"] forState:UIControlStateNormal];
-        [replayB sizeToFit];
-        [actionV addSubview:replayB];
-        
-        retweetB = [[UIButton alloc] init];
-        retweetB.showsTouchWhenHighlighted = YES;
-        if (retweeted)
-            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_on"] forState:UIControlStateNormal];
-        else
-            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_off"] forState:UIControlStateNormal];
-        [retweetB sizeToFit];
-        [actionV addSubview:retweetB];
-        
-        favoriteB = [[UIButton alloc] init];
-        favoriteB.showsTouchWhenHighlighted = YES;
-        if (favorited)
-            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_on"] forState:UIControlStateNormal];
-        else
-            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_off"] forState:UIControlStateNormal];
-        [favoriteB sizeToFit];
-        [actionV addSubview:favoriteB];
-        
-        moreB = [[UIButton alloc] init];
-        moreB.showsTouchWhenHighlighted = YES;
-        [moreB setImage:[UIImage imageNamed:@"icn_tweet_action_more"] forState:UIControlStateNormal];
-        [moreB sizeToFit];
-        [actionV addSubview:moreB];
-        
-        [self.contentView addSubview:actionV];
-        actionV.hidden = YES;
-    }
-    
-    if (actionV.hidden) { // to action mode
-        [self setupControl:replayB forKey:@"reply" withData:self.data cleanOldEvents:YES];
-        [self setupControl:retweetB forKey:@"retweet" withData:self.data cleanOldEvents:YES];
-        [self setupControl:favoriteB forKey:@"favorite" withData:self.data cleanOldEvents:YES];
-        [self setupControl:moreB forKey:@"more" withData:self.data cleanOldEvents:YES];
-        
-        actionV.frame = self.contentView.bounds;
-        replayB.center = ccp(actionV.width/8, actionV.height/2);
-        retweetB.center = ccp(actionV.width*3/8, actionV.height/2);
-        favoriteB.center = ccp(actionV.width*5/8, actionV.height/2);
-        moreB.center = ccp(actionV.width*7/8, actionV.height/2);
-        
-        actionV.alpha = 0;
-        actionV.hidden = NO;
-        
-        [UIView animateWithDuration:0.2 animations:^{
-            self.contentView.backgroundColor = bw(230);
-            contentArea.alpha = 0;
-            actionV.alpha = 1;
-        }];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"HSUStatusCell_OtherCellSwiped" object:self];
-        
-    } else { // to default mode
-        [UIView animateWithDuration:0.2 animations:^{
-            self.contentView.backgroundColor = kClearColor;
-            contentArea.alpha = 1;
-            actionV.alpha = 0;
-        } completion:^(BOOL finish){
-            actionV.hidden = YES;
-        }];
-    }
-}
-
-- (void)otherCellSwiped:(NSNotification *)notification {
-    if (notification.object != self) {
-        if (actionV && !actionV.hidden) {
-            [self switchMode];
-        }
-    }
 }
 
 @end

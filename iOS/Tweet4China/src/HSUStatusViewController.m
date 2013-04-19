@@ -30,7 +30,7 @@
 
 - (void)viewDidLoad
 {
-    self.dataSource = [[self.dataSourceClass alloc] initWithStatus:self.mainStatus];
+    self.dataSource = [[self.dataSourceClass alloc] initWithDelegate:self status:self.mainStatus];
     self.dataSource.delegate = self;
     
     [super viewDidLoad];
