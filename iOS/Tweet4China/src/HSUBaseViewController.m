@@ -70,11 +70,7 @@
 {
     [super viewWillAppear:animated];
     
-    // TODO refector background
-    UIImage *texture = [UIImage imageNamed:@"bg_texture"];
-    UIView *background = [[HSUTexturedView alloc] initWithFrame:self.view.bounds texture:texture];
-    [self.view insertSubview:background atIndex:0];
-    
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_texture"]];
     self.tableView.frame = self.view.bounds;
 }
 
