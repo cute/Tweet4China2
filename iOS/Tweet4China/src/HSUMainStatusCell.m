@@ -20,13 +20,14 @@
 
 #define ambient_H 14
 #define info_H 16
-#define textAL_font_S 14
+#define textAL_font_S 16
 #define margin_W 10
 #define padding_S 10
 #define avatar_S 48
 #define ambient_S 20
-#define textAL_LHM 1.3
+#define textAL_LHM 1.2
 #define actionV_H 44
+#define avatar_text_Distance 15
 
 #define retweeted_R @"ic_ambient_retweet"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
@@ -173,7 +174,7 @@
         avatarI.frame = ccr(0, 0, avatar_S, avatar_S);
         infoArea.frame = ccr(ambientL.left, 0, cw-ambientL.left, info_H);
         attrI.frame = ccr(0, 0, 0, 16);
-        textAL.frame = ccr(ambientL.left, 0, infoArea.width, 0);
+        textAL.frame = ccr(avatarI.left, 0, cw-avatarI.left*2, 0);
     }
     return self;
 }
@@ -192,7 +193,7 @@
     }
     
     infoArea.frame = ccr(infoArea.left, avatarI.top, infoArea.width, infoArea.height);
-    textAL.frame = ccr(textAL.left, infoArea.bottom, textAL.width, contentArea.height-infoArea.bottom);
+    textAL.frame = ccr(textAL.left, avatarI.bottom+avatar_text_Distance, textAL.width, [self.data.renderData[@"text_height"] floatValue]);
     
     [timeL sizeToFit];
     timeL.frame = ccr(infoArea.width-timeL.width, -1, timeL.width, timeL.height);
@@ -354,16 +355,12 @@
     }
     
     CGFloat height = 0;
-    CGFloat leftHeight = 0;
     
     height += padding_S; // add padding top
-    leftHeight += padding_S;
     
     if (rawData[@"retweeted_status"]) {
         height += ambient_H; // add ambient
-        leftHeight += ambient_H;
     }
-    height += info_H; // add info
     
     NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
     NSDictionary *entities = rawData[@"entities"];
@@ -380,23 +377,45 @@
         }
     }
     CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S * 3 - avatar_S;
-    height += ceilf([text sizeWithFont:[UIFont systemFontOfSize:textAL_font_S] constrainedToSize:CGSizeMake(cellWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping].height); // add text
     
-    leftHeight += avatar_S; // add avatar
+    /////////////////
+    static TTTAttributedLabel *testSizeLabel = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        TTTAttributedLabel *textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
+        textAL.font = [UIFont systemFontOfSize:textAL_font_S];
+        textAL.backgroundColor = kClearColor;
+        textAL.textColor = rgb(38, 38, 38);
+        textAL.highlightedTextColor = kWhiteColor;
+        textAL.lineBreakMode = NSLineBreakByWordWrapping;
+        textAL.numberOfLines = 0;
+        textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164)};
+        textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
+                                        (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
+        textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
+        textAL.lineHeightMultiple = textAL_LHM;
+        
+        testSizeLabel = textAL;
+    });
+    testSizeLabel.text = text;
+    ///////////////
     
+    CGFloat textHeight = ceilf(testSizeLabel.attributedText.size.width/cellWidth + 1)*testSizeLabel.attributedText.size.height;
+    height += textHeight;
+    
+    data.renderData[@"text_height"] = @(textHeight);
+    
+    height += avatar_S;
     height += padding_S; // add padding-bottom
-    leftHeight += padding_S;
-    
-    height *= textAL_LHM;
-    height -= (textAL_LHM - 1) * textAL_font_S;
     
     height += actionV_H + 1;
-    leftHeight += actionV_H + 1;
     
-    CGFloat cellHeight = MAX(height, leftHeight);
-    renderData[@"height"] = @(cellHeight);
+    height = floorf(height);
     
-    return cellHeight;
+    renderData[@"height"] = @(height);
+    
+    return height;
 }
 
 - (TTTAttributedLabel *)contentLabel

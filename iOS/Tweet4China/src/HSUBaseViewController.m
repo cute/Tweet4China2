@@ -72,6 +72,10 @@
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_texture"]];
     self.tableView.frame = self.view.bounds;
+    
+    NSIndexPath *selection = [self.tableView indexPathForSelectedRow];
+	if (selection)
+		[self.tableView deselectRowAtIndexPath:selection animated:YES];
 }
 
 #pragma mark - TableView

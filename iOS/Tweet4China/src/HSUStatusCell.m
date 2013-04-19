@@ -348,6 +348,7 @@
     height -= (textAL_LHM - 1) * textAL_font_S;
     
     CGFloat cellHeight = MAX(height, leftHeight);
+    cellHeight = floorf(cellHeight);
     renderData[@"height"] = @(cellHeight);
     
     return cellHeight;
