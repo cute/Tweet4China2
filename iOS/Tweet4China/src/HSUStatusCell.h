@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "HSUBaseTableCell.h"
 
+#define kNotification_HSUStatusCell_OtherCellSwiped @"HSUStatusCell_OtherCellSwiped"
+
 @interface HSUStatusCell : HSUBaseTableCell
 
 @end

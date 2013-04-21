@@ -11,7 +11,6 @@
 #import "HSUStatusCell.h"
 #import "TTTAttributedLabel.h"
 #import "UIImageView+AFNetworking.h"
-#import "NSDate+Additions.h"
 #import "FHSTwitterEngine.h"
 #import "GTMNSString+HTML.h"
 #import "UIButton+WebCache.h"
@@ -142,7 +141,7 @@
         swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
         [self addGestureRecognizer:swipeGesture];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherCellSwiped:) name:@"HSUStatusCell_OtherCellSwiped" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherCellSwiped:) name:kNotification_HSUStatusCell_OtherCellSwiped object:nil];
     }
     return self;
 }
@@ -265,7 +264,7 @@
     }
     
     // time
-    NSDate *createdDate = [[FHSTwitterEngine engine] getDateFromTwitterCreatedAt:rawData[@"created_at"]];
+    NSDate *createdDate = [twe getDateFromTwitterCreatedAt:rawData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
     
     // text
@@ -298,6 +297,7 @@
     self.contentView.backgroundColor = kClearColor;
     contentArea.alpha = 1;
     actionV.hidden = YES;
+    self.data.renderData[@"mode"] = @"default";
 }
 
 + (CGFloat)_textHeightWithCellData:(HSUTableCellData *)data
@@ -467,7 +467,8 @@
             actionV.alpha = 1;
         }];
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"HSUStatusCell_OtherCellSwiped" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_HSUStatusCell_OtherCellSwiped object:self];
+        self.data.renderData[@"mode"] = @"action";
 
     } else { // to default mode
         [UIView animateWithDuration:0.2 animations:^{
@@ -477,6 +478,7 @@
         } completion:^(BOOL finish){
             actionV.hidden = YES;
         }];
+        self.data.renderData[@"mode"] = @"default";
     }
 }
 

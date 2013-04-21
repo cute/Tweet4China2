@@ -3,20 +3,21 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8">
     </head>
 	<body>
-		<div style="border:1px solid black;padding:8px;">
+		<div style="border:1px solid black;padding:8px;font-size:12px;">
 			<div>
-				<img src="${profile_url}" style="width:48px;height:48px;padding-right:8px;">
-				<b>${name}(<a href="https://twitter.com/${screen_name}">@${screen_name}</a>)</b>
+				<img src="${profile_image_url_https}" style="width:48px;height:48px;padding-right:8px;">
+				<b>${name}(<a style="color:rgb(75,138,251)" href="https://twitter.com/${screen_name}">@${screen_name}</a>)</b>
 			</div>
 			<div>
-				<a href="https://twitter.com/zhufengme/status/${id_str}">${create_time}</a>
+				<a style="color:rgb(75,138,251)" href="https://twitter.com/zhufengme/status/${id_str}">${create_time}</a>
 			</div>
 			<div>
 				${html}
 			</div>
 		</div>
+        <br>
         <div>
-            Download Tweet4China from <a href="">here</a>
+            Download Tweet4China from <a href="http://github.com/tuoxie007/Tweet4China2">here</a>
         </div>
 	</body>
 </html>

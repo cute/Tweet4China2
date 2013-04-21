@@ -79,6 +79,7 @@
     NSIndexPath *selection = [self.tableView indexPathForSelectedRow];
 	if (selection)
 		[self.tableView deselectRowAtIndexPath:selection animated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_HSUStatusCell_OtherCellSwiped object:self];
 }
 
 #pragma mark - TableView
@@ -87,6 +88,21 @@
     HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
     Class cellClass = [self cellClassForDataType:data.dataType];
     return [cellClass heightForData:data];
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
+    if ([data.dataType isEqualToString:kDataType_Status]) {
+        if ([data.renderData[@"mode"] isEqualToString:@"action"]) {
+            return NO;
+        }
+        return YES;
+    }
+    if ([data.dataType isEqualToString:kDataType_LoadMore]) {
+        return NO;
+    }
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -235,6 +251,94 @@
 
 - (void)more:(HSUTableCellData *)cellData {
     NSDictionary *rawData = cellData.rawData;
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:nil destructiveButtonItem:nil otherButtonItems:nil];
+    uint count = 0;
+    
+    NSArray *urls = rawData[@"entities"][@"urls"];
+    if (urls && urls.count) { // has link
+        RIButtonItem *tweetLinkItem = [RIButtonItem itemWithLabel:@"Tweet link"];
+        tweetLinkItem.action = ^{
+            if (urls.count == 1) {
+                NSString *link = [urls objectAtIndex:0][@"expanded_url"];
+                [self _composeWithText:S(@" %@", link)];
+            } else {
+                UIActionSheet *selectLinkActionSheet = [[UIActionSheet alloc] init];
+                RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+                [selectLinkActionSheet addButtonItem:cancelItem];
+                for (NSDictionary *urlDict in urls) {
+                    NSString *displayUrl = urlDict[@"display_url"];
+                    NSString *expendedUrl = urlDict[@"expanded_url"];
+                    RIButtonItem *buttonItem = [RIButtonItem itemWithLabel:displayUrl];
+                    buttonItem.action = ^{
+                        [self _composeWithText:S(@" %@", expendedUrl)];
+                    };
+                    [selectLinkActionSheet addButtonItem:buttonItem];
+                }
+                [selectLinkActionSheet setCancelButtonIndex:urls.count];
+                [selectLinkActionSheet showInView:self.view.window];
+            }
+        };
+        [actionSheet addButtonItem:tweetLinkItem];
+        count ++;
+        
+        RIButtonItem *copyLinkItem = [RIButtonItem itemWithLabel:@"Copy link"];
+        copyLinkItem.action = ^{
+            if (urls.count == 1) {
+                NSString *link = [urls objectAtIndex:0][@"expanded_url"];
+                UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                pasteboard.string = link;
+            } else {
+                UIActionSheet *selectLinkActionSheet = [[UIActionSheet alloc] init];
+                RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+                [selectLinkActionSheet addButtonItem:cancelItem];
+                for (NSDictionary *urlDict in urls) {
+                    NSString *displayUrl = urlDict[@"display_url"];
+                    NSString *expendedUrl = urlDict[@"expanded_url"];
+                    RIButtonItem *buttonItem = [RIButtonItem itemWithLabel:displayUrl];
+                    buttonItem.action = ^{
+                        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                        pasteboard.string = expendedUrl;
+                    };
+                    [selectLinkActionSheet addButtonItem:buttonItem];
+                }
+                [selectLinkActionSheet setCancelButtonIndex:urls.count];
+                [selectLinkActionSheet showInView:self.view.window];
+            }
+        };
+        [actionSheet addButtonItem:copyLinkItem];
+        count ++;
+        
+        RIButtonItem *mailLinkItem = [RIButtonItem itemWithLabel:@"Mail link"];
+        mailLinkItem.action = ^{
+            if (urls.count == 1) {
+                NSString *link = [urls objectAtIndex:0][@"expanded_url"];
+                NSString *subject = @"Link from Twitter";
+                NSString *body = S(@"<a href=\"%@\">%@</a>", link, link);
+                [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
+            } else {
+                UIActionSheet *selectLinkActionSheet = [[UIActionSheet alloc] init];
+                RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+                [selectLinkActionSheet addButtonItem:cancelItem];
+                for (NSDictionary *urlDict in urls) {
+                    NSString *displayUrl = urlDict[@"display_url"];
+                    NSString *expendedUrl = urlDict[@"expanded_url"];
+                    RIButtonItem *buttonItem = [RIButtonItem itemWithLabel:displayUrl];
+                    buttonItem.action = ^{
+                        NSString *subject = @"Link from Twitter";
+                        NSString *body = S(@"<a href=\"%@\">%@</a>", expendedUrl, displayUrl);
+                        [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
+                    };
+                    [selectLinkActionSheet addButtonItem:buttonItem];
+                }
+                [selectLinkActionSheet setCancelButtonIndex:urls.count];
+                [selectLinkActionSheet showInView:self.view.window];
+            }
+        };
+        [actionSheet addButtonItem:mailLinkItem];
+        count ++;
+    }
+    
     NSString *id_str = rawData[@"id_str"];
     NSString *link = S(@"https://twitter.com/rtfocus/status/%@", id_str);
     
@@ -243,22 +347,46 @@
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = link;
     };
+    [actionSheet addButtonItem:copyLinkToTweetItem];
+    count ++;
+    
+    NSString *name = rawData[@"user"][@"name"];
+    NSString *screen_name = rawData[@"user"][@"screen_name"];
+    NSString *profile_image_url_https = rawData[@"user"][@"profile_image_url_https"];
+    NSString *text = rawData[@"text"];
+    NSDate *createTime = [twe getDateFromTwitterCreatedAt:rawData[@"created_at"]];
+    NSString *create_time = createTime.standardTwitterDisplay;
     
     RIButtonItem *mailTweetItem = [RIButtonItem itemWithLabel:@"Mail Tweet"];
     mailTweetItem.action = ^{
         NSURL *templatFileURL = [[NSBundle mainBundle] URLForResource:@"mail_tweet_template" withExtension:@"html"];
-        NSString *template = [[NSString alloc] initWithContentsOfURL:templatFileURL encoding:NSUTF8StringEncoding error:nil];
         // TODO: replace template placeholders with contents
-        NSString *body = template;
-//        S(@"<a href=\"%@\">%@</a><br><br>", link, link);
+        NSString *body = [[NSString alloc] initWithContentsOfURL:templatFileURL encoding:NSUTF8StringEncoding error:nil];;
+        body = [body stringByReplacingOccurrencesOfString:@"${profile_image_url_https}" withString:profile_image_url_https];
+        body = [body stringByReplacingOccurrencesOfString:@"${name}" withString:name];
+        body = [body stringByReplacingOccurrencesOfString:@"${screen_name}" withString:screen_name];
+        body = [body stringByReplacingOccurrencesOfString:@"${id_str}" withString:id_str];
+        body = [body stringByReplacingOccurrencesOfString:@"${create_time}" withString:create_time];
+        body = [body stringByReplacingOccurrencesOfString:@"${html}" withString:text];
         NSString *subject = @"Link from Twitter";
         [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
     };
+    [actionSheet addButtonItem:mailTweetItem];
+    count ++;
     
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+    [actionSheet addButtonItem:cancelItem];
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:copyLinkToTweetItem, mailTweetItem, nil];
+    [actionSheet setCancelButtonIndex:count];
     [actionSheet showInView:self.view.window];
+}
+
+- (void)_composeWithText:(NSString *)text
+{
+    HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
+    composeVC.defaultText = text;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeVC];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 

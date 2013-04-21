@@ -18,6 +18,7 @@
 #import "UIImage+Additions.h"
 #import "UIButton+Additions.h"
 #import "UIView+Additions.h"
+#import "NSDate+Additions.h"
 
 #import "FHSTwitterEngine+Additions.h"
 
