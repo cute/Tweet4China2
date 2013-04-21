@@ -161,7 +161,7 @@
     }
     
     infoArea.frame = ccr(infoArea.left, avatarI.top, infoArea.width, infoArea.height);
-    textAL.frame = ccr(textAL.left, infoArea.bottom, textAL.width, contentArea.height-infoArea.bottom);
+    textAL.frame = ccr(textAL.left, infoArea.bottom, textAL.width, [self.data.renderData[@"text_height"] floatValue] + 3);
     
     [timeL sizeToFit];
     timeL.frame = ccr(infoArea.width-timeL.width, -1, timeL.width, timeL.height);
@@ -300,6 +300,51 @@
     actionV.hidden = YES;
 }
 
++ (CGFloat)_textHeightWithCellData:(HSUTableCellData *)data
+{
+    NSDictionary *status = data.rawData;
+    NSString *text = [status[@"text"] gtm_stringByUnescapingFromHTML];
+    NSDictionary *entities = status[@"entities"];
+    if (entities) {
+        NSArray *urls = entities[@"urls"];
+        if (urls && urls.count) {
+            for (NSDictionary *urlDict in urls) {
+                NSString *url = urlDict[@"url"];
+                NSString *displayUrl = urlDict[@"display_url"];
+                if (url && url.length && displayUrl && displayUrl.length) {
+                    text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
+                }
+            }
+        }
+    }
+    
+    static TTTAttributedLabel *testSizeLabel = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        TTTAttributedLabel *textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
+        textAL.font = [UIFont systemFontOfSize:textAL_font_S];
+        textAL.backgroundColor = kClearColor;
+        textAL.textColor = rgb(38, 38, 38);
+        textAL.highlightedTextColor = kWhiteColor;
+        textAL.lineBreakMode = NSLineBreakByWordWrapping;
+        textAL.numberOfLines = 0;
+        textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164)};
+        textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
+                                        (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
+        textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
+        textAL.lineHeightMultiple = textAL_LHM;
+        
+        testSizeLabel = textAL;
+    });
+    testSizeLabel.text = text;
+    
+    CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S * 3 - avatar_S;
+    CGFloat textHeight = [testSizeLabel sizeThatFits:ccs(cellWidth, 0)].height;
+    data.renderData[@"text_height"] = @(textHeight);
+    return textHeight;
+}
+
 + (CGFloat)heightForData:(HSUTableCellData *)data
 {
     NSDictionary *rawData = data.rawData;
@@ -322,30 +367,12 @@
     }
     height += info_H; // add info
 
-    NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
-    NSDictionary *entities = rawData[@"entities"];
-    if (entities) {
-        NSArray *urls = entities[@"urls"];
-        if (urls && urls.count) {
-            for (NSDictionary *urlDict in urls) {
-                NSString *url = urlDict[@"url"];
-                NSString *displayUrl = urlDict[@"display_url"];
-                if (url && url.length && displayUrl && displayUrl.length) {
-                    text = [text stringByReplacingOccurrencesOfString:url withString:displayUrl];
-                }
-            }
-        }
-    }
-    CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S * 3 - avatar_S;
-    height += ceilf([text sizeWithFont:[UIFont systemFontOfSize:textAL_font_S] constrainedToSize:CGSizeMake(cellWidth, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping].height); // add text
+    height += [self _textHeightWithCellData:data] + padding_S;
     
     leftHeight += avatar_S; // add avatar
     
     height += padding_S; // add padding-bottom
     leftHeight += padding_S;
-    
-    height *= textAL_LHM;
-    height -= (textAL_LHM - 1) * textAL_font_S;
     
     CGFloat cellHeight = MAX(height, leftHeight);
     cellHeight = floorf(cellHeight);

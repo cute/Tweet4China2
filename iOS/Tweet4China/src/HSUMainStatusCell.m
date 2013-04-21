@@ -41,10 +41,8 @@
     UIImageView *ambientI;
     UILabel *ambientL;
     UIImageView *avatarI;
-    UIView *infoArea;
     UILabel *nameL;
     UILabel *screenNameL;
-    UIImageView *attrI; // photo/video/geo/summary/audio/convo
     UILabel *timeL;
     TTTAttributedLabel *textAL;
     UIImageView *flagIV;
@@ -60,15 +58,13 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = kWhiteColor;
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         contentArea = [[UIView alloc] init];
         [self.contentView addSubview:contentArea];
         
         ambientArea = [[UIView alloc] init];
         [contentArea addSubview:ambientArea];
-        
-        infoArea = [[UIView alloc] init];
-        [contentArea addSubview:infoArea];
         
         ambientI = [[UIImageView alloc] init];
         [ambientArea addSubview:ambientI];
@@ -86,24 +82,21 @@
         avatarI.layer.masksToBounds = YES;
         
         nameL = [[UILabel alloc] init];
-        [infoArea addSubview:nameL];
+        [contentArea addSubview:nameL];
         nameL.font = [UIFont boldSystemFontOfSize:14];
         nameL.textColor = [UIColor blackColor];
         nameL.highlightedTextColor = kWhiteColor;
         nameL.backgroundColor = kClearColor;
         
         screenNameL = [[UILabel alloc] init];
-        [infoArea addSubview:screenNameL];
+        [contentArea addSubview:screenNameL];
         screenNameL.font = [UIFont systemFontOfSize:12];
         screenNameL.textColor = [UIColor grayColor];
         screenNameL.highlightedTextColor = kWhiteColor;
         screenNameL.backgroundColor = kClearColor;
         
-        attrI = [[UIImageView alloc] init];
-        [infoArea addSubview:attrI];
-        
         timeL = [[UILabel alloc] init];
-        [infoArea addSubview:timeL];
+        [contentArea addSubview:timeL];
         timeL.font = [UIFont systemFontOfSize:12];
         timeL.textColor = [UIColor grayColor];
         timeL.highlightedTextColor = kWhiteColor;
@@ -172,9 +165,7 @@
         ambientI.frame = ccr(avatar_S-ambient_S, (ambient_H-ambient_S)/2, ambient_S, ambient_S);
         ambientL.frame = ccr(avatar_S+padding_S, 0, cw-ambientI.right-padding_S, ambient_H);
         avatarI.frame = ccr(0, 0, avatar_S, avatar_S);
-        infoArea.frame = ccr(ambientL.left, 0, cw-ambientL.left, info_H);
-        attrI.frame = ccr(0, 0, 0, 16);
-        textAL.frame = ccr(avatarI.left, 0, cw-avatarI.left*2, 0);
+        textAL.frame = ccr(avatarI.left, 0, cw, 0);
     }
     return self;
 }
@@ -187,25 +178,21 @@
     ambientArea.frame = ccr(0, 0, contentArea.width, ambient_S);
     
     if (ambientArea.hidden) {
-        avatarI.frame = ccr(avatarI.left, 0, avatarI.width, avatarI.height);
+        avatarI.leftTop = ccp(avatarI.left, 0);
     } else {
-        avatarI.frame = ccr(avatarI.left, ambientArea.bottom, avatarI.width, avatarI.height);
+        avatarI.leftTop = ccp(avatarI.left, ambientArea.bottom);
     }
     
-    infoArea.frame = ccr(infoArea.left, avatarI.top, infoArea.width, infoArea.height);
-    textAL.frame = ccr(textAL.left, avatarI.bottom+avatar_text_Distance, textAL.width, [self.data.renderData[@"text_height"] floatValue]);
+    textAL.frame = ccr(textAL.left, avatarI.bottom+avatar_text_Distance, textAL.width, [self.data.renderData[@"text_height"] floatValue]+3);
     
     [timeL sizeToFit];
-    timeL.frame = ccr(infoArea.width-timeL.width, -1, timeL.width, timeL.height);
-    
-    [attrI sizeToFit];
-    attrI.frame = ccr(timeL.left-attrI.width-3, -1, attrI.width, attrI.height);
+    timeL.leftTop = ccp(textAL.left, textAL.bottom+avatar_text_Distance);
     
     [nameL sizeToFit];
-    nameL.frame = ccr(0, -3, MIN(attrI.left-3, nameL.width), nameL.height);
+    nameL.leftTop = ccp(avatarI.right+padding_S, avatarI.top+7);
     
     [screenNameL sizeToFit];
-    screenNameL.frame = ccr(nameL.right+3, -1, attrI.left-nameL.right, screenNameL.height);
+    screenNameL.leftTop = ccp(nameL.left, nameL.bottom+3);
     
     [flagIV sizeToFit];
     flagIV.rightTop = ccp(self.contentView.width, 0);
@@ -271,44 +258,9 @@
     [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
     [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
     
-    NSDictionary *geo = rawData[@"geo"];
-    
-    // attr
-    attrI.imageName = nil;
-    NSString *attrName = nil;
-    if ([rawData[@"in_reply_to_status_id_str"] length]) {
-        attrName = @"convo";
-    } else if (entities) {
-        NSArray *medias = entities[@"media"];
-        NSArray *urls = entities[@"urls"];
-        if (medias && medias.count) {
-            NSDictionary *media = medias[0];
-            NSString *type = media[@"type"];
-            if ([type isEqualToString:@"photo"]) {
-                attrName = @"photo";
-            }
-        } else if (urls && urls.count) {
-            for (NSDictionary *urlDict in urls) {
-                NSString *expandedUrl = urlDict[@"expanded_url"];
-                attrName = [self.class attrForUrl:expandedUrl];
-                if (attrName) {
-                    break;
-                }
-            }
-        }
-    } else if ([geo isKindOfClass:[NSDictionary class]]) {
-        attrName = @"geo";
-    }
-    
-    if (attrName) {
-        attrI.imageName = S(@"ic_tweet_attr_%@_default", attrName);
-    } else {
-        attrI.imageName = nil;
-    }
-    
     // time
     NSDate *createdDate = [[FHSTwitterEngine engine] getDateFromTwitterCreatedAt:rawData[@"created_at"]];
-    timeL.text = createdDate.twitterDisplay;
+    timeL.text = createdDate.standardTwitterDisplay;
     
     // text
     NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
@@ -344,26 +296,11 @@
     [self setupControl:moreB forKey:@"more" withData:self.data cleanOldEvents:YES];
 }
 
-+ (CGFloat)heightForData:(HSUTableCellData *)data
++ (CGFloat)_textHeightWithCellData:(HSUTableCellData *)data
 {
-    NSDictionary *rawData = data.rawData;
-    NSMutableDictionary *renderData = data.renderData;
-    if (renderData) {
-        if (renderData[@"height"]) {
-            return [renderData[@"height"] floatValue];
-        }
-    }
-    
-    CGFloat height = 0;
-    
-    height += padding_S; // add padding top
-    
-    if (rawData[@"retweeted_status"]) {
-        height += ambient_H; // add ambient
-    }
-    
-    NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
-    NSDictionary *entities = rawData[@"entities"];
+    NSDictionary *status = data.rawData;
+    NSString *text = [status[@"text"] gtm_stringByUnescapingFromHTML];
+    NSDictionary *entities = status[@"entities"];
     if (entities) {
         NSArray *urls = entities[@"urls"];
         if (urls && urls.count) {
@@ -376,9 +313,7 @@
             }
         }
     }
-    CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S * 3 - avatar_S;
     
-    /////////////////
     static TTTAttributedLabel *testSizeLabel = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -399,18 +334,47 @@
         testSizeLabel = textAL;
     });
     testSizeLabel.text = text;
-    ///////////////
     
-    CGFloat textHeight = ceilf(testSizeLabel.attributedText.size.width/cellWidth + 1)*testSizeLabel.attributedText.size.height;
-    height += textHeight;
-    
+    CGFloat cellWidth = [HSUCommonTools winWidth] - padding_S * 4;
+    CGFloat textHeight = [testSizeLabel sizeThatFits:ccs(cellWidth, 0)].height;
     data.renderData[@"text_height"] = @(textHeight);
+    return [testSizeLabel sizeThatFits:ccs(cellWidth, 0)].height;
+}
+
++ (CGFloat)heightForData:(HSUTableCellData *)data
+{
+    NSDictionary *rawData = data.rawData;
+    NSMutableDictionary *renderData = data.renderData;
+    if (renderData) {
+        if (renderData[@"height"]) {
+            return [renderData[@"height"] floatValue];
+        }
+    }
     
+    CGFloat height = 0;
+    
+    height += padding_S; // add padding top
+    
+    if (rawData[@"retweeted_status"]) {
+        height += ambient_H; // add ambient
+    }
+    
+    // avatar
     height += avatar_S;
-    height += padding_S; // add padding-bottom
+    height += avatar_text_Distance;
     
+    // text height
+    height += [self _textHeightWithCellData:data];;
+    height += avatar_text_Distance;
+    
+    // timeL height
+    height += 15;
+    height += avatar_text_Distance;
+    
+    // actionV height
     height += actionV_H + 1;
     
+    // as integer
     height = floorf(height);
     
     renderData[@"height"] = @(height);

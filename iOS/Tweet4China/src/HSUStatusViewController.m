@@ -24,6 +24,7 @@
     if (self) {
         self.mainStatus = status;
         self.dataSourceClass = [HSUStatusDataSource class];
+        self.useRefreshControl = NO;
     }
     return self;
 }

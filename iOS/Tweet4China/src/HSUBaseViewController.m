@@ -29,6 +29,7 @@
     self = [super init];
     if (self) {
         self.dataSourceClass = [HSUBaseDataSource class];
+        self.useRefreshControl = YES;
     }
     return self;
 }
@@ -55,10 +56,12 @@
     [self.view addSubview:tableView];
     self.tableView = tableView;
     
-    HSURefreshControl *refreshControl = [[HSURefreshControl alloc] init];
-    [refreshControl addTarget:self.dataSource action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
-    [tableView addSubview:refreshControl];
-    self.refreshControl = refreshControl;
+    if (self.useRefreshControl) {
+        HSURefreshControl *refreshControl = [[HSURefreshControl alloc] init];
+        [refreshControl addTarget:self.dataSource action:@selector(refresh) forControlEvents:UIControlEventValueChanged];
+        [tableView addSubview:refreshControl];
+        self.refreshControl = refreshControl;
+    }
     
     self.navigationItem.rightBarButtonItems = [self _createRightBarButtonItems];
     if ([self.navigationController.viewControllers objectAtIndex:0] != self) {

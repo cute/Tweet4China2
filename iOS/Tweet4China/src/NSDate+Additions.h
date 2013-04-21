@@ -11,5 +11,6 @@
 @interface NSDate (Additions)
 
 @property (nonatomic, readonly) NSString *twitterDisplay;
+@property (nonatomic, readonly) NSString *standardTwitterDisplay;
 
 @end

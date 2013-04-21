@@ -30,4 +30,11 @@
     }
 }
 
+- (NSString *)standardTwitterDisplay
+{
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyy-MM-dd HH:mm:ss"];
+    return [df stringFromDate:self];
+}
+
 @end
