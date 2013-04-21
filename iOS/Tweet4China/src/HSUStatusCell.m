@@ -271,9 +271,17 @@
     NSString *text = [rawData[@"text"] gtm_stringByUnescapingFromHTML];
     textAL.text = text;
     if (entities) {
+        NSMutableArray *urlDicts = [NSMutableArray array];
         NSArray *urls = entities[@"urls"];
+        NSArray *medias = entities[@"media"];
         if (urls && urls.count) {
-            for (NSDictionary *urlDict in urls) {
+            [urlDicts addObjectsFromArray:urls];
+        }
+        if (medias && medias.count) {
+            [urlDicts addObjectsFromArray:medias];
+        }
+        if (urlDicts && urlDicts.count) {
+            for (NSDictionary *urlDict in urlDicts) {
                 NSString *url = urlDict[@"url"];
                 NSString *displayUrl = urlDict[@"display_url"];
                 if (url && url.length && displayUrl && displayUrl.length) {
@@ -281,7 +289,7 @@
                 }
             }
             textAL.text = text;
-            for (NSDictionary *urlDict in urls) {
+            for (NSDictionary *urlDict in urlDicts) {
                 NSString *url = urlDict[@"url"];
                 NSString *displayUrl = urlDict[@"display_url"];
                 NSString *expanedUrl = urlDict[@"expanded_url"];
@@ -306,9 +314,17 @@
     NSString *text = [status[@"text"] gtm_stringByUnescapingFromHTML];
     NSDictionary *entities = status[@"entities"];
     if (entities) {
+        NSMutableArray *urlDicts = [NSMutableArray array];
         NSArray *urls = entities[@"urls"];
+        NSArray *medias = entities[@"media"];
         if (urls && urls.count) {
-            for (NSDictionary *urlDict in urls) {
+            [urlDicts addObjectsFromArray:urls];
+        }
+        if (medias && medias.count) {
+            [urlDicts addObjectsFromArray:medias];
+        }
+        if (urlDicts && urlDicts.count) {
+            for (NSDictionary *urlDict in urlDicts) {
                 NSString *url = urlDict[@"url"];
                 NSString *displayUrl = urlDict[@"display_url"];
                 if (url && url.length && displayUrl && displayUrl.length) {

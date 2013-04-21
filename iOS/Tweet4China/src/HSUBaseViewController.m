@@ -256,6 +256,11 @@
     uint count = 0;
     
     NSArray *urls = rawData[@"entities"][@"urls"];
+    NSArray *medias = rawData[@"entities"][@"media"];
+    if (medias && medias.count) {
+        urls = [urls arrayByAddingObjectsFromArray:medias];
+    }
+    
     if (urls && urls.count) { // has link
         RIButtonItem *tweetLinkItem = [RIButtonItem itemWithLabel:@"Tweet link"];
         tweetLinkItem.action = ^{
