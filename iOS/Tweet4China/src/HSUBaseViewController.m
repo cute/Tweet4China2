@@ -37,10 +37,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     if (!self.dataSource) {
         self.dataSource = [self.dataSourceClass dataSourceWithDelegate:self useCache:YES];
         self.dataSource.delegate = self;
+    }
+    
+    for (HSUTableCellData *cellData in self.dataSource.allData) {
+        cellData.renderData[@"attributed_label_delegate"] = self;
     }
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -126,6 +130,10 @@
     if (error) {
         NSLog(@"%@", error);
     } else {
+        for (HSUTableCellData *cellData in self.dataSource.allData) {
+            cellData.renderData[@"attributed_label_delegate"] = self;
+        }
+        
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     }
@@ -394,5 +402,36 @@
     [self presentViewController:nav animated:YES completion:nil];
 }
 
+#pragma mark - attributtedLabel delegate
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+    RIButtonItem *tweetLinkItem = [RIButtonItem itemWithLabel:@"Tweet Link"];
+    tweetLinkItem.action = ^{
+        
+    };
+    RIButtonItem *copyLinkItem = [RIButtonItem itemWithLabel:@"Copy Link"];
+    copyLinkItem.action = ^{
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = url.absoluteString;
+    };
+    RIButtonItem *mailLinkItem = [RIButtonItem itemWithLabel:@"Mail Link"];
+    mailLinkItem.action = ^{
+        NSString *body = S(@"<a href=\"%@\">%@</a><br><br>", url.absoluteString, url.absoluteString);
+        NSString *subject = @"Link from Twitter";
+        [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
+    };
+    RIButtonItem *openInSafariItem = [RIButtonItem itemWithLabel:@"Open in Safari"];
+    openInSafariItem.action = ^{
+        [[UIApplication sharedApplication] openURL:url];
+    };
+    UIActionSheet *linkActionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:tweetLinkItem, copyLinkItem, mailLinkItem, openInSafariItem, nil];
+    [linkActionSheet showInView:self.view.window];
+}
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithURL:(NSURL *)url
+{
+    [[UIApplication sharedApplication] openURL:url];
+}
 
 @end

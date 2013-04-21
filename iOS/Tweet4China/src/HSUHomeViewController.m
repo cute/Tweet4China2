@@ -31,10 +31,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    for (HSUTableCellData *cellData in self.dataSource.allData) {
-        cellData.renderData[@"attributed_label_delegate"] = self;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -60,47 +56,6 @@
     [super dataSourceDidFindUnread:dataSource];
 }
 
-- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
-{
-    [super dataSource:dataSource didFinishRefreshWithError:error];
-    
-    for (HSUTableCellData *cellData in self.dataSource.allData) {
-        cellData.renderData[@"attributed_label_delegate"] = self;
-    }
-}
-
 #pragma mark - TableView delegate
-
-#pragma mark - attributtedLabel delegate
-- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
-{
-    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
-    RIButtonItem *tweetLinkItem = [RIButtonItem itemWithLabel:@"Tweet Link"];
-    tweetLinkItem.action = ^{
-        
-    };
-    RIButtonItem *copyLinkItem = [RIButtonItem itemWithLabel:@"Copy Link"];
-    copyLinkItem.action = ^{
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        pasteboard.string = url.absoluteString;
-    };
-    RIButtonItem *mailLinkItem = [RIButtonItem itemWithLabel:@"Mail Link"];
-    mailLinkItem.action = ^{
-        NSString *body = S(@"<a href=\"%@\">%@</a><br><br>", url.absoluteString, url.absoluteString);
-        NSString *subject = @"Link from Twitter";
-        [HSUCommonTools sendMailWithSubject:subject body:body presentFromViewController:self];
-    };
-    RIButtonItem *openInSafariItem = [RIButtonItem itemWithLabel:@"Open in Safari"];
-    openInSafariItem.action = ^{
-        [[UIApplication sharedApplication] openURL:url];
-    };
-    UIActionSheet *linkActionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:tweetLinkItem, copyLinkItem, mailLinkItem, openInSafariItem, nil];
-    [linkActionSheet showInView:self.view.window];
-}
-
-- (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithURL:(NSURL *)url
-{
-    [[UIApplication sharedApplication] openURL:url];
-}
 
 @end

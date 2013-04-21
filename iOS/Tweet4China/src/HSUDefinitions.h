@@ -19,6 +19,7 @@
 #import "UIButton+Additions.h"
 #import "UIView+Additions.h"
 #import "NSDate+Additions.h"
+#import "TTTAttributedLabel.h"
 
 #import "FHSTwitterEngine+Additions.h"
 
