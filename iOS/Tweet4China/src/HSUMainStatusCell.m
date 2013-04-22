@@ -105,15 +105,14 @@
         
         textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
         [contentArea addSubview:textAL];
-        textAL.font = [UIFont systemFontOfSize:textAL_font_S];
+        textAL.font = [UIFont fontWithName:@"Georgia" size:textAL_font_S];
         textAL.backgroundColor = kClearColor;
         textAL.textColor = rgb(38, 38, 38);
         textAL.highlightedTextColor = kWhiteColor;
         textAL.lineBreakMode = NSLineBreakByWordWrapping;
         textAL.numberOfLines = 0;
         textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
-                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164),
-                                  (NSString *)kCTFontAttributeName: [UIFont fontWithName:@"Georgia" size:textAL_font_S]};
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164)};
         textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
@@ -335,15 +334,14 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         TTTAttributedLabel *textAL = [[TTTAttributedLabel alloc] initWithFrame:CGRectZero];
-        textAL.font = [UIFont systemFontOfSize:textAL_font_S];
+        textAL.font = [UIFont fontWithName:@"Georgia" size:textAL_font_S];
         textAL.backgroundColor = kClearColor;
         textAL.textColor = rgb(38, 38, 38);
         textAL.highlightedTextColor = kWhiteColor;
         textAL.lineBreakMode = NSLineBreakByWordWrapping;
         textAL.numberOfLines = 0;
         textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
-                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164),
-                                  (NSString *)kCTFontAttributeName: [UIFont fontWithName:@"Georgia" size:textAL_font_S]};
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164)};
         textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
