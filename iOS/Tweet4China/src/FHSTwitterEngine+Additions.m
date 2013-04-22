@@ -51,7 +51,7 @@
 
 - (BOOL)dealWithError:(NSError *)error errTitle:(NSString *)errTitle {
     if (error == nil) return YES;
-    if ([error isKindOfClass:[NSError class]]) {
+    if (![error isKindOfClass:[NSError class]]) {
         return YES;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
