@@ -17,10 +17,11 @@
 #import "FHSTwitterEngine.h"
 #import "GTMNSString+HTML.h"
 #import "UIButton+WebCache.h"
+#import "NSString+URLEncoding.h"
 
 #define ambient_H 14
 #define info_H 16
-#define textAL_font_S 16
+#define textAL_font_S 18
 #define margin_W 10
 #define padding_S 10
 #define avatar_S 48
@@ -28,6 +29,7 @@
 #define textAL_LHM 1.2
 #define actionV_H 44
 #define avatar_text_Distance 15
+#define text_time_Distance 7
 
 #define retweeted_R @"ic_ambient_retweet"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
@@ -45,7 +47,6 @@
     UILabel *screenNameL;
     UILabel *timeL;
     TTTAttributedLabel *textAL;
-    UIImageView *flagIV;
     
     UIView *actionSeperatorV;
     UIView *actionV;
@@ -111,14 +112,12 @@
         textAL.lineBreakMode = NSLineBreakByWordWrapping;
         textAL.numberOfLines = 0;
         textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
-                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164)};
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164),
+                                  (NSString *)kCTFontAttributeName: [UIFont fontWithName:@"Georgia" size:textAL_font_S]};
         textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
         textAL.lineHeightMultiple = textAL_LHM;
-        
-        flagIV = [[UIImageView alloc] init];
-        [self.contentView addSubview:flagIV];
         
         // action buttons
         actionSeperatorV = [[UIView alloc] init];
@@ -175,18 +174,10 @@
     [super layoutSubviews];
     
     contentArea.frame = ccr(contentArea.left, contentArea.top, contentArea.width, self.contentView.height-padding_S*2);
+    
     ambientArea.frame = ccr(0, 0, contentArea.width, ambient_S);
     
-    if (ambientArea.hidden) {
-        avatarI.leftTop = ccp(avatarI.left, 0);
-    } else {
-        avatarI.leftTop = ccp(avatarI.left, ambientArea.bottom);
-    }
-    
-    textAL.frame = ccr(textAL.left, avatarI.bottom+avatar_text_Distance, textAL.width, [self.data.renderData[@"text_height"] floatValue]+3);
-    
-    [timeL sizeToFit];
-    timeL.leftTop = ccp(textAL.left, textAL.bottom+avatar_text_Distance);
+    avatarI.leftTop = ccp(avatarI.left, ambientArea.hidden ? 0 : ambientArea.bottom);
     
     [nameL sizeToFit];
     nameL.leftTop = ccp(avatarI.right+padding_S, avatarI.top+7);
@@ -194,8 +185,10 @@
     [screenNameL sizeToFit];
     screenNameL.leftTop = ccp(nameL.left, nameL.bottom+3);
     
-    [flagIV sizeToFit];
-    flagIV.rightTop = ccp(self.contentView.width, 0);
+    textAL.frame = ccr(textAL.left, avatarI.bottom+avatar_text_Distance, textAL.width, [self.data.renderData[@"text_height"] floatValue]);
+    
+    [timeL sizeToFit];
+    timeL.leftTop = ccp(textAL.left, textAL.bottom+text_time_Distance);
     
     actionV.frame = ccr(0, 0, self.contentView.width, actionV_H);
     actionV.bottom = self.contentView.height;
@@ -215,14 +208,6 @@
     NSDictionary *rawData = data.rawData;
     retweeted = [rawData[@"retweeted"] boolValue];
     favorited = [rawData[@"favorited"] boolValue];
-    
-    if (retweeted && favorited) {
-        flagIV.image = [UIImage imageNamed:@"ic_dogear_both"];
-    } else if (retweeted) {
-        flagIV.image = [UIImage imageNamed:@"ic_dogear_rt"];
-    } else if (favorited) {
-        flagIV.image = [UIImage imageNamed:@"ic_dogear_fave"];
-    }
     
     // ambient
     ambientI.hidden = NO;
@@ -259,7 +244,7 @@
     [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
     
     // time
-    NSDate *createdDate = [[FHSTwitterEngine engine] getDateFromTwitterCreatedAt:rawData[@"created_at"]];
+    NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:rawData[@"created_at"]];
     timeL.text = createdDate.standardTwitterDisplay;
     
     // text
@@ -292,6 +277,26 @@
                     NSRange range = [text rangeOfString:displayUrl];
                     [textAL addLinkToURL:[NSURL URLWithString:expanedUrl] withRange:range];
                 }
+            }
+        }
+        
+        NSArray *userMentions = entities[@"user_mentions"];
+        if (userMentions && userMentions.count) {
+            for (NSDictionary *userMention in userMentions) {
+                NSString *screenName = userMention[@"screen_name"];
+                NSString *userUrl = S(@"user://%@", screenName);
+                NSRange range = [text rangeOfString:S(@"@%@", screenName)];
+                [textAL addLinkToURL:[NSURL URLWithString:userUrl] withRange:range];
+            }
+        }
+        
+        NSArray *hashTags = entities[@"hashtags"];
+        if (hashTags && hashTags.count) {
+            for (NSDictionary *hashTag in hashTags) {
+                NSString *tag = hashTag[@"text"];
+                NSString *userUrl = S(@"tag://%@", tag.URLEncodedString);
+                NSRange range = [text rangeOfString:S(@"#%@", tag)];
+                [textAL addLinkToURL:[NSURL URLWithString:userUrl] withRange:range];
             }
         }
     }
@@ -337,7 +342,8 @@
         textAL.lineBreakMode = NSLineBreakByWordWrapping;
         textAL.numberOfLines = 0;
         textAL.linkAttributes = @{(NSString *)kCTUnderlineStyleAttributeName: @(NO),
-                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164)};
+                                  (NSString *)kCTForegroundColorAttributeName: (id)cgrgb(30, 98, 164),
+                                  (NSString *)kCTFontAttributeName: [UIFont fontWithName:@"Georgia" size:textAL_font_S]};
         textAL.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
                                         (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
@@ -348,9 +354,9 @@
     testSizeLabel.text = text;
     
     CGFloat cellWidth = [HSUCommonTools winWidth] - padding_S * 4;
-    CGFloat textHeight = [testSizeLabel sizeThatFits:ccs(cellWidth, 0)].height;
+    CGFloat textHeight = [testSizeLabel sizeThatFits:ccs(cellWidth, 0)].height + 3;
     data.renderData[@"text_height"] = @(textHeight);
-    return [testSizeLabel sizeThatFits:ccs(cellWidth, 0)].height;
+    return textHeight;
 }
 
 + (CGFloat)heightForData:(HSUTableCellData *)data
@@ -377,11 +383,11 @@
     
     // text height
     height += [self _textHeightWithCellData:data];;
-    height += avatar_text_Distance;
+    height += text_time_Distance;
     
     // timeL height
-    height += 15;
-    height += avatar_text_Distance;
+    height += 20;
+    height += text_time_Distance;
     
     // actionV height
     height += actionV_H + 1;

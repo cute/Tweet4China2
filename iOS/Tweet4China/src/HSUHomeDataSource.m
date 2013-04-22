@@ -24,7 +24,7 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [self.twEngine getHomeTimelineSinceID:latestIdStr count:1];
+            id result = [TWENGINE getHomeTimelineSinceID:latestIdStr count:1];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -55,15 +55,11 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [self.twEngine getHomeTimelineSinceID:latestIdStr count:[self.class requestDataCount]];
+            id result = [TWENGINE getHomeTimelineSinceID:latestIdStr count:[self.class requestDataCount]];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-                    if ([result isKindOfClass:[NSError class]]) {
-//                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:result];
-//                        [strongSelf authenticate];
-                        [FHSTwitterEngine dealWithError:result errTitle:@"Load failed"];
-                    } else {
+                    if ([TWENGINE dealWithError:result errTitle:@"Load failed"]) {
                         NSArray *tweets = result;
                         NSString *lastIdStr = tweets.lastObject[@"id_str"];
                         uint newTweetCount = tweets.count;
@@ -71,14 +67,14 @@
                             newTweetCount --;
                             for (int i=newTweetCount-1; i>=0; i--) {
                                 HSUTableCellData *cellData =
-                                    [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
+                                [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
                                 [strongSelf.data insertObject:cellData atIndex:0];
                             }
                         } else {
                             [strongSelf.data removeAllObjects];
                             for (NSDictionary *tweet in tweets) {
                                 HSUTableCellData *cellData =
-                                    [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
+                                [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
                                 [strongSelf.data addObject:cellData];
                             }
                         }
@@ -112,22 +108,17 @@
             __strong __typeof(&*weakSelf)strongSelf = weakSelf;
             HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
             NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
-            id result =  [self.twEngine getHomeTimelineMaxId:lastStatusId count:[self.class requestDataCount]];
+            id result =  [TWENGINE getHomeTimelineMaxId:lastStatusId count:[self.class requestDataCount]];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-                    if ([result isKindOfClass:[NSError class]]) {
-                        [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
-//                        [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:result];
-//                        [strongSelf authenticate];
-                        [FHSTwitterEngine dealWithError:result errTitle:@"Load failed"];
-                    } else {
+                    if ([TWENGINE dealWithError:result errTitle:@"Load failed"]) {
                         [result removeObjectAtIndex:0];
                         id loadMoreCellData = strongSelf.data.lastObject;
                         [strongSelf.data removeLastObject];
                         for (NSDictionary *tweet in result) {
                             HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
+                            [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
                             [strongSelf.data addObject:cellData];
                         }
                         [strongSelf.data addObject:loadMoreCellData];

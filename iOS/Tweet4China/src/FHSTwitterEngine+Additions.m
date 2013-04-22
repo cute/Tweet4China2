@@ -45,12 +45,15 @@
     return staticEngine;
  }
 
-+ (void)auth {
-    [[self engine] showOAuthLoginControllerFromViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+- (void)auth {
+    [self showOAuthLoginControllerFromViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
 }
 
-+ (void)dealWithError:(NSError *)error errTitle:(NSString *)errTitle {
-    if (error == nil) return;
+- (BOOL)dealWithError:(NSError *)error errTitle:(NSString *)errTitle {
+    if (error == nil) return YES;
+    if ([error isKindOfClass:[NSError class]]) {
+        return YES;
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         if (error.code == 401) {
             RIButtonItem *cancelBnt = [RIButtonItem itemWithLabel:@"Cancel"];
@@ -59,7 +62,7 @@
             [alertView show];
 
             confirmBnt.action = ^{
-                [self auth];
+                [TWENGINE auth];
             };
 
         } else {
@@ -69,7 +72,7 @@
     });
 }
 
-+ (NSUInteger)twitterTextLength:(NSString *)text {
+- (NSUInteger)twitterTextLength:(NSString *)text {
     return [TwitterText tweetLength:text];
 }
 

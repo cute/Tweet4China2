@@ -15,10 +15,11 @@
 @property (strong, nonatomic) OAConsumer *consumer;
 
 + (FHSTwitterEngine *)engine;
-+ (void)auth;
-+ (void)dealWithError:(NSError *)error errTitle:(NSString *)errTitle;
+- (void)auth;
+// YES if no error
+- (BOOL)dealWithError:(NSError *)error errTitle:(NSString *)errTitle;
 - (id)getHomeTimelineMaxId:(NSString *)maxId count:(int)count;
-+ (NSUInteger)twitterTextLength:(NSString *)text;
+- (NSUInteger)twitterTextLength:(NSString *)text;
 - (OAMutableURLRequest *)requestWithBaseURL:(NSURL *)baseURL;
 
 - (id)getFriendsMoreThanID;

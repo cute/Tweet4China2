@@ -14,10 +14,8 @@
 @protocol HSUBaseDataSourceDelegate;
 @class HSUTableCellData;
 @class HSUUIEvent;
-@class FHSTwitterEngine;
 @interface HSUBaseDataSource : NSObject <UITableViewDataSource>
 
-@property (nonatomic, strong) FHSTwitterEngine *twEngine;
 @property (nonatomic, assign) NSInteger count;
 @property (nonatomic, weak) id<HSUBaseDataSourceDelegate> delegate;
 @property (nonatomic, readonly) NSArray *allData;

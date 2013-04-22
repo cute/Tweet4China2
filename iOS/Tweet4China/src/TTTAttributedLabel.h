@@ -318,7 +318,9 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
    didSelectLinkWithURL:(NSURL *)url;
 
 - (void)attributedLabel:(TTTAttributedLabel *)label
-   didReleaseLinkWithURL:(NSURL *)url;
+  didReleaseLinkWithURL:(NSURL *)url;
+
+- (void)attributedLabelDidLongPressed:(TTTAttributedLabel *)label;
 
 /**
  Tells the delegate that the user did select a link to an address.

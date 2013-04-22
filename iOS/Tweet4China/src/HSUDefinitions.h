@@ -61,7 +61,7 @@ _Pragma("clang diagnostic pop") \
 #define kClearColor [UIColor clearColor]
 #define kWinWidth [HSUCommonTools winWidth]
 #define kWinHeight [HSUCommonTools winHeight]
-#define twe [FHSTwitterEngine engine]
+#define TWENGINE [FHSTwitterEngine engine]
 
 #define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
 

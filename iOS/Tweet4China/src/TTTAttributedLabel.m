@@ -200,7 +200,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 @private
     BOOL _needsFramesetter;
     
-    BOOL longTouchLink;
+    BOOL longPressed;
 }
 
 @dynamic text;
@@ -986,15 +986,25 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
     self.activeLink = [self linkAtPoint:[touch locationInView:self]];
     
     if (!self.activeLink) {
-        [super touchesBegan:touches withEvent:event];
+        longPressed = YES;
+        if ([self.delegate respondsToSelector:@selector(attributedLabelDidLongPressed:)]) {
+            __weak __typeof(&*self)weakSelf = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
+                if (longPressed) {
+                    [weakSelf.delegate attributedLabelDidLongPressed:weakSelf];
+                    longPressed = NO;
+                }
+            });
+            [super touchesBegan:touches withEvent:event];
+        }
     } else {
-        longTouchLink = YES;
+        longPressed = YES;
         if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithURL:)]) {
             __weak __typeof(&*self)weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
-                if (longTouchLink) {
+                if (longPressed) {
                     [weakSelf.delegate attributedLabel:weakSelf didSelectLinkWithURL:self.activeLink.URL];
-                    longTouchLink = NO;
+                    longPressed = NO;
                 }
             });
         }
@@ -1024,7 +1034,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
         
         switch (result.resultType) {
             case NSTextCheckingTypeLink:
-                longTouchLink = NO;
+                longPressed = NO;
                 if ([self.delegate respondsToSelector:@selector(attributedLabel:didReleaseLinkWithURL:)]) {
                     [self.delegate attributedLabel:self didReleaseLinkWithURL:result.URL];
                     return;
@@ -1060,6 +1070,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
             [self.delegate attributedLabel:self didSelectLinkWithTextCheckingResult:result];
         }
     } else {
+        longPressed = NO;
         [super touchesEnded:touches withEvent:event];
     }
 }

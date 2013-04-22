@@ -24,7 +24,7 @@
         
         // load context data, then call finish on delegate
         dispatch_async(GCDBackgroundThread, ^{
-            id result = [twe getDetailsForTweet:status[@"in_reply_to_status_id_str"]];
+            id result = [TWENGINE getDetailsForTweet:status[@"in_reply_to_status_id_str"]];
             if ([result isKindOfClass:[NSError class]]) {
                 
             } else {

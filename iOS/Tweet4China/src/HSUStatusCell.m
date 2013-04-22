@@ -264,7 +264,7 @@
     }
     
     // time
-    NSDate *createdDate = [twe getDateFromTwitterCreatedAt:rawData[@"created_at"]];
+    NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:rawData[@"created_at"]];
     timeL.text = createdDate.twitterDisplay;
     
     // text

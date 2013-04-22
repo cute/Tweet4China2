@@ -337,7 +337,7 @@
     
     friends = [[NSUserDefaults standardUserDefaults] objectForKey:@"friends"];
     dispatch_async(GCDBackgroundThread, ^{
-        id result = [[FHSTwitterEngine engine] getFriendsMoreThanID];
+        id result = [TWENGINE getFriendsMoreThanID];
         if ([result isKindOfClass:[NSArray class]]) {
             friends = result;
             [[NSUserDefaults standardUserDefaults] setObject:friends forKey:@"friends"];
@@ -349,7 +349,7 @@
     });
 
     dispatch_async(GCDBackgroundThread, ^{
-        id result = [[FHSTwitterEngine engine] getTrends];
+        id result = [TWENGINE getTrends];
         if ([result isKindOfClass:[NSArray class]] && [result count]) {
             trends = result[0][@"trends"];
             [[NSUserDefaults standardUserDefaults] setObject:trends forKey:@"trends"];
@@ -458,23 +458,23 @@
             [params addObject:longP];
         }
 
-        OAMutableURLRequest *request = [[FHSTwitterEngine engine] requestWithBaseURL:baseURL];
-        NSError *err = [[FHSTwitterEngine engine] sendPOSTRequest:request withParameters:params];
+        OAMutableURLRequest *request = [TWENGINE requestWithBaseURL:baseURL];
+        NSError *err = [TWENGINE sendPOSTRequest:request withParameters:params];
         if (err == nil) {
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"draft"];
         }
-        [FHSTwitterEngine dealWithError:err errTitle:@"Send status failed"];
+        [TWENGINE dealWithError:err errTitle:@"Send status failed"];
     });
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     NSString *newText = [contentTV.text stringByReplacingCharactersInRange:range withString:text];
-    return ([FHSTwitterEngine twitterTextLength:newText] <= 140);
+    return ([TWENGINE twitterTextLength:newText] <= 140);
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
-    NSUInteger wordLen = [FHSTwitterEngine twitterTextLength:contentTV.text];
+    NSUInteger wordLen = [TWENGINE twitterTextLength:contentTV.text];
     if (wordLen > 0) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
         self.navigationItem.rightBarButtonItem.tintColor = rgb(52, 172, 232);

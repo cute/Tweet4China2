@@ -17,15 +17,14 @@
     self = [super init];
     if (self) {
         self.data = [[NSMutableArray alloc] init];
-        self.twEngine = [FHSTwitterEngine engine];
     }
     return self;
 }
 
 - (void)authenticate
 {
-    if (!self.twEngine.isAuthorized) {
-        [FHSTwitterEngine auth];
+    if (!TWENGINE.isAuthorized) {
+        [TWENGINE auth];
     }
 }
 
