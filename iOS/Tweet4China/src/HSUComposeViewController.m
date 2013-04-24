@@ -218,7 +218,7 @@
     wordCountL.text = S(@"%d", kMaxWordLen);
     [wordCountL sizeToFit];
     wordCountL.center = ccp(294, 20);
-
+    
     nippleIV = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"compose-nipple"]];
     [toolbar addSubview:nippleIV];
     nippleIV.center = photoBnt.center;
@@ -461,6 +461,10 @@
             OARequestParameter *longP = [OARequestParameter requestParameterWithName:@"long" value:S(@"%g", location.longitude)];
             [params addObject:latP];
             [params addObject:longP];
+        }
+        if (self.inReplyToStatusId) {
+            OARequestParameter *inReplyToP = [OARequestParameter requestParameterWithName:@"in_reply_to_status_id" value:self.inReplyToStatusId];
+            [params addObject:inReplyToP];
         }
 
         OAMutableURLRequest *request = [TWENGINE requestWithBaseURL:baseURL];

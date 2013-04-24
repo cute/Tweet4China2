@@ -52,7 +52,9 @@
     NSMutableString *defaultText = [[NSMutableString alloc] init];
     HSUTableCellData *mainStatus = [self.dataSource dataAtIndex:0];
     NSString *authorScreenName = mainStatus.rawData[@"user"][@"screen_name"];
-    composeViewController.inReplyToStatusId = authorScreenName;
+    composeViewController.defaultTitle = S(@"Reply to @%@", authorScreenName);
+    NSString *statusId = mainStatus.rawData[@"id_str"];
+    composeViewController.inReplyToStatusId = statusId;
     NSArray *userMentions = mainStatus.rawData[@"entities"][@"user_mentions"];
     if (userMentions && userMentions.count) {
         [defaultText appendFormat:@" @%@ ", authorScreenName];
