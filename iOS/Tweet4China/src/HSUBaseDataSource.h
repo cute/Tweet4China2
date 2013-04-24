@@ -14,13 +14,16 @@
 @protocol HSUBaseDataSourceDelegate;
 @class HSUTableCellData;
 @class HSUUIEvent;
+@protocol TTTAttributedLabelDelegate;
 @interface HSUBaseDataSource : NSObject <UITableViewDataSource>
 
 @property (nonatomic, assign) NSInteger count;
 @property (nonatomic, weak) id<HSUBaseDataSourceDelegate> delegate;
+@property (nonatomic, weak) id<TTTAttributedLabelDelegate> attributeLabelDelegate;
 @property (nonatomic, readonly) NSArray *allData;
 @property (atomic, strong) NSMutableArray *data;
-@property (nonatomic, assign, getter = isLoading) BOOL loading;
+//@property (nonatomic, assign, getter = isLoading) BOOL loading;
+@property (nonatomic, assign) NSUInteger loadingCount;
 
 - (NSDictionary *)rawDataAtIndex:(NSInteger)index;
 - (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;

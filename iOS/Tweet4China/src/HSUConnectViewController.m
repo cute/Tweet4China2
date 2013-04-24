@@ -7,6 +7,7 @@
 //
 
 #import "HSUConnectViewController.h"
+#import "HSUConnectDataSource.h"
 
 @interface HSUConnectViewController ()
 
@@ -18,6 +19,7 @@
 {
     self = [super init];
     if (self) {
+        self.dataSourceClass = [HSUConnectDataSource class];
     }
     return self;
 }
@@ -27,10 +29,29 @@
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewDidAppear:animated];
+    
+    [(HSUConnectDataSource *)self.dataSource authenticate];
+    
+    if (self.dataSource.count == 0) {
+        [self.refreshControl beginRefreshing];
+        [self.dataSource refresh];
+    } else {
+        //        return;
+        if (![((HSUTabController *)self.navigationController.tabBarController) hasUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem]) {
+            [self.dataSource checkUnread];
+        }
+    }
 }
+
+#pragma mark - dataSource delegate
+- (void)dataSourceDidFindUnread:(HSUBaseDataSource *)dataSource
+{
+    [super dataSourceDidFindUnread:dataSource];
+}
+
+#pragma mark - TableView delegate
 
 @end

@@ -1,15 +1,15 @@
 //
-//  HSUHomeDataSource.m
+//  HSUConnectDataSource.m
 //  Tweet4China
 //
-//  Created by Jason Hsu on 3/14/13.
+//  Created by Jason Hsu on 4/24/13.
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import "HSUHomeDataSource.h"
+#import "HSUConnectDataSource.h"
 #import "HSULoadMoreCell.h"
 
-@implementation HSUHomeDataSource
+@implementation HSUConnectDataSource
 
 - (void)checkUnread
 {
@@ -23,7 +23,7 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [TWENGINE getHomeTimelineSinceID:latestIdStr count:1];
+            id result = [TWENGINE getMentionsTimelineWithCount:1 sinceID:latestIdStr maxID:nil];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -34,7 +34,7 @@
                             [strongSelf.delegate dataSourceDidFindUnread:strongSelf];
                         }
                     } else {
-
+                        
                     }
                 }
             });
@@ -54,7 +54,7 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [TWENGINE getHomeTimelineSinceID:latestIdStr count:[self.class requestDataCount]];
+            id result = [TWENGINE getMentionsTimelineWithCount:[self.class requestDataCount] sinceID:latestIdStr maxID:nil];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -107,7 +107,7 @@
             __strong __typeof(&*weakSelf)strongSelf = weakSelf;
             HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
             NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
-            id result =  [TWENGINE getHomeTimelineMaxId:lastStatusId count:[self.class requestDataCount]];
+            id result = [TWENGINE getMentionsTimelineWithCount:[self.class requestDataCount] sinceID:nil maxID:lastStatusId];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -147,6 +147,11 @@
     }
     
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+}
+
++ (NSUInteger)requestDataCount
+{
+    return 20;
 }
 
 @end

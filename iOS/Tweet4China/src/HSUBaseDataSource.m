@@ -97,14 +97,14 @@
 
 - (void)refresh
 {
-    self.loading = YES;
+    self.loadingCount ++;
 	[HSUNetworkActivityIndicatorManager oneMore];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNNStartRefreshing object:nil];
 }
 
 - (void)loadMore
 {
-    self.loading = YES;
+    self.loadingCount ++;
     [HSUNetworkActivityIndicatorManager oneMore];
 }
 

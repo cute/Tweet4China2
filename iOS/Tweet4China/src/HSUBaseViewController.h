@@ -10,7 +10,7 @@
 #import "HSUBaseDataSource.h"
 
 @class HSURefreshControl;
-@interface HSUBaseViewController : UIViewController <UITableViewDelegate, HSUBaseDataSourceDelegate>
+@interface HSUBaseViewController : UIViewController <UITableViewDelegate, HSUBaseDataSourceDelegate, TTTAttributedLabelDelegate>
 
 @property (nonatomic, strong) Class dataSourceClass;
 @property (nonatomic, strong) HSUBaseDataSource *dataSource;

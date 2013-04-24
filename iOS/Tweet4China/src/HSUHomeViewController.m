@@ -8,12 +8,8 @@
 
 #import "HSUHomeViewController.h"
 #import "HSUHomeDataSource.h"
-#import "TTTAttributedLabel.h"
-#import "UIActionSheet+Blocks.h"
-#import "HSURefreshControl.h"
-#import "HSUTabController.h"
 
-@interface HSUHomeViewController () <TTTAttributedLabelDelegate>
+@interface HSUHomeViewController ()
 
 @end
 

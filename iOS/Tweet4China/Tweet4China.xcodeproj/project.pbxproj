@@ -233,6 +233,7 @@
 		96BE217416EC8FDA00226799 /* HSUBaseTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BE217316EC8FDA00226799 /* HSUBaseTableCell.m */; };
 		96CFC382171EC82000B6D212 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CFC37F171EC82000B6D212 /* TwitterText.m */; };
 		96CFC383171EC82000B6D212 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CFC381171EC82000B6D212 /* TwitterTextEntity.m */; };
+		96D4BC8C172830F700E7BABA /* HSUConnectDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D4BC8B172830F700E7BABA /* HSUConnectDataSource.m */; };
 		96E34B4117006B1C0066CD5E /* bg_dm_count@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E34B4017006B1C0066CD5E /* bg_dm_count@2x.png */; };
 		96E34B4417015ECD0066CD5E /* HSUComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E34B4317015ECD0066CD5E /* HSUComposeViewController.m */; };
 		96E34B50170167580066CD5E /* button-bar-at@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E34B45170167580066CD5E /* button-bar-at@2x.png */; };
@@ -557,6 +558,8 @@
 		96CFC37F171EC82000B6D212 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "twitter-text-objc/lib/TwitterText.m"; sourceTree = "<group>"; };
 		96CFC380171EC82000B6D212 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = "<group>"; };
 		96CFC381171EC82000B6D212 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = "<group>"; };
+		96D4BC8A172830F700E7BABA /* HSUConnectDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUConnectDataSource.h; sourceTree = "<group>"; };
+		96D4BC8B172830F700E7BABA /* HSUConnectDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUConnectDataSource.m; sourceTree = "<group>"; };
 		96E34B4017006B1C0066CD5E /* bg_dm_count@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_dm_count@2x.png"; sourceTree = "<group>"; };
 		96E34B4217015ECD0066CD5E /* HSUComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUComposeViewController.h; sourceTree = "<group>"; };
 		96E34B4317015ECD0066CD5E /* HSUComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUComposeViewController.m; sourceTree = "<group>"; };
@@ -1088,6 +1091,8 @@
 				967A55E916FCD3D900581274 /* HSUUIEvent.m */,
 				9696D80016F1AAB4005D7AAB /* HSUHomeDataSource.h */,
 				9696D80116F1AAB4005D7AAB /* HSUHomeDataSource.m */,
+				96D4BC8A172830F700E7BABA /* HSUConnectDataSource.h */,
+				96D4BC8B172830F700E7BABA /* HSUConnectDataSource.m */,
 				9628184C16DFAB3D00ABF0AD /* HSUHomeViewController.h */,
 				9628184D16DFAB3D00ABF0AD /* HSUHomeViewController.m */,
 				9628184F16DFAB5000ABF0AD /* HSUConnectViewController.h */,
@@ -1438,6 +1443,7 @@
 				969B6FB11720489400420F01 /* HSUMainStatusCell.m in Sources */,
 				969B6FB417204BC800420F01 /* HSUStatusDataSource.m in Sources */,
 				96A2127117204F3200BC1D09 /* HSUContextStatusCell.m in Sources */,
+				96D4BC8C172830F700E7BABA /* HSUConnectDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

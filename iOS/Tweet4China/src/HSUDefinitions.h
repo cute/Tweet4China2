@@ -20,6 +20,8 @@
 #import "UIView+Additions.h"
 #import "NSDate+Additions.h"
 #import "TTTAttributedLabel.h"
+#import "HSURefreshControl.h"
+#import "HSUTabController.h"
 
 #import "FHSTwitterEngine+Additions.h"
 
