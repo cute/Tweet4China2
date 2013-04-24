@@ -9,6 +9,7 @@
 #import "HSUStatusViewController.h"
 #import "HSUStatusDataSource.h"
 #import "HSUMainStatusCell.h"
+#import "HSUComposeViewController.h"
 
 @interface HSUStatusViewController ()
 
@@ -43,5 +44,32 @@
 {
     [super dataSource:dataSource didFinishRefreshWithError:error];
 }
+
+
+- (void)_composeButtonTouched
+{
+    HSUComposeViewController *composeViewController = [[HSUComposeViewController alloc] init];
+    NSMutableString *defaultText = [[NSMutableString alloc] init];
+    HSUTableCellData *mainStatus = [self.dataSource dataAtIndex:0];
+    NSString *authorScreenName = mainStatus.rawData[@"user"][@"screen_name"];
+    composeViewController.inReplyToStatusId = authorScreenName;
+    NSArray *userMentions = mainStatus.rawData[@"entities"][@"user_mentions"];
+    if (userMentions && userMentions.count) {
+        [defaultText appendFormat:@" @%@ ", authorScreenName];
+        for (NSDictionary *userMention in userMentions) {
+            NSString *screenName = userMention[@"screen_name"];
+            [defaultText appendFormat:@"@%@ ", screenName];
+        }
+        uint start = authorScreenName.length + 2;
+        uint length = defaultText.length - authorScreenName.length - 2;
+        composeViewController.defaultSelectedRange = NSMakeRange(start, length);
+    } else {
+        [defaultText appendFormat:@"@%@ ", authorScreenName];
+    }
+    composeViewController.defaultText = defaultText;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
+    [self presentViewController:nav animated:YES completion:nil];
+}
+
 
 @end

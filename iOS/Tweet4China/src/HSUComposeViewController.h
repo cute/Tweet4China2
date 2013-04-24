@@ -11,6 +11,8 @@
 @interface HSUComposeViewController : UIViewController
 
 @property (nonatomic, copy) NSString *defaultText;
+@property (nonatomic, copy) NSString *defaultTitle;
+@property (nonatomic, assign) NSRange defaultSelectedRange;
 @property (nonatomic, copy) NSString *inReplyToStatusId;
 
 @end

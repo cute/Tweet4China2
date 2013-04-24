@@ -70,6 +70,7 @@
             [alertView show];
         }
     });
+    return NO;
 }
 
 - (NSUInteger)twitterTextLength:(NSString *)text {

@@ -108,7 +108,11 @@
                                                object:nil];
 
 //    setup navigation bar
-    self.title = @"New Tweet";
+    if (self.defaultTitle) {
+        self.title = self.defaultTitle;
+    } else {
+        self.title = @"New Tweet";
+    }
     self.navigationController.navigationBar.tintColor = bw(212);
     NSDictionary *attributes = @{UITextAttributeTextColor: bw(50),
             UITextAttributeTextShadowColor: kWhiteColor,
@@ -154,6 +158,7 @@
     contentTV.delegate = self;
     if (self.defaultText) {
         contentTV.text = self.defaultText;
+        contentTV.selectedRange = self.defaultSelectedRange;
     } else {
         contentTV.text = [[NSUserDefaults standardUserDefaults] objectForKey:@"draft"];
     }
