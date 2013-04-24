@@ -57,7 +57,7 @@
     composeViewController.inReplyToStatusId = statusId;
     NSArray *userMentions = mainStatus.rawData[@"entities"][@"user_mentions"];
     if (userMentions && userMentions.count) {
-        [defaultText appendFormat:@" @%@ ", authorScreenName];
+        [defaultText appendFormat:@"@%@ ", authorScreenName];
         for (NSDictionary *userMention in userMentions) {
             NSString *screenName = userMention[@"screen_name"];
             [defaultText appendFormat:@"@%@ ", screenName];
@@ -66,7 +66,7 @@
         uint length = defaultText.length - authorScreenName.length - 2;
         composeViewController.defaultSelectedRange = NSMakeRange(start, length);
     } else {
-        [defaultText appendFormat:@"@%@ ", authorScreenName];
+        [defaultText appendFormat:@" @%@ ", authorScreenName];
     }
     composeViewController.defaultText = defaultText;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
