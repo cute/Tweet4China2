@@ -393,6 +393,19 @@
     [actionSheet addButtonItem:mailTweetItem];
     count ++;
     
+    RIButtonItem *RTItem = [RIButtonItem itemWithLabel:@"RT"];
+    RTItem.action = ^{
+        HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
+        NSDictionary *rawData = [self.dataSource dataAtIndex:0].rawData;
+        NSString *authorScreenName = rawData[@"user"][@"screen_name"];
+        NSString *text = rawData[@"text"];
+        composeVC.defaultText = S(@" RT @%@: %@", authorScreenName, text);
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeVC];
+        [self presentViewController:nav animated:YES completion:nil];
+    };
+    [actionSheet addButtonItem:RTItem];
+    count ++;
+    
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
     [actionSheet addButtonItem:cancelItem];
     

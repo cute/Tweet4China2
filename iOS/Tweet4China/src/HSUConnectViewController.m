@@ -33,13 +33,11 @@
 {
     [super viewDidAppear:animated];
     
-    [(HSUConnectDataSource *)self.dataSource authenticate];
-    
     if (self.dataSource.count == 0) {
         [self.refreshControl beginRefreshing];
         [self.dataSource refresh];
     } else {
-        //        return;
+//        return;
         if (![((HSUTabController *)self.navigationController.tabBarController) hasUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem]) {
             [self.dataSource checkUnread];
         }
