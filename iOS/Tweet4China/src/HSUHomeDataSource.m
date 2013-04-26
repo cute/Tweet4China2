@@ -60,34 +60,36 @@
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([TWENGINE dealWithError:result errTitle:@"Load failed"]) {
                         NSArray *tweets = result;
-                        NSString *lastIdStr = tweets.lastObject[@"id_str"];
-                        uint newTweetCount = tweets.count;
-                        if ([latestIdStr isEqualToString:lastIdStr]) { // throw old tweets
-                            newTweetCount --;
-                            for (int i=newTweetCount-1; i>=0; i--) {
-                                HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
-                                [strongSelf.data insertObject:cellData atIndex:0];
+                        if (tweets.count) {
+                            NSString *lastIdStr = tweets.lastObject[@"id_str"];
+                            uint newTweetCount = tweets.count;
+                            if ([latestIdStr isEqualToString:lastIdStr]) { // throw old tweets
+                                newTweetCount --;
+                                for (int i=newTweetCount-1; i>=0; i--) {
+                                    HSUTableCellData *cellData =
+                                    [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
+                                    [strongSelf.data insertObject:cellData atIndex:0];
+                                }
+                            } else {
+                                [strongSelf.data removeAllObjects];
+                                for (NSDictionary *tweet in tweets) {
+                                    HSUTableCellData *cellData =
+                                    [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
+                                    [strongSelf.data addObject:cellData];
+                                }
                             }
-                        } else {
-                            [strongSelf.data removeAllObjects];
-                            for (NSDictionary *tweet in tweets) {
-                                HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
-                                [strongSelf.data addObject:cellData];
+                            
+                            HSUTableCellData *lastCellData = strongSelf.data.lastObject;
+                            if (![lastCellData.dataType isEqualToString:kDataType_LoadMore]) {
+                                HSUTableCellData *loadMoreCellData = [[HSUTableCellData alloc] init];
+                                loadMoreCellData.rawData = @{@"status": @(kLoadMoreCellStatus_Done)};
+                                loadMoreCellData.dataType = kDataType_LoadMore;
+                                [strongSelf.data addObject:loadMoreCellData];
                             }
+                            
+                            [strongSelf saveCache];
+                            [strongSelf.delegate preprocessDataSourceForRender:self];
                         }
-                        
-                        HSUTableCellData *lastCellData = strongSelf.data.lastObject;
-                        if (![lastCellData.dataType isEqualToString:kDataType_LoadMore]) {
-                            HSUTableCellData *loadMoreCellData = [[HSUTableCellData alloc] init];
-                            loadMoreCellData.rawData = @{@"status": @(kLoadMoreCellStatus_Done)};
-                            loadMoreCellData.dataType = kDataType_LoadMore;
-                            [strongSelf.data addObject:loadMoreCellData];
-                        }
-                        
-                        [strongSelf saveCache];
-                        [strongSelf.delegate preprocessDataSourceForRender:self];
                         [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:nil];
                         strongSelf.loadingCount --;
                     }
@@ -125,10 +127,10 @@
                         [strongSelf saveCache];
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Done);
                         [strongSelf.delegate preprocessDataSourceForRender:self];
-                        [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:nil];
                     } else {
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
                     }
+                    [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:nil];
                     strongSelf.loadingCount --;
                 }
             });
@@ -147,6 +149,15 @@
     }
     
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+}
+
+- (NSUInteger)requestCount
+{
+    if ([Reachability reachabilityForInternetConnection].isReachableViaWiFi) {
+        return kRequestDataCountViaWifi;
+    } else {
+        return kRequestDataCountViaWWAN;
+    }
 }
 
 @end

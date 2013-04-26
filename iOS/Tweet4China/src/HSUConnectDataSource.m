@@ -54,40 +54,42 @@
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
-            id result = [TWENGINE getMentionsTimelineWithCount:[self.class requestDataCount] sinceID:latestIdStr maxID:nil];
+            id result = [TWENGINE getMentionsTimelineWithCount:self.requestCount sinceID:latestIdStr maxID:nil];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([TWENGINE dealWithError:result errTitle:@"Load failed"]) {
                         NSArray *tweets = result;
-                        NSString *lastIdStr = tweets.lastObject[@"id_str"];
-                        uint newTweetCount = tweets.count;
-                        if ([latestIdStr isEqualToString:lastIdStr]) { // throw old tweets
-                            newTweetCount --;
-                            for (int i=newTweetCount-1; i>=0; i--) {
-                                HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
-                                [strongSelf.data insertObject:cellData atIndex:0];
+                        if (tweets.count) {
+                            NSString *lastIdStr = tweets.lastObject[@"id_str"];
+                            uint newTweetCount = tweets.count;
+                            if ([latestIdStr isEqualToString:lastIdStr]) { // throw old tweets
+                                newTweetCount --;
+                                for (int i=newTweetCount-1; i>=0; i--) {
+                                    HSUTableCellData *cellData =
+                                    [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
+                                    [strongSelf.data insertObject:cellData atIndex:0];
+                                }
+                            } else {
+                                [strongSelf.data removeAllObjects];
+                                for (NSDictionary *tweet in tweets) {
+                                    HSUTableCellData *cellData =
+                                    [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
+                                    [strongSelf.data addObject:cellData];
+                                }
                             }
-                        } else {
-                            [strongSelf.data removeAllObjects];
-                            for (NSDictionary *tweet in tweets) {
-                                HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
-                                [strongSelf.data addObject:cellData];
+                            
+                            HSUTableCellData *lastCellData = strongSelf.data.lastObject;
+                            if (![lastCellData.dataType isEqualToString:kDataType_LoadMore]) {
+                                HSUTableCellData *loadMoreCellData = [[HSUTableCellData alloc] init];
+                                loadMoreCellData.rawData = @{@"status": @(kLoadMoreCellStatus_Done)};
+                                loadMoreCellData.dataType = kDataType_LoadMore;
+                                [strongSelf.data addObject:loadMoreCellData];
                             }
+                            
+                            [strongSelf saveCache];
+                            [strongSelf.delegate preprocessDataSourceForRender:self];
                         }
-                        
-                        HSUTableCellData *lastCellData = strongSelf.data.lastObject;
-                        if (![lastCellData.dataType isEqualToString:kDataType_LoadMore]) {
-                            HSUTableCellData *loadMoreCellData = [[HSUTableCellData alloc] init];
-                            loadMoreCellData.rawData = @{@"status": @(kLoadMoreCellStatus_Done)};
-                            loadMoreCellData.dataType = kDataType_LoadMore;
-                            [strongSelf.data addObject:loadMoreCellData];
-                        }
-                        
-                        [strongSelf saveCache];
-                        [strongSelf.delegate preprocessDataSourceForRender:self];
                         [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:nil];
                         strongSelf.loadingCount --;
                     }
@@ -107,7 +109,7 @@
             __strong __typeof(&*weakSelf)strongSelf = weakSelf;
             HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
             NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
-            id result = [TWENGINE getMentionsTimelineWithCount:[self.class requestDataCount] sinceID:nil maxID:lastStatusId];
+            id result = [TWENGINE getMentionsTimelineWithCount:self.requestCount sinceID:nil maxID:lastStatusId];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
@@ -125,10 +127,10 @@
                         [strongSelf saveCache];
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Done);
                         [strongSelf.delegate preprocessDataSourceForRender:self];
-                        [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:nil];
                     } else {
                         [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
                     }
+                    [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:nil];
                     strongSelf.loadingCount --;
                 }
             });
@@ -147,11 +149,6 @@
     }
     
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
-}
-
-+ (NSUInteger)requestDataCount
-{
-    return 20;
 }
 
 @end

@@ -22,6 +22,7 @@
 #import "TTTAttributedLabel.h"
 #import "HSURefreshControl.h"
 #import "HSUTabController.h"
+#import "Reachability.h"
 
 #import "FHSTwitterEngine+Additions.h"
 
