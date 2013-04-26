@@ -45,7 +45,7 @@
     UIImageView *flagIV;
 
     UIView *actionV;
-    UIButton *replayB, *retweetB, *favoriteB, *moreB;
+    UIButton *replayB, *retweetB, *favoriteB, *moreB, *deleteB;
     BOOL retweeted, favorited;
 }
 
@@ -436,10 +436,13 @@
 
         retweetB = [[UIButton alloc] init];
         retweetB.showsTouchWhenHighlighted = YES;
-        if (retweeted)
+        if ([self isMyTweet]) {
+            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_disabled"] forState:UIControlStateNormal];
+        } else if (retweeted) {
             [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_on"] forState:UIControlStateNormal];
-        else
+        } else {
             [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_off"] forState:UIControlStateNormal];
+        }
         [retweetB sizeToFit];
         [actionV addSubview:retweetB];
 
@@ -457,23 +460,40 @@
         [moreB setImage:[UIImage imageNamed:@"icn_tweet_action_more"] forState:UIControlStateNormal];
         [moreB sizeToFit];
         [actionV addSubview:moreB];
+        
+        deleteB = [[UIButton alloc] init];
+        deleteB.showsTouchWhenHighlighted = YES;
+        [deleteB setImage:[UIImage imageNamed:@"icn_tweet_action_delete"] forState:UIControlStateNormal];
+        [deleteB sizeToFit];
+        [actionV addSubview:deleteB];
 
         [self.contentView addSubview:actionV];
         actionV.hidden = YES;
     }
 
     if (actionV.hidden) { // to action mode
+        NSMutableArray *actionButtons = [NSMutableArray array];
         [self setupControl:replayB forKey:@"reply" withData:self.data cleanOldEvents:YES];
+        [actionButtons addObject:replayB];
         [self setupControl:retweetB forKey:@"retweet" withData:self.data cleanOldEvents:YES];
+        [actionButtons addObject:retweetB];
         [self setupControl:favoriteB forKey:@"favorite" withData:self.data cleanOldEvents:YES];
+        [actionButtons addObject:favoriteB];
         [self setupControl:moreB forKey:@"more" withData:self.data cleanOldEvents:YES];
-
+        [actionButtons addObject:moreB];
+        if ([self isMyTweet]) {
+            [self setupControl:deleteB forKey:@"delete" withData:self.data cleanOldEvents:YES];
+            [actionButtons addObject:deleteB];
+            deleteB.hidden = NO;
+        } else {
+            deleteB.hidden = YES;
+        }
+        
         actionV.frame = self.contentView.bounds;
-        replayB.center = ccp(actionV.width/8, actionV.height/2);
-        retweetB.center = ccp(actionV.width*3/8, actionV.height/2);
-        favoriteB.center = ccp(actionV.width*5/8, actionV.height/2);
-        moreB.center = ccp(actionV.width*7/8, actionV.height/2);
-
+        for (uint i=0; i<actionButtons.count; i++) {
+            [actionButtons[i] setCenter:ccp(actionV.width / 2 / actionButtons.count * (2 * i + 1), actionV.height / 2)];
+        }
+        
         actionV.alpha = 0;
         actionV.hidden = NO;
 
@@ -504,6 +524,10 @@
             [self switchMode];
         }
     }
+}
+
+- (BOOL)isMyTweet {
+    return [self.data.rawData[@"user"][@"screen_name"] isEqualToString:TWENGINE.myScreenName];
 }
 
 @end

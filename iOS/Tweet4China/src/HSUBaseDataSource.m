@@ -170,4 +170,9 @@
     return dataSource;
 }
 
+- (void)removeCellData:(HSUTableCellData *)cellData
+{
+    [self.data removeObject:cellData];
+}
+
 @end

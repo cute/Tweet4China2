@@ -12,6 +12,9 @@
 
 - (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data cleanOldEvents:(BOOL)clean
 {
+    if (!control) {
+        return;
+    }
     HSUUIEvent *event = data.renderData[key];
     if (clean) {
         [control removeTarget:nil action:NULL forControlEvents:event.events];

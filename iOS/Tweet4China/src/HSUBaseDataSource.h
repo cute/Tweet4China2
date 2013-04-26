@@ -38,6 +38,7 @@
 + (id)dataSourceWithDelegate:(id<HSUBaseDataSourceDelegate>)delegate useCache:(BOOL)useCahce;
 + (NSString *)cacheKey;
 - (void)authenticate;
+- (void)removeCellData:(HSUTableCellData *)cellData;
 
 @end
 

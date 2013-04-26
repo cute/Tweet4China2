@@ -134,10 +134,13 @@
         
         retweetB = [[UIButton alloc] init];
         retweetB.showsTouchWhenHighlighted = YES;
-        if (retweeted)
+        if ([self.data.rawData[@"user"][@"screen_name"] isEqualToString:TWENGINE.myScreenName]) {
+            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_disabled"] forState:UIControlStateNormal];
+        } else if (retweeted) {
             [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_on"] forState:UIControlStateNormal];
-        else
+        } else {
             [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_off"] forState:UIControlStateNormal];
+        }
         [retweetB sizeToFit];
         [actionV addSubview:retweetB];
         

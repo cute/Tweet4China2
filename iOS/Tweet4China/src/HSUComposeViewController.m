@@ -440,8 +440,8 @@
 {
     if (contentTV.text == nil) return;
     dispatch_async(GCDBackgroundThread, ^{
-        NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update_with_media.json"];
-
+        NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
+        
         NSMutableArray *params = [NSMutableArray array];
 
         OARequestParameter *statusP = [OARequestParameter requestParameterWithName:@"status" value:contentTV.text];
@@ -453,6 +453,7 @@
         }
 
         if (previewIV.image) {
+            baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update_with_media.json"];
             OARequestParameter *mediaP = [OARequestParameter requestParameterWithName:@"media_data[]" value:[UIImageJPEGRepresentation(previewIV.image, 0.92) base64EncodingWithLineLength:0]];
             [params addObject:mediaP];
         }

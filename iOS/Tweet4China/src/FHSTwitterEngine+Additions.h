@@ -12,7 +12,8 @@
 
 @interface FHSTwitterEngine (Additions)
 
-@property (strong, nonatomic) OAConsumer *consumer;
+@property (nonatomic, strong) OAConsumer *consumer;
+@property (nonatomic, copy, readonly) NSString *myScreenName;
 
 + (FHSTwitterEngine *)engine;
 - (void)auth;

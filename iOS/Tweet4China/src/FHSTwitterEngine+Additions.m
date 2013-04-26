@@ -158,4 +158,20 @@
     return [self sendGETRequest:request withParameters:[NSArray arrayWithObjects:idP, nil]];
 }
 
+- (NSString *)myScreenName
+{
+    NSDictionary *userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey];
+    if (userSettings) {
+        return userSettings[@"screen_name"];
+    }
+    return nil;
+}
+
+- (NSError *)destroyTweet:(NSString *)identifier {
+    NSString *urlString = S(@"https://api.twitter.com/1.1/statuses/destroy/%@.json", identifier);
+    NSURL *baseURL = [NSURL URLWithString:urlString];
+    OAMutableURLRequest *request = [OAMutableURLRequest requestWithURL:baseURL consumer:self.consumer token:self.accessToken];
+    return [self sendPOSTRequest:request withParameters:nil];
+}
+
 @end

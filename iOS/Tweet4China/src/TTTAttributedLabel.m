@@ -991,14 +991,12 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
             __weak __typeof(&*self)weakSelf = self;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_current_queue(), ^{
                 if (longPressed) {
-                    if ([weakSelf.delegate respondsToSelector:@selector(attributedLabelDidLongPressed:)]) {
-                        [weakSelf.delegate attributedLabelDidLongPressed:weakSelf];
-                    }
+                    [weakSelf.delegate attributedLabelDidLongPressed:weakSelf];
                     longPressed = NO;
                 }
             });
-            [super touchesBegan:touches withEvent:event];
         }
+        [super touchesBegan:touches withEvent:event];
     } else {
         longPressed = YES;
         if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithURL:)]) {
