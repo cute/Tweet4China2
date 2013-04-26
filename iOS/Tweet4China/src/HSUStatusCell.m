@@ -192,6 +192,8 @@
         flagIV.image = [UIImage imageNamed:@"ic_dogear_rt"];
     } else if (favorited) {
         flagIV.image = [UIImage imageNamed:@"ic_dogear_fave"];
+    } else {
+        flagIV.image = nil;
     }
     
     // ambient
