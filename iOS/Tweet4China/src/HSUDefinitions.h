@@ -23,6 +23,7 @@
 #import "HSURefreshControl.h"
 #import "HSUTabController.h"
 #import "Reachability.h"
+#import "HSUGalleryVC.h"
 
 #import "FHSTwitterEngine+Additions.h"
 

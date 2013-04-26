@@ -11,6 +11,6 @@
 
 #define kNotification_HSUStatusCell_OtherCellSwiped @"HSUStatusCell_OtherCellSwiped"
 
-@interface HSUStatusCell : HSUBaseTableCell
+@interface HSUStatusCell : HSUBaseTableCell <TTTAttributedLabelDelegate>
 
 @end

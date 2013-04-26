@@ -158,7 +158,7 @@
         return;
     }
     
-    UIImage *indicatorImage = [UIImage imageNamed:@"unread-indicator"];
+    UIImage *indicatorImage = [UIImage imageNamed:@"ic_glow"];
     UIImageView *indicator = [[UIImageView alloc] initWithImage:indicatorImage];
     uint curIdx = 0;
     for (UIView *subView in self.tabBar.subviews) {

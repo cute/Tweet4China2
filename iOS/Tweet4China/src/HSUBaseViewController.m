@@ -16,6 +16,7 @@
 #import "HSUTabController.h"
 #import "HSUComposeViewController.h"
 #import "HSUStatusViewController.h"
+#import "HSUGalleryView.h"
 
 @interface HSUBaseViewController ()
 
@@ -475,9 +476,11 @@
 }
 
 #pragma mark - attributtedLabel delegate
-- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithArguments:(NSDictionary *)arguments
 {
     // User Link
+    NSURL *url = [arguments objectForKey:@"url"];
+    HSUTableCellData *cellData = [arguments objectForKey:@"cell_data"];
     if ([url.absoluteString hasPrefix:@"user://"] ||
         [url.absoluteString hasPrefix:@"tag://"]) {
         RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
@@ -516,8 +519,10 @@
     [linkActionSheet showInView:self.view.window];
 }
 
-- (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithURL:(NSURL *)url
+- (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithArguments:(NSDictionary *)arguments
 {
+    NSURL *url = [arguments objectForKey:@"url"];
+    HSUTableCellData *cellData = [arguments objectForKey:@"cell_data"];
     if ([url.absoluteString hasPrefix:@"user://"]) {
         // Push Profile ViewController
         return;
@@ -525,6 +530,24 @@
     if ([url.absoluteString hasPrefix:@"tag://"]) {
         // Push Tag ViewController
         return;
+    }
+    NSString *attr = cellData.renderData[@"attr"];
+    if ([attr isEqualToString:@"photo"]) {
+        NSString *mediaURLHttps;
+        NSArray *medias = cellData.rawData[@"entities"][@"media"];
+        for (NSDictionary *media in medias) {
+            NSString *expandedUrl = media[@"expanded_url"];
+            if ([expandedUrl isEqualToString:url.absoluteString]) {
+                mediaURLHttps = media[@"media_url_https"];
+            }
+        }
+        if (mediaURLHttps) {
+            HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithStatus:cellData.rawData imageURL:[NSURL URLWithString:mediaURLHttps]];
+            galleryView.frame = self.view.window.frame;
+            [self.view.window addSubview:galleryView];
+            [galleryView showWithAnimation:YES];
+            return;
+        }
     }
     [[UIApplication sharedApplication] openURL:url];
 }

@@ -185,7 +185,7 @@
     NSDictionary *rawData = data.rawData;
     retweeted = [rawData[@"retweeted"] boolValue];
     favorited = [rawData[@"favorited"] boolValue];
-
+    
     if (retweeted && favorited) {
         flagIV.image = [UIImage imageNamed:@"ic_dogear_both"];
     } else if (retweeted) {
@@ -261,9 +261,12 @@
 
     if (attrName) {
         attrI.imageName = S(@"ic_tweet_attr_%@_default", attrName);
+        self.data.renderData[@"attr"] = attrName;
     } else {
         attrI.imageName = nil;
+        [self.data.renderData removeObjectForKey:@"attr"];
     }
+    
     
     // time
     NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:rawData[@"created_at"]];
@@ -302,7 +305,7 @@
             }
         }
     }
-    textAL.delegate = data.renderData[@"attributed_label_delegate"];
+    textAL.delegate = self;
     
     self.contentView.backgroundColor = kClearColor;
     contentArea.alpha = 1;
@@ -530,6 +533,25 @@
 
 - (BOOL)isMyTweet {
     return [self.data.rawData[@"user"][@"screen_name"] isEqualToString:TWENGINE.myScreenName];
+}
+
+#pragma mark - attributtedLabel delegate
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    if (!url) {
+        return ;
+    }
+    id attributedLabelDelegate = self.data.renderData[@"attributed_label_delegate"];
+    [attributedLabelDelegate performSelector:@selector(attributedLabel:didSelectLinkWithArguments:) withObject:label withObject:@{@"url": url, @"cell_data": self.data}];
+}
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithURL:(NSURL *)url
+{
+    if (!url) {
+        return;
+    }
+    id attributedLabelDelegate = self.data.renderData[@"attributed_label_delegate"];
+    [attributedLabelDelegate performSelector:@selector(attributedLabel:didReleaseLinkWithArguments:) withObject:label withObject:@{@"url": url, @"cell_data": self.data}];
 }
 
 @end
