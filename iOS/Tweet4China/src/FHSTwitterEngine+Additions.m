@@ -43,7 +43,7 @@
     });
 
     return staticEngine;
- }
+}
 
 - (void)auth {
     [self showOAuthLoginControllerFromViewController:[UIApplication sharedApplication].keyWindow.rootViewController];

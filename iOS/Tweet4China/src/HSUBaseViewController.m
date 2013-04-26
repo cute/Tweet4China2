@@ -476,21 +476,4 @@
     [[UIApplication sharedApplication] openURL:url];
 }
 
-- (void)attributedLabelDidLongPressed:(TTTAttributedLabel *)label
-{
-    label.backgroundColor = rgb(215, 230, 242);
-    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
-    cancelItem.action = ^{
-        label.backgroundColor = kClearColor;
-    };
-    RIButtonItem *copyItem = [RIButtonItem itemWithLabel:@"Copy Content"];
-    copyItem.action = ^{
-        label.backgroundColor = kClearColor;
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        pasteboard.string = label.text;
-    };
-    UIActionSheet *linkActionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:copyItem, nil];
-    [linkActionSheet showInView:self.view.window];
-}
-
 @end

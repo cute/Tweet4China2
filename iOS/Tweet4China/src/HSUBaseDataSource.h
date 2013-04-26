@@ -24,6 +24,7 @@
 @property (atomic, strong) NSMutableArray *data;
 //@property (nonatomic, assign, getter = isLoading) BOOL loading;
 @property (nonatomic, assign) NSUInteger loadingCount;
+@property (nonatomic, assign) NSUInteger requestCount;
 
 - (NSDictionary *)rawDataAtIndex:(NSInteger)index;
 - (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;
@@ -37,8 +38,6 @@
 + (id)dataSourceWithDelegate:(id<HSUBaseDataSourceDelegate>)delegate useCache:(BOOL)useCahce;
 + (NSString *)cacheKey;
 - (void)authenticate;
-
-+ (NSUInteger)requestDataCount;
 
 @end
 

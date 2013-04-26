@@ -8,7 +8,6 @@
 
 #import "HSUBaseDataSource.h"
 #import "HSUBaseTableCell.h"
-#import "Reachability.h"
 
 @implementation HSUBaseDataSource
 
@@ -16,6 +15,7 @@
 {
     self = [super init];
     if (self) {
+        self.requestCount = 200;
         self.data = [[NSMutableArray alloc] init];
     }
     return self;
@@ -24,7 +24,24 @@
 - (void)authenticate
 {
     if (!TWENGINE.isAuthorized) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kUserSettings_DBKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         [TWENGINE auth];
+    } else {
+        id userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey];
+        if (!userSettings) {
+            UIAlertView *loadingAlert = [[UIAlertView alloc] initWithTitle:@"Loading account info..." message:nil cancelButtonItem:nil otherButtonItems:nil, nil];
+            UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            [loadingAlert addSubview:spinner];
+            spinner.frame = ccr(125, 50, 30, 30);
+            [loadingAlert show];
+            userSettings = [TWENGINE getUserSettings];
+            if ([TWENGINE dealWithError:userSettings errTitle:@"Fetch account info failed"]) {
+                [[NSUserDefaults standardUserDefaults] setObject:userSettings forKey:kUserSettings_DBKey];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                [loadingAlert dismissWithClickedButtonIndex:-1 animated:YES];
+            }
+        }
     }
 }
 
@@ -151,14 +168,6 @@
         [dataSource.delegate preprocessDataSourceForRender:dataSource];
     }
     return dataSource;
-}
-
-+ (NSUInteger)requestDataCount {
-    if ([Reachability reachabilityForInternetConnection].isReachableViaWiFi) {
-        return kRequestDataCountViaWifi;
-    } else {
-        return kRequestDataCountViaWWAN;
-    }
 }
 
 @end

@@ -74,5 +74,6 @@ _Pragma("clang diagnostic pop") \
 #define kDataType_Status @"Status"
 #define kDataType_LoadMore @"LoadMore"
 
+#define kUserSettings_DBKey @"user_settings"
 
 #endif
