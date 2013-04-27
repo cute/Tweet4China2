@@ -10,7 +10,7 @@
 
 @interface HSUGalleryView : UIView
 
-- (id)initWithStatus:(NSDictionary *)status imageURL:(NSURL *)imageURL;
+- (id)initWithData:(HSUTableCellData *)data imageURL:(NSURL *)imageURL;
 
 - (void)showWithAnimation:(BOOL)animation;
 - (void)hideWithAnimation:(BOOL)animation;

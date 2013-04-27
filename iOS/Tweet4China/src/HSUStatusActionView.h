@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, HSUStatusActionViewStyle) {
+    HSUStatusActionViewStyle_Default = 0,
+    HSUStatusActionViewStyle_Gallery = 1,
+};
+
 @interface HSUStatusActionView : UIView
+
+@property (nonatomic, strong) UIButton *replayB, *retweetB, *favoriteB, *moreB, *deleteB;
+
+- (id)initWithStatus:(NSDictionary *)status style:(HSUStatusActionViewStyle)style;
 
 @end

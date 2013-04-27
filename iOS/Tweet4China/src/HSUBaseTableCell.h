@@ -15,6 +15,7 @@
 
 - (void)setupWithData:(HSUTableCellData *)data;
 + (CGFloat)heightForData:(HSUTableCellData *)data;
-- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data cleanOldEvents:(BOOL)clean;
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key;
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key cleanOldEvents:(BOOL)clean;
 
 @end

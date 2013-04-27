@@ -145,7 +145,7 @@
 }
 
 - (void)setSize:(CGSize)size {
-    self.bounds = ccr(0, 0, size.width, size.height);
+    self.frame = ccr(self.left, self.top, size.width, size.height);
 }
 
 - (NSString *)frameStr

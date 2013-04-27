@@ -18,6 +18,7 @@
 #import "GTMNSString+HTML.h"
 #import "UIButton+WebCache.h"
 #import "NSString+URLEncoding.h"
+#import "HSUStatusActionView.h"
 
 #define ambient_H 14
 #define info_H 16
@@ -49,9 +50,7 @@
     TTTAttributedLabel *textAL;
     
     UIView *actionSeperatorV;
-    UIView *actionV;
-    UIButton *replayB, *retweetB, *favoriteB, *moreB;
-    BOOL retweeted, favorited;
+    HSUStatusActionView *actionV;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -123,41 +122,8 @@
         actionSeperatorV.backgroundColor = bw(226);
         [self.contentView addSubview:actionSeperatorV];
         
-        actionV = [[UIView alloc] init];
+        actionV = [[HSUStatusActionView alloc] initWithStatus:self.data.rawData style:HSUStatusActionViewStyle_Default];
         [self.contentView addSubview:actionV];
-        
-        replayB = [[UIButton alloc] init];
-        replayB.showsTouchWhenHighlighted = YES;
-        [replayB setImage:[UIImage imageNamed:@"icn_tweet_action_reply"] forState:UIControlStateNormal];
-        [replayB sizeToFit];
-        [actionV addSubview:replayB];
-        
-        retweetB = [[UIButton alloc] init];
-        retweetB.showsTouchWhenHighlighted = YES;
-        if ([self.data.rawData[@"user"][@"screen_name"] isEqualToString:TWENGINE.myScreenName]) {
-            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_disabled"] forState:UIControlStateNormal];
-        } else if (retweeted) {
-            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_on"] forState:UIControlStateNormal];
-        } else {
-            [retweetB setImage:[UIImage imageNamed:@"icn_tweet_action_retweet_off"] forState:UIControlStateNormal];
-        }
-        [retweetB sizeToFit];
-        [actionV addSubview:retweetB];
-        
-        favoriteB = [[UIButton alloc] init];
-        favoriteB.showsTouchWhenHighlighted = YES;
-        if (favorited)
-            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_on"] forState:UIControlStateNormal];
-        else
-            [favoriteB setImage:[UIImage imageNamed:@"icn_tweet_action_favorite_off"] forState:UIControlStateNormal];
-        [favoriteB sizeToFit];
-        [actionV addSubview:favoriteB];
-        
-        moreB = [[UIButton alloc] init];
-        moreB.showsTouchWhenHighlighted = YES;
-        [moreB setImage:[UIImage imageNamed:@"icn_tweet_action_more"] forState:UIControlStateNormal];
-        [moreB sizeToFit];
-        [actionV addSubview:moreB];
         
         // set frames
         contentArea.frame = ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0);
@@ -196,11 +162,6 @@
     actionV.bottom = self.contentView.height;
     
     actionSeperatorV.frame = ccr(9, actionV.top-1, actionV.width-9*2, 1);
-    
-    replayB.center = ccp(actionV.width/8, actionV.height/2);
-    retweetB.center = ccp(actionV.width*3/8, actionV.height/2);
-    favoriteB.center = ccp(actionV.width*5/8, actionV.height/2);
-    moreB.center = ccp(actionV.width*7/8, actionV.height/2);
 }
 
 - (void)setupWithData:(HSUTableCellData *)data
@@ -208,8 +169,6 @@
     [super setupWithData:data];
     
     NSDictionary *rawData = data.rawData;
-    retweeted = [rawData[@"retweeted"] boolValue];
-    favorited = [rawData[@"favorited"] boolValue];
     
     // ambient
     ambientI.hidden = NO;
@@ -305,10 +264,11 @@
     textAL.delegate = data.renderData[@"attributed_label_delegate"];
     
     // set action events
-    [self setupControl:replayB forKey:@"reply" withData:self.data cleanOldEvents:YES];
-    [self setupControl:retweetB forKey:@"retweet" withData:self.data cleanOldEvents:YES];
-    [self setupControl:favoriteB forKey:@"favorite" withData:self.data cleanOldEvents:YES];
-    [self setupControl:moreB forKey:@"more" withData:self.data cleanOldEvents:YES];
+    [self setupControl:actionV.replayB forKey:@"reply"];
+    [self setupControl:actionV.retweetB forKey:@"retweet"];
+    [self setupControl:actionV.favoriteB forKey:@"favorite"];
+    [self setupControl:actionV.moreB forKey:@"more"];
+    [self setupControl:actionV.deleteB forKey:@"delete"];
 }
 
 + (CGFloat)_textHeightWithCellData:(HSUTableCellData *)data

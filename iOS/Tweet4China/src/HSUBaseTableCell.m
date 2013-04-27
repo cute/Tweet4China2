@@ -10,12 +10,17 @@
 
 @implementation HSUBaseTableCell
 
-- (void)setupControl:(UIControl *)control forKey:(NSString *)key withData:(HSUTableCellData *)data cleanOldEvents:(BOOL)clean
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key
+{
+    [self setupControl:control forKey:key cleanOldEvents:YES];
+}
+
+- (void)setupControl:(UIControl *)control forKey:(NSString *)key cleanOldEvents:(BOOL)clean
 {
     if (!control) {
         return;
     }
-    HSUUIEvent *event = data.renderData[key];
+    HSUUIEvent *event = self.data.renderData[key];
     if (clean) {
         [control removeTarget:nil action:NULL forControlEvents:event.events];
     }

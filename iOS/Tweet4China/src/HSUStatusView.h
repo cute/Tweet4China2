@@ -8,6 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HSUStatusView : UIView
+typedef NS_ENUM(NSUInteger, HSUStatusViewStyle) {
+    HSUStatusViewStyle_Default = 0,
+    HSUStatusViewStyle_Gallery = 1,
+};
+
+@interface HSUStatusView : UIView <TTTAttributedLabelDelegate>
+
+@property (nonatomic, strong) HSUTableCellData *data;
+@property (nonatomic, assign) HSUStatusViewStyle style;
+
+- (id)initWithFrame:(CGRect)frame style:(HSUStatusViewStyle)style;
+
+- (void)setupWithData:(HSUTableCellData *)cellData;
++ (CGFloat)heightForData:(HSUTableCellData *)data;
 
 @end

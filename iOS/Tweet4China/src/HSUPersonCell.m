@@ -26,7 +26,7 @@
 {
     [super setupWithData:data];
     
-    [self setupControl:followButton forKey:@"follow" withData:data cleanOldEvents:YES];
+    [self setupControl:followButton forKey:@"follow"];
 }
 
 @end

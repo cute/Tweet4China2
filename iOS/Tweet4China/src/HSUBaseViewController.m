@@ -480,7 +480,7 @@
 {
     // User Link
     NSURL *url = [arguments objectForKey:@"url"];
-    HSUTableCellData *cellData = [arguments objectForKey:@"cell_data"];
+//    HSUTableCellData *cellData = [arguments objectForKey:@"cell_data"];
     if ([url.absoluteString hasPrefix:@"user://"] ||
         [url.absoluteString hasPrefix:@"tag://"]) {
         RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
@@ -542,8 +542,7 @@
             }
         }
         if (mediaURLHttps) {
-            HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithStatus:cellData.rawData imageURL:[NSURL URLWithString:mediaURLHttps]];
-            galleryView.frame = self.view.window.frame;
+            HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithData:cellData imageURL:[NSURL URLWithString:mediaURLHttps]];
             [self.view.window addSubview:galleryView];
             [galleryView showWithAnimation:YES];
             return;

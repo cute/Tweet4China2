@@ -56,6 +56,7 @@ _Pragma("clang diagnostic pop") \
 #define rgba(r, g, b, a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
 #define rgb(r, g, b) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:1]
 #define bw(w) [UIColor colorWithWhite:w/255.0f alpha:1]
+#define bwa(w, a) [UIColor colorWithWhite:w/255.0f alpha:a]
 #define L(s) NSLog(@"%@", s);
 #define LR(rect) NSLog(@"%@", NSStringFromCGRect(rect));
 #define LF(f,...) NSLog(f,##__VA_ARGS__);
@@ -63,6 +64,7 @@ _Pragma("clang diagnostic pop") \
 #define kBlackColor [UIColor blackColor]
 #define kWhiteColor [UIColor whiteColor]
 #define kClearColor [UIColor clearColor]
+#define kGrayColor [UIColor grayColor]
 #define kWinWidth [HSUCommonTools winWidth]
 #define kWinHeight [HSUCommonTools winHeight]
 #define TWENGINE [FHSTwitterEngine engine]

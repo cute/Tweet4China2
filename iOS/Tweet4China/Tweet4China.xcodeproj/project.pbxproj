@@ -210,6 +210,7 @@
 		967A55FB16FDB2AD00581274 /* HSULoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 967A55FA16FDB2AD00581274 /* HSULoadMoreCell.m */; };
 		968EC06116ECB0830068A6A0 /* HSUPersonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06016ECB0830068A6A0 /* HSUPersonCell.m */; };
 		968EC06516ECB62A0068A6A0 /* HSUStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 968EC06416ECB62A0068A6A0 /* HSUStatusViewController.m */; };
+		9692466B172BB6BE007720D4 /* HSUStatusView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9692466A172BB6BE007720D4 /* HSUStatusView.m */; };
 		9696D7F016F0A4EB005D7AAB /* RIButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9696D7EA16F0A4EB005D7AAB /* RIButtonItem.m */; };
 		9696D7F116F0A4EB005D7AAB /* UIActionSheet+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9696D7EC16F0A4EB005D7AAB /* UIActionSheet+Blocks.m */; };
 		9696D7F216F0A4EB005D7AAB /* UIAlertView+Blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 9696D7EE16F0A4EB005D7AAB /* UIAlertView+Blocks.m */; };
@@ -272,6 +273,7 @@
 		96DABC6E172A9B90001AD70A /* HSUGalleryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DABC6D172A9B90001AD70A /* HSUGalleryView.m */; };
 		96DABC71172AC4C7001AD70A /* ic_glow.png in Resources */ = {isa = PBXBuildFile; fileRef = 96DABC6F172AC4C7001AD70A /* ic_glow.png */; };
 		96DABC72172AC4C7001AD70A /* ic_glow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96DABC70172AC4C7001AD70A /* ic_glow@2x.png */; };
+		96DABC76172AF5BF001AD70A /* HSUStatusActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96DABC75172AF5BE001AD70A /* HSUStatusActionView.m */; };
 		96E34B4117006B1C0066CD5E /* bg_dm_count@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E34B4017006B1C0066CD5E /* bg_dm_count@2x.png */; };
 		96E34B4417015ECD0066CD5E /* HSUComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E34B4317015ECD0066CD5E /* HSUComposeViewController.m */; };
 		96E34B50170167580066CD5E /* button-bar-at@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E34B45170167580066CD5E /* button-bar-at@2x.png */; };
@@ -559,6 +561,8 @@
 		968EC06016ECB0830068A6A0 /* HSUPersonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUPersonCell.m; sourceTree = "<group>"; };
 		968EC06316ECB62A0068A6A0 /* HSUStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUStatusViewController.h; sourceTree = "<group>"; };
 		968EC06416ECB62A0068A6A0 /* HSUStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUStatusViewController.m; sourceTree = "<group>"; };
+		96924669172BB6BE007720D4 /* HSUStatusView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUStatusView.h; sourceTree = "<group>"; };
+		9692466A172BB6BE007720D4 /* HSUStatusView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUStatusView.m; sourceTree = "<group>"; };
 		9696D7E816F0A4EB005D7AAB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		9696D7E916F0A4EB005D7AAB /* RIButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RIButtonItem.h; sourceTree = "<group>"; };
 		9696D7EA16F0A4EB005D7AAB /* RIButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RIButtonItem.m; sourceTree = "<group>"; };
@@ -638,6 +642,8 @@
 		96DABC6D172A9B90001AD70A /* HSUGalleryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUGalleryView.m; sourceTree = "<group>"; };
 		96DABC6F172AC4C7001AD70A /* ic_glow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_glow.png; sourceTree = "<group>"; };
 		96DABC70172AC4C7001AD70A /* ic_glow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_glow@2x.png"; sourceTree = "<group>"; };
+		96DABC74172AF5BE001AD70A /* HSUStatusActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUStatusActionView.h; sourceTree = "<group>"; };
+		96DABC75172AF5BE001AD70A /* HSUStatusActionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUStatusActionView.m; sourceTree = "<group>"; };
 		96E34B4017006B1C0066CD5E /* bg_dm_count@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_dm_count@2x.png"; sourceTree = "<group>"; };
 		96E34B4217015ECD0066CD5E /* HSUComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUComposeViewController.h; sourceTree = "<group>"; };
 		96E34B4317015ECD0066CD5E /* HSUComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUComposeViewController.m; sourceTree = "<group>"; };
@@ -1277,6 +1283,10 @@
 				96DABC6A172A84F3001AD70A /* HSUGalleryVC.m */,
 				96DABC6C172A9B90001AD70A /* HSUGalleryView.h */,
 				96DABC6D172A9B90001AD70A /* HSUGalleryView.m */,
+				96DABC74172AF5BE001AD70A /* HSUStatusActionView.h */,
+				96DABC75172AF5BE001AD70A /* HSUStatusActionView.m */,
+				96924669172BB6BE007720D4 /* HSUStatusView.h */,
+				9692466A172BB6BE007720D4 /* HSUStatusView.m */,
 			);
 			name = Controller_Model;
 			sourceTree = "<group>";
@@ -1608,6 +1618,8 @@
 				96D4BC8C172830F700E7BABA /* HSUConnectDataSource.m in Sources */,
 				96DABC6B172A84F3001AD70A /* HSUGalleryVC.m in Sources */,
 				96DABC6E172A9B90001AD70A /* HSUGalleryView.m in Sources */,
+				96DABC76172AF5BF001AD70A /* HSUStatusActionView.m in Sources */,
+				9692466B172BB6BE007720D4 /* HSUStatusView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
