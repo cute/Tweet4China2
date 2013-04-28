@@ -353,17 +353,9 @@
 {
     NSDictionary *rawData = data.rawData;
     NSMutableDictionary *renderData = data.renderData;
-    if (renderData) {
-        if (renderData[@"height"]) {
-            return [renderData[@"height"] floatValue];
-        }
-    }
     
     CGFloat height = 0;
     CGFloat leftHeight = 0;
-    
-    height += padding_S; // add padding top
-    leftHeight += padding_S;
     
     if (rawData[@"retweeted_status"]) {
         height += ambient_H; // add ambient
@@ -375,12 +367,8 @@
     
     leftHeight += avatar_S; // add avatar
     
-    height += padding_S; // add padding-bottom
-    leftHeight += padding_S;
-    
     CGFloat cellHeight = MAX(height, leftHeight);
     cellHeight = floorf(cellHeight);
-    renderData[@"height"] = @(cellHeight);
     
     return cellHeight;
 }

@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HSUBaseViewController.h"
 
 @interface HSUGalleryView : UIView
+
+@property (nonatomic, weak) HSUBaseViewController *viewController;
 
 - (id)initWithData:(HSUTableCellData *)data imageURL:(NSURL *)imageURL;
 

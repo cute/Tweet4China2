@@ -93,7 +93,16 @@
 
 + (CGFloat)heightForData:(HSUTableCellData *)data
 {
-    return [HSUStatusView heightForData:data constraintWidth:[HSUCommonTools winWidth] - 20 - padding_S*2];
+    NSMutableDictionary *renderData = data.renderData;
+    if (renderData) {
+        if (renderData[@"height"]) {
+            return [renderData[@"height"] floatValue];
+        }
+    }
+    
+    CGFloat height = [HSUStatusView heightForData:data constraintWidth:[HSUCommonTools winWidth] - 20 - padding_S*2] + padding_S * 2;
+    renderData[@"height"] = @(height);
+    return height;
 }
 
 - (void)cellSwiped:(UIGestureRecognizer *)gesture {

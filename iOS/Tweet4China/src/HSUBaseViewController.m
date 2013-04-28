@@ -55,7 +55,7 @@
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    tableView.backgroundColor = [UIColor clearColor];
+    tableView.backgroundColor = kClearColor;
     tableView.backgroundView = nil;
     tableView.separatorColor = rgb(206, 206, 206);
     [self.view addSubview:tableView];
@@ -543,6 +543,7 @@
         }
         if (mediaURLHttps) {
             HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithData:cellData imageURL:[NSURL URLWithString:mediaURLHttps]];
+            galleryView.viewController = self;
             [self.view.window addSubview:galleryView];
             [galleryView showWithAnimation:YES];
             return;
