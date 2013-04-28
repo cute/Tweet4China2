@@ -10,23 +10,32 @@
 #import "AFNetworking.h"
 #import "HSUStatusActionView.h"
 #import "HSUStatusView.h"
+#import "HSUGalleryStatusCell.h"
+
+@interface HSUGalleryView()  <UITableViewDataSource, UITableViewDelegate>
+
+@end
 
 @implementation HSUGalleryView
 {
     UIProgressView *progressBar;
     UIImageView *imageView;
     UIView *menuView;
-    HSUStatusView *statusView;
+    UITableView *statusView;
     HSUStatusActionView *actionView;
     
     CGFloat menuStartTop;
     CGFloat startTouchY;
+    
+    HSUTableCellData *cellData;
 }
 
 - (id)initWithData:(HSUTableCellData *)data imageURL:(NSURL *)imageURL
 {
     self = [super initWithFrame:[UIApplication sharedApplication].keyWindow.bounds];
     if (self) {
+        cellData = data;
+        
         self.backgroundColor = kBlackColor;
         self.alpha = 0;
         
@@ -44,7 +53,7 @@
         
         menuView = [[UIView alloc] init];
         [self addSubview:menuView];
-        menuView.backgroundColor = bwa(0, .8);
+        menuView.backgroundColor = bwa(0, 0.8);
         
         UIView *border = [[UIView alloc] init];
         [menuView addSubview:border];
@@ -53,11 +62,15 @@
         UIImageView *gripperView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icn_photo_detail_gripper"]];
         [menuView addSubview:gripperView];
         
-        CGRect statusFrame = ccr(10, 10, self.width-20, [HSUStatusView heightForData:data]);
-        statusView = [[HSUStatusView alloc] initWithFrame:statusFrame style:HSUStatusViewStyle_Gallery];
+        statusView = [[UITableView alloc] init];
         [menuView addSubview:statusView];
-        [statusView setupWithData:data];
-        [statusView setNeedsLayout];
+        statusView.backgroundColor = kClearColor;
+        statusView.delegate = self;
+        statusView.dataSource = self;
+        [statusView registerClass:[HSUGalleryStatusCell class] forCellReuseIdentifier:@"StatusCell"];
+        statusView.size = ccs(self.width-20, [HSUGalleryStatusCell heightForData:data]);
+        statusView.scrollEnabled = NO;
+        statusView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
         UIView *sep = [[UIView alloc] init];
         [menuView addSubview:sep];
@@ -213,6 +226,35 @@
     } else {
         [super touchesEnded:touches withEvent:event];
     }
+}
+
+#pragma mark - tableview delegate
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    HSUGalleryStatusCell *statusCell = [tableView dequeueReusableCellWithIdentifier:@"StatusCell"];
+    [statusCell setupWithData:cellData];
+    statusCell.selectionStyle = UITableViewCellSelectionStyleGray;
+    return statusCell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [HSUGalleryStatusCell heightForData:cellData];
 }
 
 @end

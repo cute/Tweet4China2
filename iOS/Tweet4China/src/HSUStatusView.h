@@ -21,6 +21,6 @@ typedef NS_ENUM(NSUInteger, HSUStatusViewStyle) {
 - (id)initWithFrame:(CGRect)frame style:(HSUStatusViewStyle)style;
 
 - (void)setupWithData:(HSUTableCellData *)cellData;
-+ (CGFloat)heightForData:(HSUTableCellData *)data;
++ (CGFloat)heightForData:(HSUTableCellData *)data constraintWidth:(CGFloat)constraintWidth;
 
 @end

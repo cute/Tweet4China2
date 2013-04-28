@@ -93,7 +93,7 @@
 
 + (CGFloat)heightForData:(HSUTableCellData *)data
 {
-    return [HSUStatusView heightForData:data];
+    return [HSUStatusView heightForData:data constraintWidth:[HSUCommonTools winWidth] - 20 - padding_S*2];
 }
 
 - (void)cellSwiped:(UIGestureRecognizer *)gesture {
@@ -103,15 +103,22 @@
 }
 
 - (void)switchMode {
-    if (!actionV) { // set to default
+    if (actionV) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.contentView.backgroundColor = kClearColor;
+            statusView.alpha = 1;
+            actionV.alpha = 0;
+        } completion:^(BOOL finish){
+            [actionV removeFromSuperview];
+            actionV = nil;
+        }];
+        self.data.renderData[@"mode"] = @"default";
+    } else {
         actionV = [[HSUStatusActionView alloc] initWithStatus:self.data.rawData style:HSUStatusActionViewStyle_Default];
+        [self.contentView addSubview:actionV];
         UIColor *actionBGC = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_swipe_tile"]];
         actionV.backgroundColor = actionBGC;
-        [self.contentView addSubview:actionV];
-        actionV.hidden = YES;
-    }
-    
-    if (actionV.hidden) { // to action mode
+        
         [self setupControl:actionV.replayB forKey:@"reply"];
         [self setupControl:actionV.retweetB forKey:@"retweet"];
         [self setupControl:actionV.favoriteB forKey:@"favorite"];
@@ -119,10 +126,7 @@
         [self setupControl:actionV.deleteB forKey:@"delete"];
         
         actionV.frame = self.contentView.bounds;
-        
         actionV.alpha = 0;
-        actionV.hidden = NO;
-        
         [UIView animateWithDuration:0.2 animations:^{
             self.contentView.backgroundColor = bw(230);
             statusView.alpha = 0;
@@ -131,16 +135,6 @@
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_HSUStatusCell_OtherCellSwiped object:self];
         self.data.renderData[@"mode"] = @"action";
-
-    } else { // to default mode
-        [UIView animateWithDuration:0.2 animations:^{
-            self.contentView.backgroundColor = kClearColor;
-            statusView.alpha = 1;
-            actionV.alpha = 0;
-        } completion:^(BOOL finish){
-            actionV.hidden = YES;
-        }];
-        self.data.renderData[@"mode"] = @"default";
     }
 }
 

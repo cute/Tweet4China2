@@ -77,16 +77,6 @@
         [self addSubview:textAL];
         
         [self _setupStyle];
-        
-        // set frames
-        CGFloat cw = self.width;
-        ambientArea.frame = ccr(0, 0, cw, ambient_H);
-        ambientI.frame = ccr(avatar_S-ambient_S, (ambient_H-ambient_S)/2, ambient_S, ambient_S);
-        ambientL.frame = ccr(avatar_S+padding_S, 0, cw-ambientI.right-padding_S, ambient_H);
-        avatarI.frame = ccr(0, 0, avatar_S, avatar_S);
-        infoArea.frame = ccr(ambientL.left, 0, cw-ambientL.left, info_H);
-        attrI.frame = ccr(0, 0, 0, 16);
-        textAL.frame = ccr(ambientL.left, 0, infoArea.width, 0);
     }
     return self;
 }
@@ -143,16 +133,21 @@
 {
     [super layoutSubviews];
     
-    ambientArea.frame = ccr(0, 0, self.width, ambient_S);
+    
+    // set frames
+    CGFloat cw = self.width;
+    ambientArea.frame = ccr(0, 0, cw, ambient_S);
+    ambientI.frame = ccr(avatar_S-ambient_S, (ambient_H-ambient_S)/2, ambient_S, ambient_S);
+    ambientL.frame = ccr(avatar_S+padding_S, 0, cw-ambientI.right-padding_S, ambient_H);
     
     if (ambientArea.hidden) {
-        avatarI.frame = ccr(avatarI.left, 0, avatarI.width, avatarI.height);
+        avatarI.frame = ccr(avatarI.left, 0, avatar_S, avatar_S);
     } else {
-        avatarI.frame = ccr(avatarI.left, ambientArea.bottom, avatarI.width, avatarI.height);
+        avatarI.frame = ccr(avatarI.left, ambientArea.bottom, avatar_S, avatar_S);
     }
     
-    infoArea.frame = ccr(infoArea.left, avatarI.top, infoArea.width, infoArea.height);
-    textAL.frame = ccr(textAL.left, infoArea.bottom, textAL.width, [self.data.renderData[@"text_height"] floatValue] + 3);
+    infoArea.frame = ccr(ambientL.left, avatarI.top, cw-ambientL.left, info_H);
+    textAL.frame = ccr(ambientL.left, infoArea.bottom, infoArea.width, [self.data.renderData[@"text_height"] floatValue] + 3);
     
     [timeL sizeToFit];
     timeL.frame = ccr(infoArea.width-timeL.width, -1, timeL.width, timeL.height);
@@ -301,7 +296,7 @@
     return nil;
 }
 
-+ (CGFloat)_textHeightWithCellData:(HSUTableCellData *)data
++ (CGFloat)_textHeightWithCellData:(HSUTableCellData *)data constraintWidth:(CGFloat)constraintWidth
 {
     NSDictionary *status = data.rawData;
     NSString *text = [status[@"text"] gtm_stringByUnescapingFromHTML];
@@ -348,13 +343,13 @@
     });
     testSizeLabel.text = text;
     
-    CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S * 3 - avatar_S;
-    CGFloat textHeight = [testSizeLabel sizeThatFits:ccs(cellWidth, 0)].height;
+//    CGFloat cellWidth = [HSUCommonTools winWidth] - margin_W * 2 - padding_S * 3 - avatar_S;
+    CGFloat textHeight = [testSizeLabel sizeThatFits:ccs(constraintWidth, 0)].height;
     data.renderData[@"text_height"] = @(textHeight);
     return textHeight;
 }
 
-+ (CGFloat)heightForData:(HSUTableCellData *)data
++ (CGFloat)heightForData:(HSUTableCellData *)data constraintWidth:(CGFloat)constraintWidth
 {
     NSDictionary *rawData = data.rawData;
     NSMutableDictionary *renderData = data.renderData;
@@ -376,7 +371,7 @@
     }
     height += info_H; // add info
     
-    height += [self _textHeightWithCellData:data] + padding_S;
+    height += [self _textHeightWithCellData:data constraintWidth:constraintWidth-avatar_S-padding_S] + padding_S;
     
     leftHeight += avatar_S; // add avatar
     
