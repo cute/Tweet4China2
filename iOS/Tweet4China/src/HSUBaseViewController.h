@@ -20,6 +20,7 @@
 @property (nonatomic, assign) BOOL useRefreshControl;
 
 - (Class)cellClassForDataType:(NSString *)dataType;
+- (void)openPhotoURL:(NSURL *)photoURL withCellData:(HSUTableCellData *)cellData;
 
 #pragma mark - Common actions
 - (void)reply:(HSUTableCellData *)cellData;

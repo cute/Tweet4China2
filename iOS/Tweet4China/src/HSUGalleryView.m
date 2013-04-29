@@ -12,10 +12,9 @@
 #import "AFNetworking.h"
 #import "HSUStatusActionView.h"
 #import "HSUStatusView.h"
-#import "HSUGalleryStatusCell.h"
 #import "HSUStatusViewController.h"
 
-@interface HSUGalleryView()  <UITableViewDataSource, UITableViewDelegate>
+@interface HSUGalleryView()
 
 @end
 
@@ -132,8 +131,10 @@
             }
         }];
         [downloader setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            progressBar.hidden = YES;
             [imageView setImage:responseObject];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            progressBar.hidden = YES;
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load image failed" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
         }];
@@ -160,11 +161,12 @@
 {
     if (gesture.state == UIGestureRecognizerStateEnded) {
         BOOL statusViewTapped = [gesture locationInView:self].y > menuView.top;
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [UIView animateWithDuration:.3 animations:^{
             self.alpha = 0;
         } completion:^(BOOL finished) {
             [self removeFromSuperview];
-            if (statusViewTapped) {
+            if (statusViewTapped && self.viewController) {
                 HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] initWithStatus:cellData.rawData];
                 [self.viewController.navigationController pushViewController:statusVC animated:YES];
             }
@@ -220,6 +222,7 @@
     } else if (sender == actionView.deleteB) {
         event = cellData.renderData[@"delete"];
     }
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [UIView animateWithDuration:.3 animations:^{
         self.alpha = 0;
     } completion:^(BOOL finished) {

@@ -10,6 +10,7 @@
 #import "HSUStatusDataSource.h"
 #import "HSUMainStatusCell.h"
 #import "HSUComposeViewController.h"
+#import "HSUGalleryView.h"
 
 @interface HSUStatusViewController ()
 
@@ -90,5 +91,11 @@
     [linkActionSheet showInView:self.view.window];
 }
 
+- (void)openPhotoURL:(NSURL *)photoURL withCellData:(HSUTableCellData *)cellData
+{
+    HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithData:cellData imageURL:photoURL];
+    [self.view.window addSubview:galleryView];
+    [galleryView showWithAnimation:YES];
+}
 
 @end

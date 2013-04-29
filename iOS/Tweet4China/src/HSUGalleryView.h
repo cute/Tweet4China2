@@ -16,6 +16,5 @@
 - (id)initWithData:(HSUTableCellData *)data imageURL:(NSURL *)imageURL;
 
 - (void)showWithAnimation:(BOOL)animation;
-- (void)hideWithAnimation:(BOOL)animation;
 
 @end

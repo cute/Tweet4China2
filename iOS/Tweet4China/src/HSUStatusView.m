@@ -352,7 +352,6 @@
 + (CGFloat)heightForData:(HSUTableCellData *)data constraintWidth:(CGFloat)constraintWidth
 {
     NSDictionary *rawData = data.rawData;
-    NSMutableDictionary *renderData = data.renderData;
     
     CGFloat height = 0;
     CGFloat leftHeight = 0;

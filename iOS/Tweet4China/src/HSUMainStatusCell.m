@@ -261,7 +261,42 @@
             }
         }
     }
-    textAL.delegate = data.renderData[@"attributed_label_delegate"];
+    textAL.delegate = self;
+    
+    
+    NSDictionary *geo = rawData[@"geo"];
+    NSString *attrName = nil;
+    if ([rawData[@"in_reply_to_status_id_str"] length]) {
+        attrName = @"convo";
+    } else if (entities) {
+        NSArray *medias = entities[@"media"];
+        NSArray *urls = entities[@"urls"];
+        if (medias && medias.count) {
+            NSDictionary *media = medias[0];
+            NSString *type = media[@"type"];
+            if ([type isEqualToString:@"photo"]) {
+                attrName = @"photo";
+            }
+        } else if (urls && urls.count) {
+            for (NSDictionary *urlDict in urls) {
+                NSString *expandedUrl = urlDict[@"expanded_url"];
+                attrName = [self _attrForUrl:expandedUrl];
+                if (attrName) {
+                    break;
+                }
+            }
+        }
+    } else if ([geo isKindOfClass:[NSDictionary class]]) {
+        attrName = @"geo";
+    }
+    
+    if (attrName) {
+        self.data.renderData[@"attr"] = attrName;
+    } else {
+        [self.data.renderData removeObjectForKey:@"attr"];
+    }
+    
+    
     
     // set action events
     [self setupControl:actionV.replayB forKey:@"reply"];
@@ -367,6 +402,41 @@
 }
 
 + (NSString *)attrForUrl:(NSString *)url
+{
+    if ([url hasPrefix:@"http://4sq.com"] ||
+        [url hasPrefix:@"http://youtube.com"]) {
+        return @"summary";
+    } else if ([url hasPrefix:@"http://youtube.com"] ||
+               [url hasPrefix:@"http://snpy.tv"]) {
+        return @"video";
+    } else if ([url hasPrefix:@"http://instagram.com"] || [url hasPrefix:@"http://instagr.am"]) {
+        return @"photo";
+    }
+    return nil;
+}
+
+
+#pragma mark - attributtedLabel delegate
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+    if (!url) {
+        return ;
+    }
+    id attributedLabelDelegate = self.data.renderData[@"attributed_label_delegate"];
+    [attributedLabelDelegate performSelector:@selector(attributedLabel:didSelectLinkWithArguments:) withObject:label withObject:@{@"url": url, @"cell_data": self.data}];
+}
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didReleaseLinkWithURL:(NSURL *)url
+{
+    if (!url) {
+        return;
+    }
+    id attributedLabelDelegate = self.data.renderData[@"attributed_label_delegate"];
+    [attributedLabelDelegate performSelector:@selector(attributedLabel:didReleaseLinkWithArguments:) withObject:label withObject:@{@"url": url, @"cell_data": self.data}];
+}
+
+
+- (NSString *)_attrForUrl:(NSString *)url
 {
     if ([url hasPrefix:@"http://4sq.com"] ||
         [url hasPrefix:@"http://youtube.com"]) {

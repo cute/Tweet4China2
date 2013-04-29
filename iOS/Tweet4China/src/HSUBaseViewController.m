@@ -542,14 +542,19 @@
             }
         }
         if (mediaURLHttps) {
-            HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithData:cellData imageURL:[NSURL URLWithString:mediaURLHttps]];
-            galleryView.viewController = self;
-            [self.view.window addSubview:galleryView];
-            [galleryView showWithAnimation:YES];
+            [self openPhotoURL:[NSURL URLWithString:mediaURLHttps] withCellData:cellData];
             return;
         }
     }
     [[UIApplication sharedApplication] openURL:url];
+}
+
+- (void)openPhotoURL:(NSURL *)photoURL withCellData:(HSUTableCellData *)cellData
+{
+    HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithData:cellData imageURL:photoURL];
+    galleryView.viewController = self;
+    [self.view.window addSubview:galleryView];
+    [galleryView showWithAnimation:YES];
 }
 
 @end
