@@ -18,6 +18,7 @@
 #import "UIImage+Additions.h"
 #import "UIButton+Additions.h"
 #import "UIView+Additions.h"
+#import "UIViewController+Additions.h"
 #import "NSDate+Additions.h"
 #import "TTTAttributedLabel.h"
 #import "HSURefreshControl.h"

@@ -17,6 +17,8 @@
 #import "HSUComposeViewController.h"
 #import "HSUStatusViewController.h"
 #import "HSUGalleryView.h"
+#import "HSUMiniBrowser.h"
+#import "HSUNavigationBarLight.h"
 
 @interface HSUBaseViewController ()
 
@@ -464,7 +466,7 @@
     [actionSheet addButtonItem:cancelItem];
     
     [actionSheet setCancelButtonIndex:count];
-    [actionSheet showInView:self.view.window];
+    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 - (void)_composeWithText:(NSString *)text
@@ -553,7 +555,7 @@
             return;
         }
     }
-    [[UIApplication sharedApplication] openURL:url];
+    [self openWebURL:url withCellData:cellData];
 }
 
 - (void)openPhotoURL:(NSURL *)photoURL withCellData:(HSUTableCellData *)cellData
@@ -562,6 +564,15 @@
     galleryView.viewController = self;
     [self.view.window addSubview:galleryView];
     [galleryView showWithAnimation:YES];
+}
+
+- (void)openWebURL:(NSURL *)webURL withCellData:(HSUTableCellData *)cellData
+{
+    UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+    HSUMiniBrowser *miniBrowser = [[HSUMiniBrowser alloc] initWithURL:webURL cellData:cellData];
+    miniBrowser.viewController = self;
+    nav.viewControllers = @[miniBrowser];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 @end
