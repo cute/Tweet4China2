@@ -533,6 +533,13 @@
     }
     NSString *attr = cellData.renderData[@"attr"];
     if ([attr isEqualToString:@"photo"]) {
+        if ([url.absoluteString hasPrefix:@"http://instagram.com"]) {
+            NSString *imageUrl = cellData.renderData[@"instagram_image_url"];
+            if ([imageUrl isKindOfClass:[NSString class]]) {
+                [self openPhotoURL:[NSURL URLWithString:imageUrl] withCellData:cellData];
+                return;
+            }
+        }
         NSString *mediaURLHttps;
         NSArray *medias = cellData.rawData[@"entities"][@"media"];
         for (NSDictionary *media in medias) {

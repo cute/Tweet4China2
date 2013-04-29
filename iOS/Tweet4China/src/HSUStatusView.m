@@ -11,6 +11,7 @@
 #import "HSUStatusView.h"
 #import "UIImageView+AFNetworking.h"
 #import "GTMNSString+HTML.h"
+#import "AFNetworking.h"
 
 #define ambient_H 14
 #define info_H 16
@@ -291,6 +292,18 @@
                [url hasPrefix:@"http://snpy.tv"]) {
         return @"video";
     } else if ([url hasPrefix:@"http://instagram.com"] || [url hasPrefix:@"http://instagr.am"]) {
+        NSString *instagramAPIUrl = S(@"http://api.instagram.com/oembed?url=%@", url);
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:instagramAPIUrl]];
+        self.data.renderData[@"instagram_image_url"] = [NSNull null];
+        AFHTTPRequestOperation *instagramer = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+            if ([JSON isKindOfClass:[NSDictionary class]]) {
+                NSString *imageUrl = JSON[@"url"];
+                self.data.renderData[@"instagram_image_url"] = imageUrl;
+            }
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+            
+        }];
+        [instagramer start];
         return @"photo";
     }
     return nil;
