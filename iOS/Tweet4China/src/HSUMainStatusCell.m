@@ -33,6 +33,7 @@
 #define avatar_text_Distance 15
 #define text_time_Distance 7
 #define time_summary_Distance 30
+#define retweet_favorite_pannel_H 45
 
 #define retweeted_R @"ic_ambient_retweet"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
@@ -56,6 +57,13 @@
     
     UIImageView *imageView;
     UIActivityIndicatorView *imgLoadSpinner;
+    
+    UIView *retweetFavoriteCountSeperatorV;
+    UILabel *retweetCountL;
+    UILabel *retweetCountWordL;
+    UILabel *favoriteCountL;
+    UILabel *favoriteCountWordL;
+    UIView *retweetFavoritePannel;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -90,21 +98,21 @@
         nameL = [[UILabel alloc] init];
         [contentArea addSubview:nameL];
         nameL.font = [UIFont boldSystemFontOfSize:14];
-        nameL.textColor = [UIColor blackColor];
+        nameL.textColor = kBlackColor;
         nameL.highlightedTextColor = kWhiteColor;
         nameL.backgroundColor = kClearColor;
         
         screenNameL = [[UILabel alloc] init];
         [contentArea addSubview:screenNameL];
         screenNameL.font = [UIFont systemFontOfSize:12];
-        screenNameL.textColor = [UIColor grayColor];
+        screenNameL.textColor = kGrayColor;
         screenNameL.highlightedTextColor = kWhiteColor;
         screenNameL.backgroundColor = kClearColor;
         
         timeL = [[UILabel alloc] init];
         [contentArea addSubview:timeL];
         timeL.font = [UIFont systemFontOfSize:12];
-        timeL.textColor = [UIColor grayColor];
+        timeL.textColor = kGrayColor;
         timeL.highlightedTextColor = kWhiteColor;
         timeL.backgroundColor = kClearColor;
         
@@ -135,10 +143,42 @@
         imgLoadSpinner = GRAY_INDICATOR;
         [imageView addSubview:imgLoadSpinner];
         
+        retweetFavoritePannel = [[UIView alloc] init];
+        [contentArea addSubview:retweetFavoritePannel];
+        retweetFavoritePannel.hidden = YES;
+        
+        retweetFavoriteCountSeperatorV = [[UIView alloc] init];
+        [retweetFavoritePannel addSubview:retweetFavoriteCountSeperatorV];
+        retweetFavoriteCountSeperatorV.backgroundColor = bw(226);
+        
+        retweetCountL = [[UILabel alloc] init];
+        [retweetFavoritePannel addSubview:retweetCountL];
+        retweetCountL.font = [UIFont boldSystemFontOfSize:12];
+        retweetCountL.textColor = kBlackColor;
+        retweetCountL.hidden = YES;
+        
+        retweetCountWordL = [[UILabel alloc] init];
+        [retweetFavoritePannel addSubview:retweetCountWordL];
+        retweetCountWordL.font = [UIFont systemFontOfSize:12];
+        retweetCountWordL.textColor = kGrayColor;
+        retweetCountWordL.hidden = YES;
+        
+        favoriteCountL = [[UILabel alloc] init];
+        [retweetFavoritePannel addSubview:favoriteCountL];
+        favoriteCountL.font = [UIFont boldSystemFontOfSize:12];
+        favoriteCountL.textColor = kBlackColor;
+        favoriteCountL.hidden = YES;
+        
+        favoriteCountWordL = [[UILabel alloc] init];
+        [retweetFavoritePannel addSubview:favoriteCountWordL];
+        favoriteCountWordL.font = [UIFont systemFontOfSize:12];
+        favoriteCountWordL.textColor = kGrayColor;
+        favoriteCountWordL.hidden = YES;
+        
         // action buttons
         actionSeperatorV = [[UIView alloc] init];
         actionSeperatorV.backgroundColor = bw(226);
-        [self.contentView addSubview:actionSeperatorV];
+        [contentArea addSubview:actionSeperatorV];
         
         actionV = [[HSUStatusActionView alloc] initWithStatus:self.data.rawData style:HSUStatusActionViewStyle_Default];
         [self.contentView addSubview:actionV];
@@ -159,7 +199,7 @@
 {
     [super layoutSubviews];
     
-    contentArea.frame = ccr(contentArea.left, contentArea.top, contentArea.width, self.contentView.height-padding_S*2);
+    contentArea.frame = ccr(contentArea.left, contentArea.top, contentArea.width, self.contentView.height-padding_S-actionV_H);
     
     ambientArea.frame = ccr(0, 0, contentArea.width, ambient_S);
     
@@ -181,7 +221,15 @@
     actionV.frame = ccr(0, 0, self.contentView.width, actionV_H);
     actionV.bottom = self.contentView.height;
     
-    actionSeperatorV.frame = ccr(9, actionV.top-1, actionV.width-9*2, 1);
+    actionSeperatorV.frame = ccr(0, contentArea.height-1, contentArea.width, 1);
+    
+    retweetFavoritePannel.frame = ccr(0, actionSeperatorV.top-retweet_favorite_pannel_H, contentArea.width, retweet_favorite_pannel_H);
+    retweetFavoritePannel.backgroundColor = kClearColor;
+    retweetFavoriteCountSeperatorV.frame = ccr(0, 0, retweetFavoritePannel.width, 1);
+    retweetCountL.leftCenter = ccp(retweetCountL.left, retweetFavoritePannel.height/2);
+    retweetCountWordL.leftCenter = ccp(retweetCountWordL.left, retweetFavoritePannel.height/2);
+    favoriteCountL.leftCenter = ccp(favoriteCountL.left, retweetFavoritePannel.height/2);
+    favoriteCountWordL.leftCenter = ccp(favoriteCountWordL.left, retweetFavoritePannel.height/2);
 }
 
 - (void)setupWithData:(HSUTableCellData *)data
@@ -220,9 +268,9 @@
     }
     avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
     [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl]];
-    UIButton *b;
-    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
-    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
+//    UIButton *b;
+//    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
+//    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
     
     // time
     NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:rawData[@"created_at"]];
@@ -311,6 +359,34 @@
                 [imgLoadSpinner stopAnimating];
             }
         }
+    }
+    
+    // retweets & favorites
+    NSInteger retweetCount = [data.rawData[@"retweet_count"] integerValue];
+    NSInteger favoriteCount = [data.rawData[@"favorite_count"] integerValue];
+    CGFloat favoriteLeft = 0;
+    if (retweetCount) {
+        retweetFavoritePannel.hidden = NO;
+        retweetCountL.hidden = NO;
+        retweetCountL.text = S(@"%d", retweetCount);
+        [retweetCountL sizeToFit];
+        retweetCountWordL.hidden = NO;
+        retweetCountWordL.text = retweetCount > 1 ? @"RETWEETS" : @"RETWEET";
+        [retweetCountWordL sizeToFit];
+        retweetCountWordL.left = retweetCountL.right + 3;
+        
+        favoriteLeft += retweetCountWordL.right + 10;
+    }
+    if (favoriteCount) {
+        retweetFavoritePannel.hidden = NO;
+        favoriteCountL.hidden = NO;
+        favoriteCountL.text = S(@"%d", favoriteCount);
+        [favoriteCountL sizeToFit];
+        favoriteCountWordL.hidden = NO;
+        favoriteCountWordL.text = favoriteCount > 1 ? @"FAVORITES" : @"FAVORITE";
+        [favoriteCountWordL sizeToFit];
+        favoriteCountL.left = favoriteLeft;
+        favoriteCountWordL.left = favoriteCountL.right + 3;
     }
     
     // set action events
@@ -417,6 +493,12 @@
         height += summaryHeight;
         data.renderData[@"photo_fit_width"] = @(summaryWidth);
         data.renderData[@"photo_fit_height"] = @(summaryHeight);
+    }
+    
+    NSInteger retweetCount = [data.rawData[@"retweet_count"] integerValue];
+    NSInteger favoriteCount = [data.rawData[@"favorite_count"] integerValue];
+    if (retweetCount + favoriteCount) {
+        height += retweet_favorite_pannel_H;
     }
     
     // actionV height
