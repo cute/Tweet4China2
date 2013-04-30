@@ -11,7 +11,7 @@
 #import "HSUStatusActionView.h"
 #import "HSUStatusViewController.h"
 
-@interface HSUMiniBrowser () <UIWebViewDelegate>
+@interface HSUMiniBrowser () <UIWebViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) HSUTableCellData *cellData;
 @property (nonatomic, strong) NSURL *url;
@@ -37,6 +37,7 @@
 {
     [super viewDidLoad];
     
+    self.navigationItem.title = @"Loading...";
     self.view.backgroundColor = bw(0xd0);
     
     NSDictionary *attributes = @{UITextAttributeTextColor: bw(50),
@@ -142,13 +143,20 @@
     [super viewWillAppear:animated];
     
     self.webview.frame = ccr(0, 0, self.width, self.height-17);
-    self.menuView.top = self.height - 17;
+    self.menuView.bottom = self.height;
 }
 
 #pragma mark - webview delegate
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
     self.navigationItem.title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.menuView.top = self.height - 17;
+    }];
 }
 
 #pragma mark - actions

@@ -22,6 +22,8 @@
 
 @interface HSUBaseViewController ()
 
+@property (nonatomic, weak) UIViewController *modelVC;
+
 @end
 
 @implementation HSUBaseViewController
@@ -478,7 +480,7 @@
     composeVC.defaultText = text;
     UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
     nav.viewControllers = @[composeVC];
-    [self presentViewController:nav animated:YES completion:nil];
+    [self.modelVC ?: self presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark - attributtedLabel delegate
@@ -577,6 +579,7 @@
     miniBrowser.viewController = self;
     nav.viewControllers = @[miniBrowser];
     [self presentViewController:nav animated:YES completion:nil];
+    self.modelVC = miniBrowser;
 }
 
 @end
