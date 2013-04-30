@@ -401,22 +401,13 @@
     return textAL;
 }
 
-+ (NSString *)attrForUrl:(NSString *)url
+#pragma mark - attributtedLabel delegate
+- (void)attributedLabelDidLongPressed:(TTTAttributedLabel *)label
 {
-    if ([url hasPrefix:@"http://4sq.com"] ||
-        [url hasPrefix:@"http://youtube.com"]) {
-        return @"summary";
-    } else if ([url hasPrefix:@"http://youtube.com"] ||
-               [url hasPrefix:@"http://snpy.tv"]) {
-        return @"video";
-    } else if ([url hasPrefix:@"http://instagram.com"] || [url hasPrefix:@"http://instagr.am"]) {
-        return @"photo";
-    }
-    return nil;
+    id attributedLabelDelegate = self.data.renderData[@"attributed_label_delegate"];
+    [attributedLabelDelegate performSelector:@selector(attributedLabelDidLongPressed:) withObject:label];
 }
 
-
-#pragma mark - attributtedLabel delegate
 - (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
 {
     if (!url) {

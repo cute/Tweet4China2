@@ -24,11 +24,11 @@
     CGContextSetRGBStrokeColor(context, 1, 1, 1, 1);
     CGContextFillRect(context, rectangle);
     
-    [[UIImage imageNamed:@"bg_nav_bar_light"] drawInRect:CGRectMake(0, 0, rect.size.width, rect.size.height)];
+    [[UIImage imageNamed:@"bg_nav_bar_light"] drawInRect:CGRectMake(0, 0, rect.size.width, rect.size.height+3)];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(self.frame.size.width, 47);
+    return CGSizeMake(self.frame.size.width, 44);
 }
 
 @end

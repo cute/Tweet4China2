@@ -217,8 +217,9 @@
 #pragma mark - Actions
 - (void)_composeButtonTouched
 {
-    HSUComposeViewController *composeViewController = [[HSUComposeViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
+    HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+    nav.viewControllers = @[composeVC];
     [self presentViewController:nav animated:YES completion:nil];
 }
 
@@ -236,7 +237,8 @@
     HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
     composeVC.defaultText = S(@"@%@ ", screen_name);
     composeVC.inReplyToStatusId = id_str;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeVC];
+    UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+    nav.viewControllers = @[composeVC];
     [self presentViewController:nav animated:YES completion:nil];
 }
 
@@ -456,7 +458,8 @@
         NSString *authorScreenName = rawData[@"user"][@"screen_name"];
         NSString *text = rawData[@"text"];
         composeVC.defaultText = S(@" RT @%@: %@", authorScreenName, text);
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeVC];
+        UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+        nav.viewControllers = @[composeVC];
         [self presentViewController:nav animated:YES completion:nil];
     };
     [actionSheet addButtonItem:RTItem];
@@ -473,7 +476,8 @@
 {
     HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
     composeVC.defaultText = text;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeVC];
+    UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+    nav.viewControllers = @[composeVC];
     [self presentViewController:nav animated:YES completion:nil];
 }
 

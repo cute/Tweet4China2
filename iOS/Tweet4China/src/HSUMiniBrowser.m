@@ -74,7 +74,7 @@
     CGFloat statusHeight = [HSUStatusView heightForData:self.cellData
                                         constraintWidth:self.width-20];
     HSUStatusView *statusView = [[HSUStatusView alloc] initWithFrame:ccr(0, 0, self.width-20, statusHeight)
-                                                style:HSUStatusViewStyle_Default];
+                                                style:HSUStatusViewStyle_Light];
     [menuView addSubview:statusView];
     statusView.backgroundColor = kClearColor;
     [statusView setupWithData:self.cellData];

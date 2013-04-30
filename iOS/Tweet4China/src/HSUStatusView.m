@@ -127,6 +127,8 @@
         screenNameL.textColor = kWhiteColor;
         timeL.textColor = kWhiteColor;
         textAL.textColor = kWhiteColor;
+    } else if (self.style == HSUStatusViewStyle_Light) {
+        attrI.hidden = YES;
     }
 }
 

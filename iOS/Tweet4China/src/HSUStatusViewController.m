@@ -11,6 +11,8 @@
 #import "HSUMainStatusCell.h"
 #import "HSUComposeViewController.h"
 #import "HSUGalleryView.h"
+#import "HSUMiniBrowser.h"
+#import "HSUNavigationBarLight.h"
 
 @interface HSUStatusViewController ()
 
@@ -49,13 +51,13 @@
 
 - (void)_composeButtonTouched
 {
-    HSUComposeViewController *composeViewController = [[HSUComposeViewController alloc] init];
+    HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
     NSMutableString *defaultText = [[NSMutableString alloc] init];
     HSUTableCellData *mainStatus = [self.dataSource dataAtIndex:0];
     NSString *authorScreenName = mainStatus.rawData[@"user"][@"screen_name"];
-    composeViewController.defaultTitle = S(@"Reply to @%@", authorScreenName);
+    composeVC.defaultTitle = S(@"Reply to @%@", authorScreenName);
     NSString *statusId = mainStatus.rawData[@"id_str"];
-    composeViewController.inReplyToStatusId = statusId;
+    composeVC.inReplyToStatusId = statusId;
     NSArray *userMentions = mainStatus.rawData[@"entities"][@"user_mentions"];
     if (userMentions && userMentions.count) {
         [defaultText appendFormat:@"@%@ ", authorScreenName];
@@ -65,12 +67,13 @@
         }
         uint start = authorScreenName.length + 2;
         uint length = defaultText.length - authorScreenName.length - 2;
-        composeViewController.defaultSelectedRange = NSMakeRange(start, length);
+        composeVC.defaultSelectedRange = NSMakeRange(start, length);
     } else {
         [defaultText appendFormat:@" @%@ ", authorScreenName];
     }
-    composeViewController.defaultText = defaultText;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:composeViewController];
+    composeVC.defaultText = defaultText;
+    UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+    nav.viewControllers = @[composeVC];
     [self presentViewController:nav animated:YES completion:nil];
 }
 
@@ -96,6 +99,14 @@
     HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithData:cellData imageURL:photoURL];
     [self.view.window addSubview:galleryView];
     [galleryView showWithAnimation:YES];
+}
+
+- (void)openWebURL:(NSURL *)webURL withCellData:(HSUTableCellData *)cellData
+{
+    UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+    HSUMiniBrowser *miniBrowser = [[HSUMiniBrowser alloc] initWithURL:webURL cellData:cellData];
+    nav.viewControllers = @[miniBrowser];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 @end

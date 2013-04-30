@@ -11,6 +11,7 @@
 typedef NS_ENUM(NSUInteger, HSUStatusViewStyle) {
     HSUStatusViewStyle_Default = 0,
     HSUStatusViewStyle_Gallery = 1,
+    HSUStatusViewStyle_Light = 2,
 };
 
 @interface HSUStatusView : UIView <TTTAttributedLabelDelegate>
