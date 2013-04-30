@@ -27,7 +27,6 @@
 		603906FC37B949AA97CD9ABA /* ic_dogear_rt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60390440899E0C3C122585D1 /* ic_dogear_rt@2x.png */; };
 		60390728B803BF6E4D1D8A8B /* icn_tweet_action_retweet_disabled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60390923210B8CD3653CA5C4 /* icn_tweet_action_retweet_disabled@2x.png */; };
 		6039074D7CCCE90480459672 /* icn_tweet_action_more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 603905D33349066DC45A134A /* icn_tweet_action_more@2x.png */; };
-		6039077635561C5291C717CB /* ProfilePlaceholderOverBlue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60390CBD4568304231A09CEC /* ProfilePlaceholderOverBlue@2x.png */; };
 		603907B99695A80D058A970A /* icn_tweet_action_retweet_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6039005BA395BF865E9313FE /* icn_tweet_action_retweet_off@2x.png */; };
 		603908B2C39FB3B9882CE8AC /* searches-top-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 603908A8B4865103CD83628F /* searches-top-shadow.png */; };
 		6039090E01F27B4F0F6A401A /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6039034D1454F2BE4102B422 /* UIImageView+WebCache.m */; };
@@ -99,7 +98,6 @@
 		9605A859171C503D0031BA74 /* icn_tweet_action_retweet_disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 9605A81F171C503D0031BA74 /* icn_tweet_action_retweet_disabled.png */; };
 		9605A85A171C503D0031BA74 /* icn_tweet_action_retweet_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 9605A820171C503D0031BA74 /* icn_tweet_action_retweet_off.png */; };
 		9605A85B171C503D0031BA74 /* icn_tweet_action_retweet_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 9605A821171C503D0031BA74 /* icn_tweet_action_retweet_on.png */; };
-		9605A85C171C503D0031BA74 /* ProfilePlaceholderOverBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 9605A822171C503D0031BA74 /* ProfilePlaceholderOverBlue.png */; };
 		9605A85D171C503D0031BA74 /* UIBlackCloseButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 9605A823171C503D0031BA74 /* UIBlackCloseButton.png */; };
 		9605A85E171C503D0031BA74 /* UIBlackCloseButtonPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 9605A824171C503D0031BA74 /* UIBlackCloseButtonPressed.png */; };
 		9605A862171C51150031BA74 /* nonretina.sh in Resources */ = {isa = PBXBuildFile; fileRef = 9605A861171C51150031BA74 /* nonretina.sh */; };
@@ -342,7 +340,6 @@
 		60390C2BE4C81A98FABD86CD /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		60390C536C955CCC0CDC2586 /* icn_tweet_action_favorite_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icn_tweet_action_favorite_off@2x.png"; sourceTree = "<group>"; };
 		60390CA86378610ACFD11D36 /* UIImage+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Additions.h"; sourceTree = "<group>"; };
-		60390CBD4568304231A09CEC /* ProfilePlaceholderOverBlue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ProfilePlaceholderOverBlue@2x.png"; sourceTree = "<group>"; };
 		60390D00EA34D960D4AAE299 /* SDImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDImageCache.m; sourceTree = "<group>"; };
 		60390D05097F78CAA0801E56 /* SDWebImageDownloaderOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageDownloaderOperation.h; sourceTree = "<group>"; };
 		60390D115800FA481494092D /* SDWebImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDWebImageDownloader.h; sourceTree = "<group>"; };
@@ -409,7 +406,6 @@
 		9605A81F171C503D0031BA74 /* icn_tweet_action_retweet_disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_tweet_action_retweet_disabled.png; sourceTree = "<group>"; };
 		9605A820171C503D0031BA74 /* icn_tweet_action_retweet_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_tweet_action_retweet_off.png; sourceTree = "<group>"; };
 		9605A821171C503D0031BA74 /* icn_tweet_action_retweet_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_tweet_action_retweet_on.png; sourceTree = "<group>"; };
-		9605A822171C503D0031BA74 /* ProfilePlaceholderOverBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfilePlaceholderOverBlue.png; sourceTree = "<group>"; };
 		9605A823171C503D0031BA74 /* UIBlackCloseButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBlackCloseButton.png; sourceTree = "<group>"; };
 		9605A824171C503D0031BA74 /* UIBlackCloseButtonPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIBlackCloseButtonPressed.png; sourceTree = "<group>"; };
 		9605A861171C51150031BA74 /* nonretina.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = nonretina.sh; sourceTree = "<group>"; };
@@ -1029,8 +1025,6 @@
 				6039014080F0DEA7CEBCE192 /* icn_tweet_action_retweet_on@2x.png */,
 				60390DC451E27785677A1F2D /* icn_tweet_sheet_photo_remove_default@2x~ipad.png */,
 				60390DB40B7855166EE945D8 /* icn_tweet_sheet_photo_remove_pressed@2x~ipad.png */,
-				9605A822171C503D0031BA74 /* ProfilePlaceholderOverBlue.png */,
-				60390CBD4568304231A09CEC /* ProfilePlaceholderOverBlue@2x.png */,
 				603908A8B4865103CD83628F /* searches-top-shadow.png */,
 				9605A823171C503D0031BA74 /* UIBlackCloseButton.png */,
 				603907F6F8C74FBCB5DC8E7B /* UIBlackCloseButton@2x.png */,
@@ -1452,7 +1446,6 @@
 				603903F81FA5C0E0228F51B9 /* UIBlackCloseButtonPressed@2x.png in Resources */,
 				6039013E59085F1E64EE3D93 /* UIBlackCloseButton@2x.png in Resources */,
 				603908B2C39FB3B9882CE8AC /* searches-top-shadow.png in Resources */,
-				6039077635561C5291C717CB /* ProfilePlaceholderOverBlue@2x.png in Resources */,
 				603907B99695A80D058A970A /* icn_tweet_action_retweet_off@2x.png in Resources */,
 				60390657CC7C60D36F98DC64 /* icn_tweet_action_favorite_off@2x.png in Resources */,
 				603902AEBFB1975F67D0B190 /* icn_tweet_action_retweet_on@2x.png in Resources */,
@@ -1520,7 +1513,6 @@
 				9605A859171C503D0031BA74 /* icn_tweet_action_retweet_disabled.png in Resources */,
 				9605A85A171C503D0031BA74 /* icn_tweet_action_retweet_off.png in Resources */,
 				9605A85B171C503D0031BA74 /* icn_tweet_action_retweet_on.png in Resources */,
-				9605A85C171C503D0031BA74 /* ProfilePlaceholderOverBlue.png in Resources */,
 				9605A85D171C503D0031BA74 /* UIBlackCloseButton.png in Resources */,
 				9605A85E171C503D0031BA74 /* UIBlackCloseButtonPressed.png in Resources */,
 				9605A862171C51150031BA74 /* nonretina.sh in Resources */,

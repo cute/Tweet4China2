@@ -85,6 +85,7 @@
         [contentArea addSubview:avatarI];
         avatarI.layer.cornerRadius = 5;
         avatarI.layer.masksToBounds = YES;
+        avatarI.backgroundColor = bw(229);
         
         nameL = [[UILabel alloc] init];
         [contentArea addSubview:nameL];
@@ -218,7 +219,7 @@
         screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
     }
     avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
-    [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl] placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
+    [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl]];
     UIButton *b;
     [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
     [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
