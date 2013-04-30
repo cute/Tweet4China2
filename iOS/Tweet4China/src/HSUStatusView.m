@@ -220,6 +220,7 @@
             NSString *type = media[@"type"];
             if ([type isEqualToString:@"photo"]) {
                 attrName = @"photo";
+                self.data.renderData[@"photo_url"] = media[@"media_url_https"];
             }
         } else if (urls && urls.count) {
             for (NSDictionary *urlDict in urls) {
@@ -296,11 +297,11 @@
     } else if ([url hasPrefix:@"http://instagram.com"] || [url hasPrefix:@"http://instagr.am"]) {
         NSString *instagramAPIUrl = S(@"http://api.instagram.com/oembed?url=%@", url);
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:instagramAPIUrl]];
-        self.data.renderData[@"instagram_image_url"] = [NSNull null];
+        self.data.renderData[@"instagram_url"] = instagramAPIUrl;
         AFHTTPRequestOperation *instagramer = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
             if ([JSON isKindOfClass:[NSDictionary class]]) {
                 NSString *imageUrl = JSON[@"url"];
-                self.data.renderData[@"instagram_image_url"] = imageUrl;
+                self.data.renderData[@"photo_url"] = imageUrl;
             }
         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
             

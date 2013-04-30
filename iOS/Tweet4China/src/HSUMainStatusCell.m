@@ -19,6 +19,7 @@
 #import "UIButton+WebCache.h"
 #import "NSString+URLEncoding.h"
 #import "HSUStatusActionView.h"
+#import "AFNetworking.h"
 
 #define ambient_H 14
 #define info_H 16
@@ -31,6 +32,7 @@
 #define actionV_H 44
 #define avatar_text_Distance 15
 #define text_time_Distance 7
+#define time_summary_Distance 20
 
 #define retweeted_R @"ic_ambient_retweet"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
@@ -51,6 +53,9 @@
     
     UIView *actionSeperatorV;
     HSUStatusActionView *actionV;
+    
+    UIImageView *imageView;
+    UIActivityIndicatorView *imgLoadSpinner;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -117,6 +122,13 @@
         textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
         textAL.lineHeightMultiple = textAL_LHM;
         
+        imageView = [[UIImageView alloc] init];
+        imageView.backgroundColor = bw(229);
+        [contentArea addSubview:imageView];
+        
+        imgLoadSpinner = GRAY_INDICATOR;
+        [imageView addSubview:imgLoadSpinner];
+        
         // action buttons
         actionSeperatorV = [[UIView alloc] init];
         actionSeperatorV.backgroundColor = bw(226);
@@ -157,6 +169,9 @@
     
     [timeL sizeToFit];
     timeL.leftTop = ccp(textAL.left, textAL.bottom+text_time_Distance);
+    
+    imageView.top = timeL.bottom + time_summary_Distance;
+    LF(@"%@", NSStringFromCGRect(imageView.frame));
     
     actionV.frame = ccr(0, 0, self.contentView.width, actionV_H);
     actionV.bottom = self.contentView.height;
@@ -263,40 +278,35 @@
     }
     textAL.delegate = self;
     
-    
-    NSDictionary *geo = rawData[@"geo"];
-    NSString *attrName = nil;
-    if ([rawData[@"in_reply_to_status_id_str"] length]) {
-        attrName = @"convo";
-    } else if (entities) {
-        NSArray *medias = entities[@"media"];
-        NSArray *urls = entities[@"urls"];
-        if (medias && medias.count) {
-            NSDictionary *media = medias[0];
-            NSString *type = media[@"type"];
-            if ([type isEqualToString:@"photo"]) {
-                attrName = @"photo";
-            }
-        } else if (urls && urls.count) {
-            for (NSDictionary *urlDict in urls) {
-                NSString *expandedUrl = urlDict[@"expanded_url"];
-                attrName = [self _attrForUrl:expandedUrl];
-                if (attrName) {
-                    break;
-                }
+    if ([data.renderData[@"attr"] isEqualToString:@"photo"]) {
+        imageView.width = [data.renderData[@"photo_fit_width"] floatValue];
+        imageView.height = [data.renderData[@"photo_fit_height"] floatValue];
+        imgLoadSpinner.center = imageView.boundsCenter;
+        NSString *photoUrl = data.renderData[@"photo_url"];
+        if (photoUrl) {
+            [self _downloadPhotoWithURL:[NSURL URLWithString:data.renderData[@"photo_url"]]];
+        } else {
+            NSString *instagramUrl = data.renderData[@"instagram_url"];
+            if (instagramUrl) {
+                NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:instagramUrl]];
+                AFHTTPRequestOperation *instagramer = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                    if ([JSON isKindOfClass:[NSDictionary class]]) {
+                        NSString *imageUrl = JSON[@"url"];
+                        data.renderData[@"photo_url"] = imageUrl;
+                        [self _downloadPhotoWithURL:[NSURL URLWithString:imageUrl]];
+                    } else {
+                        [imgLoadSpinner stopAnimating];
+                    }
+                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                    [imgLoadSpinner stopAnimating];
+                }];
+                [instagramer start];
+                [imgLoadSpinner startAnimating];
+            } else {
+                [imgLoadSpinner stopAnimating];
             }
         }
-    } else if ([geo isKindOfClass:[NSDictionary class]]) {
-        attrName = @"geo";
     }
-    
-    if (attrName) {
-        self.data.renderData[@"attr"] = attrName;
-    } else {
-        [self.data.renderData removeObjectForKey:@"attr"];
-    }
-    
-    
     
     // set action events
     [self setupControl:actionV.replayB forKey:@"reply"];
@@ -378,12 +388,31 @@
     height += avatar_text_Distance;
     
     // text height
-    height += [self _textHeightWithCellData:data];;
+    height += [self _textHeightWithCellData:data];
     height += text_time_Distance;
     
     // timeL height
     height += 20;
     height += text_time_Distance;
+    
+    // photo height
+    [self _parseSummary:data];
+    CGFloat summaryWidth = [data.renderData[@"photo_width"] floatValue];
+    CGFloat summaryHeight = [data.renderData[@"photo_height"] floatValue];
+    if (summaryHeight) {
+        height += time_summary_Distance;
+        CGFloat contentWidth = [HSUCommonTools winWidth] - padding_S * 4;
+        if (summaryWidth > contentWidth) {
+            summaryHeight = summaryHeight * contentWidth / summaryWidth;
+            summaryWidth = contentWidth;
+        } else {
+            summaryHeight /= 2;
+            summaryWidth /= 2;
+        }
+        height += summaryHeight;
+        data.renderData[@"photo_fit_width"] = @(summaryWidth);
+        data.renderData[@"photo_fit_height"] = @(summaryHeight);
+    }
     
     // actionV height
     height += actionV_H + 1;
@@ -426,19 +455,58 @@
     [attributedLabelDelegate performSelector:@selector(attributedLabel:didReleaseLinkWithArguments:) withObject:label withObject:@{@"url": url, @"cell_data": self.data}];
 }
 
-
-- (NSString *)_attrForUrl:(NSString *)url
+- (void)_downloadPhotoWithURL:(NSURL *)photoURL
 {
-    if ([url hasPrefix:@"http://4sq.com"] ||
-        [url hasPrefix:@"http://youtube.com"]) {
-        return @"summary";
-    } else if ([url hasPrefix:@"http://youtube.com"] ||
-               [url hasPrefix:@"http://snpy.tv"]) {
-        return @"video";
-    } else if ([url hasPrefix:@"http://instagram.com"] || [url hasPrefix:@"http://instagr.am"]) {
-        return @"photo";
+    NSURLRequest *request = [NSURLRequest requestWithURL:photoURL];
+    AFHTTPRequestOperation *downloader = [[AFImageRequestOperation alloc] initWithRequest:request];
+    [downloader setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [imgLoadSpinner stopAnimating];
+        [imageView setImage:responseObject];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [imgLoadSpinner stopAnimating];
+    }];
+    [downloader start];
+    [imgLoadSpinner startAnimating];
+}
+
++ (void)_parseSummary:(HSUTableCellData *)data
+{
+    NSDictionary *entities = data.rawData[@"entities"];
+    NSArray *urls = entities[@"urls"];
+    NSArray *medias = entities[@"media"];
+    NSString *attrName = nil;
+    if (medias && medias.count) {
+        NSDictionary *media = medias[0];
+        NSString *type = media[@"type"];
+        if ([type isEqualToString:@"photo"]) {
+            attrName = @"photo";
+            data.renderData[@"photo_url"] = media[@"media_url_https"];
+            data.renderData[@"photo_width"] = media[@"sizes"][@"large"][@"w"];
+            data.renderData[@"photo_height"] = media[@"sizes"][@"large"][@"h"];
+        }
+    } else if (urls && urls.count) {
+        for (NSDictionary *urlDict in urls) {
+            NSString *expandedUrl = urlDict[@"expanded_url"];
+            if ([expandedUrl hasPrefix:@"http://4sq.com"] ||
+                [expandedUrl hasPrefix:@"http://youtube.com"]) {
+                attrName = @"summary";
+            } else if ([expandedUrl hasPrefix:@"http://youtube.com"] ||
+                       [expandedUrl hasPrefix:@"http://snpy.tv"]) {
+                attrName = @"video";
+            } else if ([expandedUrl hasPrefix:@"http://instagram.com"] || [expandedUrl hasPrefix:@"http://instagr.am"]) {
+                NSString *instagramUrl = S(@"http://api.instagram.com/oembed?url=%@", expandedUrl);
+                data.renderData[@"instagram_url"] = instagramUrl;
+                data.renderData[@"photo_width"] = @(612);
+                data.renderData[@"photo_height"] = @(612);
+                attrName = @"photo";
+            }
+            if (attrName) {
+                break;
+            }
+        }
     }
-    return nil;
+    
+    data.renderData[@"attr"] = attrName;
 }
 
 @end

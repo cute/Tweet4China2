@@ -70,6 +70,7 @@ _Pragma("clang diagnostic pop") \
 #define TWENGINE [FHSTwitterEngine engine]
 
 #define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
+#define GRAY_INDICATOR [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]
 
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"

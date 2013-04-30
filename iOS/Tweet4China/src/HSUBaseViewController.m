@@ -539,9 +539,9 @@
     }
     NSString *attr = cellData.renderData[@"attr"];
     if ([attr isEqualToString:@"photo"]) {
-        if ([url.absoluteString hasPrefix:@"http://instagram.com"]) {
-            NSString *imageUrl = cellData.renderData[@"instagram_image_url"];
-            if ([imageUrl isKindOfClass:[NSString class]]) {
+        if ([url.absoluteString hasPrefix:@"http://instagram.com"] || [url.absoluteString hasPrefix:@"http://instagr.am"]) {
+            NSString *imageUrl = cellData.renderData[@"photo_url"];
+            if (imageUrl) {
                 [self openPhotoURL:[NSURL URLWithString:imageUrl] withCellData:cellData];
                 return;
             }
