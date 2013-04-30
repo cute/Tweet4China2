@@ -20,13 +20,9 @@
     self = [super init];
     if (self) {
         self.dataSourceClass = [HSUConnectDataSource class];
+        [HSUConnectDataSource checkUnreadForViewController:self];
     }
     return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -36,11 +32,6 @@
     if (self.dataSource.count == 0) {
         [self.refreshControl beginRefreshing];
         [self.dataSource refresh];
-    } else {
-//        return;
-        if (![((HSUTabController *)self.navigationController.tabBarController) hasUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem]) {
-            [self.dataSource checkUnread];
-        }
     }
 }
 

@@ -107,11 +107,6 @@
     }
 }
 
-- (void)checkUnread
-{
-    [HSUNetworkActivityIndicatorManager oneMore];
-}
-
 - (void)refresh
 {
     self.loadingCount ++;
@@ -141,8 +136,10 @@
             break;
         }
     }
-    [[NSUserDefaults standardUserDefaults] setObject:cacheDataArr forKey:self.class.cacheKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (cacheDataArr.count) {
+        [[NSUserDefaults standardUserDefaults] setObject:cacheDataArr forKey:self.class.cacheKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 + (NSString *)cacheKey

@@ -15,6 +15,7 @@
 @class HSUTableCellData;
 @class HSUUIEvent;
 @protocol TTTAttributedLabelDelegate;
+@class HSUBaseViewController;
 @interface HSUBaseDataSource : NSObject <UITableViewDataSource>
 
 @property (nonatomic, assign) NSInteger count;
@@ -31,7 +32,6 @@
 - (HSUTableCellData *)dataAtIndex:(NSInteger)index;
 - (void)addEventWithName:(NSString *)name target:(id)target action:(SEL)action events:(UIControlEvents)events;
 
-- (void)checkUnread;
 - (void)refresh;
 - (void)loadMore;
 - (void)saveCache;

@@ -10,4 +10,6 @@
 
 @interface HSUHomeDataSource : HSUBaseDataSource
 
++ (void)checkUnreadForViewController:(HSUBaseViewController *)viewController;
+
 @end

@@ -24,7 +24,7 @@
 #import "HSURefreshControl.h"
 #import "HSUTabController.h"
 #import "Reachability.h"
-
+#import "HSUBaseViewController.h"
 #import "FHSTwitterEngine+Additions.h"
 
 #import "HSUTableCellData.h"

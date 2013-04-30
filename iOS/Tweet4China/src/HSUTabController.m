@@ -164,7 +164,7 @@
     for (UIView *subView in self.tabBar.subviews) {
         if ([subView isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
             if (idx == curIdx) {
-                indicator.bottomCenter = ccp(subView.center.x-2, subView.height);
+                indicator.bottomCenter = ccp(subView.width/2, subView.height);
                 [subView addSubview:indicator];
                 break;
             } else {

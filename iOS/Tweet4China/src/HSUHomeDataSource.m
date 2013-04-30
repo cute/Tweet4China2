@@ -11,30 +11,26 @@
 
 @implementation HSUHomeDataSource
 
-- (void)checkUnread
++ (void)checkUnreadForViewController:(HSUBaseViewController *)viewController
 {
-    [super checkUnread];
-    
-    __weak __typeof(&*self)weakSelf = self;
+    [HSUNetworkActivityIndicatorManager oneMore];
     dispatch_async(GCDBackgroundThread, ^{
-        __strong __typeof(&*weakSelf)strongSelf = weakSelf;
         @autoreleasepool {
-            NSString *latestIdStr = [strongSelf rawDataAtIndex:0][@"id_str"];
+            NSString *latestIdStr = [[NSUserDefaults standardUserDefaults] objectForKey:S(@"%@_first_id_str", self.cacheKey)];
             if (!latestIdStr) {
                 latestIdStr = @"1";
             }
             id result = [TWENGINE getHomeTimelineSinceID:latestIdStr count:1];
             dispatch_sync(GCDMainThread, ^{
                 @autoreleasepool {
-                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if (![result isKindOfClass:[NSError class]]) {
                         NSArray *tweets = result;
                         NSString *lastIdStr = tweets.lastObject[@"id_str"];
-                        if (![latestIdStr isEqualToString:lastIdStr]) { // updated
-                            [strongSelf.delegate dataSourceDidFindUnread:strongSelf];
+                        if (lastIdStr) { // updated
+                            [viewController dataSourceDidFindUnread:nil];
                         }
                     } else {
-
+                        
                     }
                 }
             });
@@ -157,6 +153,17 @@
         return kRequestDataCountViaWifi;
     } else {
         return kRequestDataCountViaWWAN;
+    }
+}
+
+-(void)saveCache
+{
+    [super saveCache];
+    
+    if (self.count) {
+        NSString *firstIdStr = [self rawDataAtIndex:0][@"id_str"];
+        [[NSUserDefaults standardUserDefaults] setObject:firstIdStr forKey:S(@"%@_first_id_str", [self.class cacheKey])];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
