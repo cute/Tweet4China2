@@ -40,6 +40,10 @@
     
     [super viewDidLoad];
     
+    for (HSUTableCellData *cellData in self.dataSource.allData) {
+        cellData.renderData[@"photo_tap_delegate"] = self;
+    }
+    
     [self.tableView registerClass:[HSUMainStatusCell class] forCellReuseIdentifier:kDataType_MainStatus];
 }
 
@@ -92,6 +96,18 @@
     };
     UIActionSheet *linkActionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:copyItem, nil];
     [linkActionSheet showInView:self.view.window];
+}
+
+- (void)tappedPhoto:(UIImage *)image withCellData:(HSUTableCellData *)cellData
+{
+    [self openPhoto:image withCellData:cellData];
+}
+
+- (void)openPhoto:(UIImage *)photo withCellData:(HSUTableCellData *)cellData
+{
+    HSUGalleryView *galleryView = [[HSUGalleryView alloc] initWithData:cellData image:photo];
+    [self.view.window addSubview:galleryView];
+    [galleryView showWithAnimation:YES];
 }
 
 - (void)openPhotoURL:(NSURL *)photoURL withCellData:(HSUTableCellData *)cellData

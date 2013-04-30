@@ -32,7 +32,7 @@
     HSUTableCellData *cellData;
 }
 
-- (id)initWithData:(HSUTableCellData *)data imageURL:(NSURL *)imageURL
+- (id)_initWithData:(HSUTableCellData *)data
 {
     self = [super initWithFrame:[UIApplication sharedApplication].keyWindow.bounds];
     if (self) {
@@ -120,7 +120,24 @@
         swipeUpGesture.direction = UISwipeGestureRecognizerDirectionUp;
         [swipeUpGesture addTarget:self action:@selector(_fireSwipeUpGesture:)];
         [self addGestureRecognizer:swipeUpGesture];
-        
+    }
+    return self;
+}
+
+- (id)initWithData:(HSUTableCellData *)data image:(UIImage *)image
+{
+    self = [self _initWithData:data];
+    if (self) {
+        [progressBar removeFromSuperview];
+        [imageView setImage:image];
+    }
+    return self;
+}
+
+- (id)initWithData:(HSUTableCellData *)data imageURL:(NSURL *)imageURL
+{
+    self = [self _initWithData:data];
+    if (self) {
         // load image
         NSURLRequest *request = [NSURLRequest requestWithURL:imageURL];
         AFHTTPRequestOperation *downloader = [[AFImageRequestOperation alloc] initWithRequest:request];
@@ -131,10 +148,10 @@
             }
         }];
         [downloader setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            progressBar.hidden = YES;
+            [progressBar removeFromSuperview];
             [imageView setImage:responseObject];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            progressBar.hidden = YES;
+            [progressBar removeFromSuperview];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load image failed" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
         }];

@@ -33,7 +33,7 @@
 - (NSString *)standardTwitterDisplay
 {
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yyy-MM-dd HH:mm:ss"];
+    [df setDateFormat:@"yyy-MM-dd HH:mm"];
     return [df stringFromDate:self];
 }
 

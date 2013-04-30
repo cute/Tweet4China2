@@ -13,4 +13,6 @@
 
 - (id)initWithStatus:(NSDictionary *)status;
 
+- (void)tappedPhoto:(UIImage *)image withCellData:(HSUTableCellData *)cellData;
+
 @end

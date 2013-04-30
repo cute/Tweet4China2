@@ -32,7 +32,7 @@
 #define actionV_H 44
 #define avatar_text_Distance 15
 #define text_time_Distance 7
-#define time_summary_Distance 20
+#define time_summary_Distance 30
 
 #define retweeted_R @"ic_ambient_retweet"
 #define attr_photo_R @"ic_tweet_attr_photo_default"
@@ -126,6 +126,11 @@
         imageView.backgroundColor = bw(229);
         [contentArea addSubview:imageView];
         
+        UITapGestureRecognizer *tapPhotoGesture = [[UITapGestureRecognizer alloc] init];
+        [tapPhotoGesture addTarget:self action:@selector(_firePhotoTap:)];
+        [imageView addGestureRecognizer:tapPhotoGesture];
+        imageView.userInteractionEnabled = YES;
+        
         imgLoadSpinner = GRAY_INDICATOR;
         [imageView addSubview:imgLoadSpinner];
         
@@ -171,7 +176,6 @@
     timeL.leftTop = ccp(textAL.left, textAL.bottom+text_time_Distance);
     
     imageView.top = timeL.bottom + time_summary_Distance;
-    LF(@"%@", NSStringFromCGRect(imageView.frame));
     
     actionV.frame = ccr(0, 0, self.contentView.width, actionV_H);
     actionV.bottom = self.contentView.height;
@@ -506,7 +510,19 @@
         }
     }
     
-    data.renderData[@"attr"] = attrName;
+    if (attrName) {
+        data.renderData[@"attr"] = attrName;
+    }
+}
+
+- (void)_firePhotoTap:(UITapGestureRecognizer *)tap
+{
+    if (tap.state == UIGestureRecognizerStateEnded && imageView.image) {
+        id delegate = self.data.renderData[@"photo_tap_delegate"];
+        if ([delegate respondsToSelector:@selector(tappedPhoto:withCellData:)]) {
+            [delegate performSelector:@selector(tappedPhoto:withCellData:) withObject:imageView.image withObject:self.data];
+        }
+    }
 }
 
 @end
