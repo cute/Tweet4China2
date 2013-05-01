@@ -30,6 +30,9 @@
 - (NSDictionary *)rawDataAtIndex:(NSInteger)index;
 - (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;
 - (HSUTableCellData *)dataAtIndex:(NSInteger)index;
+- (NSDictionary *)rawDataAtIndexPath:(NSIndexPath *)indexPath;
+- (NSMutableDictionary *)renderDataAtIndexPath:(NSIndexPath *)indexPath;
+- (HSUTableCellData *)dataAtIndexPath:(NSIndexPath *)indexPath;
 - (void)addEventWithName:(NSString *)name target:(id)target action:(SEL)action events:(UIControlEvents)events;
 
 - (void)refresh;

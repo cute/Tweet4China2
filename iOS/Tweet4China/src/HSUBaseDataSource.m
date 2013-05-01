@@ -48,7 +48,7 @@
 #pragma mark - TableView
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HSUTableCellData *cellData = [self dataAtIndex:indexPath.row];
+    HSUTableCellData *cellData = [self dataAtIndexPath:indexPath];
     HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:cellData.dataType];
     [cell setupWithData:cellData];
     
@@ -57,7 +57,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.data.count;
+    if (section == 0) {
+        return self.data.count;
+    }
+    return 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -80,12 +83,22 @@
     return nil;
 }
 
+- (HSUTableCellData *)dataAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section) {
+        return nil;
+    }
+    return [self dataAtIndex:indexPath.row];
+}
+
 - (NSMutableDictionary *)renderDataAtIndex:(NSInteger)index;
 {
-    if (self.data.count > index) {
-        return [self dataAtIndex:index].renderData;
-    }
-    return nil;
+    return [self dataAtIndex:index].renderData;
+}
+
+- (NSMutableDictionary *)renderDataAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self dataAtIndexPath:indexPath].renderData;
 }
 
 - (NSInteger)count
@@ -96,6 +109,11 @@
 - (NSDictionary *)rawDataAtIndex:(NSInteger)index
 {
     return [self dataAtIndex:index].rawData;
+}
+
+- (NSDictionary *)rawDataAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self dataAtIndexPath:indexPath].rawData;
 }
 
 - (void)addEventWithName:(NSString *)name target:(id)target action:(SEL)action events:(UIControlEvents)events

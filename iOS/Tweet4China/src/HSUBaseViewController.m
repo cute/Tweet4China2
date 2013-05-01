@@ -19,6 +19,7 @@
 #import "HSUGalleryView.h"
 #import "HSUMiniBrowser.h"
 #import "HSUNavigationBarLight.h"
+#import "HSUNormalTitleCell.h"
 
 @interface HSUBaseViewController ()
 
@@ -56,6 +57,7 @@
     // todo: rework
     [tableView registerClass:[HSUStatusCell class] forCellReuseIdentifier:kDataType_Status];
     [tableView registerClass:[HSULoadMoreCell class] forCellReuseIdentifier:kDataType_LoadMore];
+    [tableView registerClass:[HSUNormalTitleCell class] forCellReuseIdentifier:kDataType_NormalTitle];
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -94,7 +96,7 @@
 #pragma mark - TableView
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
+    HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
     Class cellClass = [self cellClassForDataType:data.dataType];
     return [cellClass heightForData:data];
 }
@@ -116,12 +118,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
+    HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
     if ([data.dataType isEqualToString:kDataType_LoadMore]) {
         [self.dataSource loadMore];
     } else if ([data.dataType isEqualToString:kDataType_Status]) {
         HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] initWithStatus:data.rawData];
         [self.navigationController pushViewController:statusVC animated:YES];
+    } else if ([data.dataType isEqualToString:kDataType_NormalTitle]) {
+        // TODO
     }
 }
 

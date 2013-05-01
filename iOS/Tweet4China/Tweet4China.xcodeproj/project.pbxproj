@@ -121,6 +121,12 @@
 		9628185A16DFACEC00ABF0AD /* HSUCommonTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185916DFACEC00ABF0AD /* HSUCommonTools.m */; };
 		9628185D16DFAE2A00ABF0AD /* HSUNavitationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185C16DFAE2A00ABF0AD /* HSUNavitationBar.m */; };
 		9628186016DFB27100ABF0AD /* HSUTabController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628185F16DFB27100ABF0AD /* HSUTabController.m */; };
+		9628E6D11730F231005A9EC9 /* bg_profile_empty@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9628E6CF1730F231005A9EC9 /* bg_profile_empty@2x~iphone.png */; };
+		9628E6D21730F231005A9EC9 /* bg_profile_empty~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 9628E6D01730F231005A9EC9 /* bg_profile_empty~iphone.png */; };
+		9628E6D61730F45E005A9EC9 /* HSUProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628E6D51730F45E005A9EC9 /* HSUProfileView.m */; };
+		9628E6D917312240005A9EC9 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628E6D817312240005A9EC9 /* NSString+Additions.m */; };
+		9628E6DC17312B8E005A9EC9 /* HSUProfileDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628E6DB17312B8E005A9EC9 /* HSUProfileDataSource.m */; };
+		9628E6DF1731325D005A9EC9 /* HSUNormalTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9628E6DE1731325D005A9EC9 /* HSUNormalTitleCell.m */; };
 		962AAFF716FB296B00D44566 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 962AAFF616FB296B00D44566 /* Default-568h@2x.png */; };
 		962AAFF916FB297100D44566 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 962AAFF816FB297100D44566 /* Default@2x.png */; };
 		962AAFFB16FB297300D44566 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 962AAFFA16FB297300D44566 /* Default.png */; };
@@ -445,6 +451,16 @@
 		9628185C16DFAE2A00ABF0AD /* HSUNavitationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUNavitationBar.m; sourceTree = "<group>"; };
 		9628185E16DFB27000ABF0AD /* HSUTabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUTabController.h; sourceTree = "<group>"; };
 		9628185F16DFB27100ABF0AD /* HSUTabController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUTabController.m; sourceTree = "<group>"; };
+		9628E6CF1730F231005A9EC9 /* bg_profile_empty@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_profile_empty@2x~iphone.png"; sourceTree = "<group>"; };
+		9628E6D01730F231005A9EC9 /* bg_profile_empty~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_profile_empty~iphone.png"; sourceTree = "<group>"; };
+		9628E6D41730F45E005A9EC9 /* HSUProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUProfileView.h; sourceTree = "<group>"; };
+		9628E6D51730F45E005A9EC9 /* HSUProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUProfileView.m; sourceTree = "<group>"; };
+		9628E6D717312240005A9EC9 /* NSString+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Additions.h"; sourceTree = "<group>"; };
+		9628E6D817312240005A9EC9 /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
+		9628E6DA17312B8E005A9EC9 /* HSUProfileDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUProfileDataSource.h; sourceTree = "<group>"; };
+		9628E6DB17312B8E005A9EC9 /* HSUProfileDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUProfileDataSource.m; sourceTree = "<group>"; };
+		9628E6DD1731325D005A9EC9 /* HSUNormalTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUNormalTitleCell.h; sourceTree = "<group>"; };
+		9628E6DE1731325D005A9EC9 /* HSUNormalTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUNormalTitleCell.m; sourceTree = "<group>"; };
 		962AAFF616FB296B00D44566 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		962AAFF816FB297100D44566 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		962AAFFA16FB297300D44566 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
@@ -851,6 +867,8 @@
 		962817A216DE5FDF00ABF0AD /* images */ = {
 			isa = PBXGroup;
 			children = (
+				9628E6CF1730F231005A9EC9 /* bg_profile_empty@2x~iphone.png */,
+				9628E6D01730F231005A9EC9 /* bg_profile_empty~iphone.png */,
 				96924681172E6E93007720D4 /* icn_nav_bar_light_actions.png */,
 				96924682172E6E93007720D4 /* icn_nav_bar_light_actions@2x.png */,
 				96924683172E6E93007720D4 /* icn_nav_bar_light_close.png */,
@@ -1083,6 +1101,8 @@
 				60390CA86378610ACFD11D36 /* UIImage+Additions.h */,
 				60390849599D4E2CDA2302ED /* UIButton+Additions.m */,
 				60390D64609E5798B654DD30 /* UIButton+Additions.h */,
+				9628E6D717312240005A9EC9 /* NSString+Additions.h */,
+				9628E6D817312240005A9EC9 /* NSString+Additions.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1248,6 +1268,10 @@
 				9628185316DFAB8100ABF0AD /* HSUDiscoverViewController.m */,
 				9628185516DFABE700ABF0AD /* HSUProfileViewController.h */,
 				9628185616DFABE700ABF0AD /* HSUProfileViewController.m */,
+				9628E6DA17312B8E005A9EC9 /* HSUProfileDataSource.h */,
+				9628E6DB17312B8E005A9EC9 /* HSUProfileDataSource.m */,
+				9628E6D41730F45E005A9EC9 /* HSUProfileView.h */,
+				9628E6D51730F45E005A9EC9 /* HSUProfileView.m */,
 			);
 			name = Controller_Level1;
 			sourceTree = "<group>";
@@ -1289,6 +1313,8 @@
 				96BE217316EC8FDA00226799 /* HSUBaseTableCell.m */,
 				968EC05F16ECB0830068A6A0 /* HSUPersonCell.h */,
 				968EC06016ECB0830068A6A0 /* HSUPersonCell.m */,
+				9628E6DD1731325D005A9EC9 /* HSUNormalTitleCell.h */,
+				9628E6DE1731325D005A9EC9 /* HSUNormalTitleCell.m */,
 			);
 			name = TableCell_Level1;
 			sourceTree = "<group>";
@@ -1565,6 +1591,8 @@
 				96924686172E6E93007720D4 /* icn_nav_bar_light_actions@2x.png in Resources */,
 				96924687172E6E93007720D4 /* icn_nav_bar_light_close.png in Resources */,
 				96924688172E6E93007720D4 /* icn_nav_bar_light_close@2x.png in Resources */,
+				9628E6D11730F231005A9EC9 /* bg_profile_empty@2x~iphone.png in Resources */,
+				9628E6D21730F231005A9EC9 /* bg_profile_empty~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1656,6 +1684,10 @@
 				96924676172E64AC007720D4 /* HSUMiniBrowser.m in Sources */,
 				96924679172E6754007720D4 /* UIViewController+Additions.m in Sources */,
 				9692467C172E6A8E007720D4 /* HSUNavigationBarLight.m in Sources */,
+				9628E6D61730F45E005A9EC9 /* HSUProfileView.m in Sources */,
+				9628E6D917312240005A9EC9 /* NSString+Additions.m in Sources */,
+				9628E6DC17312B8E005A9EC9 /* HSUProfileDataSource.m in Sources */,
+				9628E6DF1731325D005A9EC9 /* HSUNormalTitleCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

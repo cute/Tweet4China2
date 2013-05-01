@@ -26,6 +26,7 @@
 #import "Reachability.h"
 #import "HSUBaseViewController.h"
 #import "FHSTwitterEngine+Additions.h"
+#import "NSString+Additions.h"
 
 #import "HSUTableCellData.h"
 #import "HSUUIEvent.h"
@@ -78,6 +79,7 @@ _Pragma("clang diagnostic pop") \
 #define kDataType_MainStatus @"MainStatus"
 #define kDataType_Status @"Status"
 #define kDataType_LoadMore @"LoadMore"
+#define kDataType_NormalTitle @"NormalTitle"
 
 #define kUserSettings_DBKey @"user_settings"
 
