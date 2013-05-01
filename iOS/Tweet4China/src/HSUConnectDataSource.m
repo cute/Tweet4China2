@@ -57,22 +57,10 @@
                     if ([TWENGINE dealWithError:result errTitle:@"Load failed"]) {
                         NSArray *tweets = result;
                         if (tweets.count) {
-                            NSString *lastIdStr = tweets.lastObject[@"id_str"];
-                            uint newTweetCount = tweets.count;
-                            if ([latestIdStr isEqualToString:lastIdStr]) { // throw old tweets
-                                newTweetCount --;
-                                for (int i=newTweetCount-1; i>=0; i--) {
-                                    HSUTableCellData *cellData =
+                            for (int i=tweets.count-1; i>=0; i--) {
+                                HSUTableCellData *cellData =
                                     [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
-                                    [strongSelf.data insertObject:cellData atIndex:0];
-                                }
-                            } else {
-                                [strongSelf.data removeAllObjects];
-                                for (NSDictionary *tweet in tweets) {
-                                    HSUTableCellData *cellData =
-                                    [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
-                                    [strongSelf.data addObject:cellData];
-                                }
+                                [strongSelf.data insertObject:cellData atIndex:0];
                             }
                             
                             HSUTableCellData *lastCellData = strongSelf.data.lastObject;
