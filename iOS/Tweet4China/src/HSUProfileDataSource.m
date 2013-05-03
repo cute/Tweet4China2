@@ -9,13 +9,6 @@
 #import "HSUProfileDataSource.h"
 #import "HSUBaseTableCell.h"
 
-#define kAction_ViewMoreTweets @"tweets"
-#define kAction_Following @"following"
-#define kAction_Followers @"followers"
-#define kAction_Favorites @"favorites"
-#define kAction_Lists @"lists"
-#define kAction_Drafts @"drafts"
-
 @interface HSUProfileDataSource ()
 
 @property (nonatomic, strong) NSMutableArray *sectionsData;
@@ -30,13 +23,26 @@
     if (self) {
         self.sectionsData = [NSMutableArray arrayWithCapacity:2];
         NSMutableArray *referencesData = [NSMutableArray arrayWithCapacity:4];
-        HSUTableCellData *followingCellData = [[HSUTableCellData alloc] initWithRawData:@{@"title": @"Following", @"action": kAction_Following}
+        NSString *userScreenName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"];
+        NSDictionary *rawData = @{@"title": @"Following",
+                                  @"action": kAction_Following,
+                                  @"user_screen_name": userScreenName};
+        HSUTableCellData *followingCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                                dataType:kDataType_NormalTitle];
-        HSUTableCellData *followersCellData = [[HSUTableCellData alloc] initWithRawData:@{@"title": @"Followers", @"action": kAction_Followers}
+        rawData = @{@"title": @"Followers",
+                    @"action": kAction_Followers,
+                    @"user_screen_name": userScreenName};
+        HSUTableCellData *followersCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                                dataType:kDataType_NormalTitle];
-        HSUTableCellData *favoritesCellData = [[HSUTableCellData alloc] initWithRawData:@{@"title": @"Favorites", @"action": kAction_Favorites}
+        rawData = @{@"title": @"Favorites",
+                    @"action": kAction_Favorites,
+                    @"user_screen_name": userScreenName};
+        HSUTableCellData *favoritesCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                                dataType:kDataType_NormalTitle];
-        HSUTableCellData *listsCellData = [[HSUTableCellData alloc] initWithRawData:@{@"title": @"Lists", @"action": kAction_Lists}
+        rawData = @{@"title": @"Lists",
+                    @"action": kAction_Lists,
+                    @"user_screen_name": userScreenName};
+        HSUTableCellData *listsCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                            dataType:kDataType_NormalTitle];
         [referencesData addObject:followingCellData];
         [referencesData addObject:followersCellData];
@@ -45,7 +51,9 @@
         [self.sectionsData addObject:referencesData];
         
         NSMutableArray *draftData = [NSMutableArray arrayWithCapacity:1];
-        HSUTableCellData *draftsCellData = [[HSUTableCellData alloc] initWithRawData:@{@"title": @"Drafts", @"action": kAction_Drafts}
+        rawData = @{@"title": @"Drafts",
+                    @"action": kAction_Drafts};
+        HSUTableCellData *draftsCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                            dataType:kDataType_NormalTitle];
         [draftData addObject:draftsCellData];
         [self.sectionsData addObject:draftData];
@@ -69,8 +77,11 @@
                         [self.data addObject:statusCellData];
                     }
                     if (self.count) {
+                        NSDictionary *rawData = @{@"title": @"View More Tweets",
+                                                  @"action": kAction_UserTimeline,
+                                                  @"user_screen_name": userScreenName};
                         HSUTableCellData *viewMoreCellData =
-                            [[HSUTableCellData alloc] initWithRawData:@{@"title": @"View More Tweets", @"action": kAction_ViewMoreTweets}
+                            [[HSUTableCellData alloc] initWithRawData:rawData
                                                              dataType:kDataType_NormalTitle];
                         [self.data addObject:viewMoreCellData];
                         [self.delegate dataSource:self didFinishRefreshWithError:nil];

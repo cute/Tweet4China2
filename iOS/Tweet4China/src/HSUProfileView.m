@@ -198,7 +198,43 @@
         followersCountLabel.textColor = kBlackColor;
         followersCountLabel.leftTop = ccp(10, 9);
         
-        self.height = referenceButtonBGView.bottom;
+        
+        UIView *buttonsPanel = [[UIView alloc] init];
+        [self addSubview:buttonsPanel];
+        buttonsPanel.frame = ccr(0, referenceButtonBGView.bottom, self.width, 48);
+        buttonsPanel.backgroundColor = kWhiteColor;
+        
+        UIButton *settingsButton = [[UIButton alloc] init];
+        [buttonsPanel addSubview:settingsButton];
+        [settingsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                        forState:UIControlStateNormal];
+        [settingsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                        forState:UIControlStateHighlighted];
+        [settingsButton setImage:[UIImage imageNamed:@"icn_profile_settings"] forState:UIControlStateNormal];
+        settingsButton.size = ccs(42, 30);
+        settingsButton.leftCenter = ccp(10, buttonsPanel.height/2);
+        
+        UIButton *accountsButton = [[UIButton alloc] init];
+        [buttonsPanel addSubview:accountsButton];
+        [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                  forState:UIControlStateNormal];
+        [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                  forState:UIControlStateHighlighted];
+        [accountsButton setImage:[UIImage imageNamed:@"icn_profile_switch_accounts"] forState:UIControlStateNormal];
+        accountsButton.size = ccs(42, 30);
+        accountsButton.leftCenter = ccp(settingsButton.right + 10, buttonsPanel.height/2);
+        
+        UIButton *messagesButton = [[UIButton alloc] init];
+        [buttonsPanel addSubview:messagesButton];
+        [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                  forState:UIControlStateNormal];
+        [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                  forState:UIControlStateHighlighted];
+        [messagesButton setImage:[UIImage imageNamed:@"icn_profile_messages"] forState:UIControlStateNormal];
+        messagesButton.size = ccs(42, 30);
+        messagesButton.rightCenter = ccp(buttonsPanel.width - 10, buttonsPanel.height/2);
+        
+        self.height = buttonsPanel.bottom;
     }
     return self;
 }
@@ -224,13 +260,13 @@
     
     self.tweetsCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
     [self.tweetsCountLabel sizeToFit];
-    self.tweetsButton.titleEdgeInsets = UIEdgeInsetsMake(self.tweetsButton.titleEdgeInsets.top+16, self.tweetsButton.titleEdgeInsets.left, self.tweetsButton.titleEdgeInsets.bottom, self.tweetsButton.titleEdgeInsets.right);
+    self.tweetsButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.tweetsButton.titleEdgeInsets.left, self.tweetsButton.titleEdgeInsets.bottom, self.tweetsButton.titleEdgeInsets.right);
     self.followingCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
     [self.followingCountLabel sizeToFit];
-    self.followingButton.titleEdgeInsets = UIEdgeInsetsMake(self.followingButton.titleEdgeInsets.top+16, self.followingButton.titleEdgeInsets.left, self.followingButton.titleEdgeInsets.bottom, self.followingButton.titleEdgeInsets.right);
+    self.followingButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.followingButton.titleEdgeInsets.left, self.followingButton.titleEdgeInsets.bottom, self.followingButton.titleEdgeInsets.right);
     self.followersCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
     [self.followersCountLabel sizeToFit];
-    self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(self.followersButton.titleEdgeInsets.top+16, self.followersButton.titleEdgeInsets.left, self.followersButton.titleEdgeInsets.bottom, self.followersButton.titleEdgeInsets.right);
+    self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.followersButton.titleEdgeInsets.left, self.followersButton.titleEdgeInsets.bottom, self.followersButton.titleEdgeInsets.right);
 }
 
 - (NSString *)_websiteForProfile:(NSDictionary *)profile

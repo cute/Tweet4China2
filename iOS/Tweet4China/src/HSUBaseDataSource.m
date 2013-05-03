@@ -48,10 +48,17 @@
 #pragma mark - TableView
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!self.loadingCount && self.count > 1) {
+        HSUTableCellData *cellData = [self dataAtIndex:indexPath.row];
+        if ([cellData.dataType isEqualToString:kDataType_LoadMore]) {
+            cellData.renderData[@"status"] = @(kLoadMoreCellStatus_Loading);
+            [self loadMore];
+        }
+    }
+    
     HSUTableCellData *cellData = [self dataAtIndexPath:indexPath];
     HSUBaseTableCell *cell = (HSUBaseTableCell *)[tableView dequeueReusableCellWithIdentifier:cellData.dataType];
     [cell setupWithData:cellData];
-    
     return cell;
 }
 

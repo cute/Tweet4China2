@@ -43,7 +43,5 @@
     [super dataSourceDidFindUnread:dataSource];
 }
 
-#pragma mark - TableView delegate
-
 
 @end

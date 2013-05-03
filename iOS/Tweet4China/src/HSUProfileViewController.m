@@ -9,6 +9,12 @@
 #import "HSUProfileViewController.h"
 #import "HSUProfileView.h"
 #import "HSUProfileDataSource.h"
+#import "HSUPersonListDataSource.h"
+#import "HSUUserHomeDataSource.h"
+#import "HSUTweetsViewController.h"
+#import "HSUFollowersDataSource.h"
+#import "HSUFollowingDataSource.h"
+#import "HSUPersonListViewController.h"
 
 @interface HSUProfileViewController ()
 
@@ -60,6 +66,36 @@
             }
         });
     });
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
+    if ([data.dataType isEqualToString:kDataType_NormalTitle]) {
+        NSDictionary *rawData = data.rawData;
+        NSString *screenName = rawData[@"user_screen_name"];
+        if ([rawData[@"action"] isEqualToString:kAction_UserTimeline]) {
+            HSUUserHomeDataSource *dataSource = [[HSUUserHomeDataSource alloc] init];
+            dataSource.screenName = screenName;
+            HSUTweetsViewController *detailVC = [[HSUTweetsViewController alloc] initWithDataSource:dataSource];
+            dataSource.delegate = detailVC;
+            [self.navigationController pushViewController:detailVC animated:YES];
+            return;
+        } else if ([rawData[@"action"] isEqualToString:kAction_Following]) {
+            HSUPersonListDataSource *dataSource = [[HSUFollowingDataSource alloc] initWithScreenName:screenName];
+            HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
+            dataSource.delegate = detailVC;
+            [self.navigationController pushViewController:detailVC animated:YES];
+            return;
+        } else if ([rawData[@"action"] isEqualToString:kAction_Followers]) {
+            HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:screenName];
+            HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
+            dataSource.delegate = detailVC;
+            [self.navigationController pushViewController:detailVC animated:YES];
+            return;
+        }
+    }
+    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
 }
 
 @end

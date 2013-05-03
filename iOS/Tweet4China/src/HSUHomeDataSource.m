@@ -7,7 +7,6 @@
 //
 
 #import "HSUHomeDataSource.h"
-#import "HSULoadMoreCell.h"
 
 @implementation HSUHomeDataSource
 
@@ -38,110 +37,20 @@
     });
 }
 
-- (void)refresh
+- (id)fetchRefreshData
 {
-    [super refresh];
-    
-    __weak __typeof(&*self)weakSelf = self;
-    dispatch_async(GCDBackgroundThread, ^{
-        __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-        @autoreleasepool {
-            NSString *latestIdStr = [strongSelf rawDataAtIndex:0][@"id_str"];
-            if (!latestIdStr) {
-                latestIdStr = @"1";
-            }
-            id result = [TWENGINE getHomeTimelineSinceID:latestIdStr count:self.requestCount];
-            dispatch_sync(GCDMainThread, ^{
-                @autoreleasepool {
-                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-                    if ([TWENGINE dealWithError:result errTitle:@"Load failed"]) {
-                        NSArray *tweets = result;
-                        if (tweets.count) {
-                            for (int i=tweets.count-1; i>=0; i--) {
-                                HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
-                                [strongSelf.data insertObject:cellData atIndex:0];
-                            }
-                            
-                            HSUTableCellData *lastCellData = strongSelf.data.lastObject;
-                            if (![lastCellData.dataType isEqualToString:kDataType_LoadMore]) {
-                                HSUTableCellData *loadMoreCellData = [[HSUTableCellData alloc] init];
-                                loadMoreCellData.rawData = @{@"status": @(kLoadMoreCellStatus_Done)};
-                                loadMoreCellData.dataType = kDataType_LoadMore;
-                                [strongSelf.data addObject:loadMoreCellData];
-                            }
-                            
-                            [strongSelf saveCache];
-                            [strongSelf.delegate preprocessDataSourceForRender:self];
-                        }
-                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:nil];
-                        strongSelf.loadingCount --;
-                    }
-                }
-            });
-        }
-    });
-}
-
-- (void)loadMore
-{
-    [super loadMore];
-    
-    __weak __typeof(&*self)weakSelf = self;
-    dispatch_async(GCDBackgroundThread, ^{
-        @autoreleasepool {
-            __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-            HSUTableCellData *lastStatusData = [strongSelf dataAtIndex:strongSelf.count-2];
-            NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
-            id result =  [TWENGINE getHomeTimelineMaxId:lastStatusId count:self.requestCount];
-            dispatch_sync(GCDMainThread, ^{
-                @autoreleasepool {
-                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-                    if ([TWENGINE dealWithError:result errTitle:@"Load failed"]) {
-                        [result removeObjectAtIndex:0];
-                        id loadMoreCellData = strongSelf.data.lastObject;
-                        [strongSelf.data removeLastObject];
-                        for (NSDictionary *tweet in result) {
-                            HSUTableCellData *cellData =
-                            [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
-                            [strongSelf.data addObject:cellData];
-                        }
-                        [strongSelf.data addObject:loadMoreCellData];
-                        
-                        [strongSelf saveCache];
-                        [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Done);
-                        [strongSelf.delegate preprocessDataSourceForRender:self];
-                    } else {
-                        [strongSelf.data.lastObject renderData][@"status"] = @(kLoadMoreCellStatus_Error);
-                    }
-                    [strongSelf.delegate dataSource:strongSelf didFinishLoadMoreWithError:nil];
-                    strongSelf.loadingCount --;
-                }
-            });
-        }
-    });
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (!self.loadingCount && self.count > 1) {
-        HSUTableCellData *cellData = [self dataAtIndex:indexPath.row];
-        if ([cellData.dataType isEqualToString:kDataType_LoadMore]) {
-            cellData.renderData[@"status"] = @(kLoadMoreCellStatus_Loading);
-            [self loadMore];
-        }
+    NSString *latestIdStr = [self rawDataAtIndex:0][@"id_str"];
+    if (!latestIdStr) {
+        latestIdStr = @"1";
     }
-    
-    return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    return [TWENGINE getHomeTimelineSinceID:latestIdStr count:self.requestCount];
 }
 
-- (NSUInteger)requestCount
+- (id)fetchMoreData
 {
-    if ([Reachability reachabilityForInternetConnection].isReachableViaWiFi) {
-        return kRequestDataCountViaWifi;
-    } else {
-        return kRequestDataCountViaWWAN;
-    }
+    HSUTableCellData *lastStatusData = [self dataAtIndex:self.count-2];
+    NSString *lastStatusId = lastStatusData.rawData[@"id_str"];
+    return [TWENGINE getHomeTimelineMaxId:lastStatusId count:self.requestCount];
 }
 
 -(void)saveCache

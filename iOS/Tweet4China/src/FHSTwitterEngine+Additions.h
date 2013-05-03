@@ -25,6 +25,8 @@
 
 - (id)getFriendsMoreThanID;
 - (id)getTrends;
+- (id)getFollowersSinceId:(NSString *)sinceId forUserScreenName:(NSString *)screenName;
+- (id)getFollowingSinceId:(NSString *)sinceId forUserScreenName:(NSString *)screenName;
 
 - (NSArray *)generateRequestStringsFromArray:(NSArray *)array;
 

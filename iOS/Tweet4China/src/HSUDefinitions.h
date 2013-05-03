@@ -31,6 +31,7 @@
 #import "HSUTableCellData.h"
 #import "HSUUIEvent.h"
 #import "HSUCommonTools.h"
+#import "HSULoadMoreCell.h"
 
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <MobileCoreServices/MobileCoreServices.h>
@@ -78,6 +79,7 @@ _Pragma("clang diagnostic pop") \
 
 #define kDataType_MainStatus @"MainStatus"
 #define kDataType_Status @"Status"
+#define kDataType_Person @"Person"
 #define kDataType_LoadMore @"LoadMore"
 #define kDataType_NormalTitle @"NormalTitle"
 

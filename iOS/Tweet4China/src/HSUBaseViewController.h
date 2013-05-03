@@ -19,14 +19,8 @@
 @property (nonatomic, assign) BOOL showBackButton;
 @property (nonatomic, assign) BOOL useRefreshControl;
 
-- (Class)cellClassForDataType:(NSString *)dataType;
-- (void)openPhotoURL:(NSURL *)photoURL withCellData:(HSUTableCellData *)cellData;
-- (void)openWebURL:(NSURL *)webURL withCellData:(HSUTableCellData *)cellData;
+- (id)initWithDataSource:(HSUBaseDataSource *)dataSource;
 
-#pragma mark - Common actions
-- (void)reply:(HSUTableCellData *)cellData;
-- (void)retweet:(HSUTableCellData *)cellData;
-- (void)favorite:(HSUTableCellData *)cellData;
-- (void)more:(HSUTableCellData *)cellData;
+- (Class)cellClassForDataType:(NSString *)dataType;
 
 @end

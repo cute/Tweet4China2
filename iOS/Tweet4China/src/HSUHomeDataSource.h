@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import "HSUBaseDataSource.h"
+#import "HSUTweetsDataSource.h"
 
-@interface HSUHomeDataSource : HSUBaseDataSource
+@interface HSUHomeDataSource : HSUTweetsDataSource
 
 + (void)checkUnreadForViewController:(HSUBaseViewController *)viewController;
 
