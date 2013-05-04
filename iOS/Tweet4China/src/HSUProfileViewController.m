@@ -129,11 +129,11 @@
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([TWENGINE dealWithError:result errTitle:@"Unfollow failed"]) {
                         NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
-                        profile[@"following"] = @(NO);
+                        profile[@"following"] = @"false";
                         strongSelf.profile = profile;
                         [strongSelf.profileView setupWithProfile:profile];
-                        followButton.enabled = YES;
                     }
+                    followButton.enabled = YES;
                 }
             });
         });
@@ -146,15 +146,77 @@
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([TWENGINE dealWithError:result errTitle:@"Follow failed"]) {
                         NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
-                        profile[@"following"] = @(YES);
+                        profile[@"following"] = @"true";
                         strongSelf.profile = profile;
                         [strongSelf.profileView setupWithProfile:profile];
-                        followButton.enabled = YES;
                     }
+                    followButton.enabled = YES;
                 }
             });
         });
     }
+}
+
+- (void)actionsButtonTouched
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:nil destructiveButtonItem:nil otherButtonItems:nil];
+    uint count = 0;
+    
+    /*
+    if ([self.profile[@"following"] boolValue]) {
+        if ([self.profile[@"notifications"] boolValue]) {
+            RIButtonItem *turnOffNotiItem = [RIButtonItem itemWithLabel:@"Turn off notifications"];
+            turnOffNotiItem.action = ^{
+                
+            };
+            [actionSheet addButtonItem:turnOffNotiItem];
+        } else {
+            RIButtonItem *turnOnNotiItem = [RIButtonItem itemWithLabel:@"Turn on notifications"];
+            turnOnNotiItem.action = ^{
+                
+            };
+            [actionSheet addButtonItem:turnOnNotiItem];
+        }
+        count ++;
+        
+        if ([self.profile[@"retweets"] boolValue]) {
+            RIButtonItem *turnOffRetweetsItem = [RIButtonItem itemWithLabel:@"Turn off Retweets"];
+            turnOffRetweetsItem.action = ^{
+                
+            };
+            [actionSheet addButtonItem:turnOffRetweetsItem];
+        } else {
+            RIButtonItem *turnOnRetweetsItem = [RIButtonItem itemWithLabel:@"Turn on Retweets"];
+            turnOnRetweetsItem.action = ^{
+                
+            };
+            [actionSheet addButtonItem:turnOnRetweetsItem];
+        }
+        count ++;
+    }
+    */
+    
+    RIButtonItem *reportSpamItem = [RIButtonItem itemWithLabel:@"Report spam"];
+    reportSpamItem.action = ^{
+        
+    };
+    [actionSheet addButtonItem:reportSpamItem];
+    count ++;
+    
+    RIButtonItem *blockItem = [RIButtonItem itemWithLabel:@"Block"];
+    blockItem.action = ^{
+        
+    };
+    [actionSheet addButtonItem:blockItem];
+    [actionSheet setDestructiveButtonIndex:count];
+    count ++;
+    
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+    [actionSheet addButtonItem:cancelItem];
+    [actionSheet setCancelButtonIndex:count];
+    count ++;
+    
+    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 @end

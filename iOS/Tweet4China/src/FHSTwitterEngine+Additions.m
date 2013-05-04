@@ -54,13 +54,14 @@
     if (![error isKindOfClass:[NSError class]]) {
         return YES;
     }
+    L(error);
     dispatch_async(dispatch_get_main_queue(), ^{
         if (error.code == 401) {
             RIButtonItem *cancelBnt = [RIButtonItem itemWithLabel:@"Cancel"];
             RIButtonItem *confirmBnt = [RIButtonItem itemWithLabel:@"Sign in"];
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:errTitle message:error.localizedDescription cancelButtonItem:cancelBnt otherButtonItems:confirmBnt, nil];
             [alertView show];
-
+            
             confirmBnt.action = ^{
                 [TWENGINE auth];
             };

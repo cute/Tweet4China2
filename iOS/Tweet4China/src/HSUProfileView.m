@@ -36,7 +36,7 @@
 @property (nonatomic, strong) UIButton *followersButton;
 @property (nonatomic, strong) UILabel *followersCountLabel;
 
-@property (nonatomic, strong) UIButton *accountsButton;
+@property (nonatomic, strong) UIButton *actionsButton;
 @property (nonatomic, strong) UIButton *followButton;
 
 @end
@@ -241,16 +241,17 @@
             messagesButton.size = ccs(42, 30);
             messagesButton.rightCenter = ccp(buttonsPanel.width - 10, buttonsPanel.height/2);
         } else {
-            UIButton *accountsButton = [[UIButton alloc] init];
-            [buttonsPanel addSubview:accountsButton];
-            self.accountsButton = accountsButton;
-            [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
-                                      forState:UIControlStateNormal];
-            [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
-                                      forState:UIControlStateHighlighted];
-            [accountsButton setImage:[UIImage imageNamed:@"icn_profile_switch_accounts"] forState:UIControlStateNormal];
-            accountsButton.size = ccs(42, 30);
-            accountsButton.leftCenter = ccp(10, buttonsPanel.height/2);
+            UIButton *actionsButton = [[UIButton alloc] init];
+            [buttonsPanel addSubview:actionsButton];
+            self.actionsButton = actionsButton;
+            [actionsButton setTapTarget:delegate action:@selector(actionsButtonTouched)];
+            [actionsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                     forState:UIControlStateNormal];
+            [actionsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                     forState:UIControlStateHighlighted];
+            [actionsButton setImage:[UIImage imageNamed:@"icn_profile_action"] forState:UIControlStateNormal];
+            actionsButton.size = ccs(42, 30);
+            actionsButton.leftCenter = ccp(10, buttonsPanel.height/2);
             
             UIButton *followButton = [[UIButton alloc] init];
             [buttonsPanel addSubview:followButton];
@@ -285,6 +286,8 @@
     self.locationLabel.text = profile[@"location"];
     self.siteLabel.text = [self _websiteForProfile:profile];
     self.pager.hidden = NO;
+    NSString *bannerUrl = [profile[@"profile_banner_url"] stringByAppendingString:@"/mobile_retina"];
+    [self.infoBGView setImageWithURL:[NSURL URLWithString:bannerUrl] placeholderImage:[UIImage imageNamed:@"bg_profile_empty"]];
     
     self.tweetsCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
     [self.tweetsCountLabel sizeToFit];

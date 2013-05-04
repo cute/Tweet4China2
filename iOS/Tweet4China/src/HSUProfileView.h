@@ -22,5 +22,7 @@
 - (void)tweetsButtonTouched;
 - (void)followingButtonTouched;
 - (void)followersButtonTouched;
+- (void)actionsButtonTouched;
+- (void)followButtonTouched:(UIButton *)followButton;
 
 @end
