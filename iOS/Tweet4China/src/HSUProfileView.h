@@ -8,10 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol HSUProfileViewDelegate;
 @interface HSUProfileView : UIView <UIScrollViewDelegate>
 
-- (id)initWithScreenName:(NSString *)screenName;
+- (id)initWithScreenName:(NSString *)screenName delegate:(id<HSUProfileViewDelegate>)delegate;
 
 - (void)setupWithProfile:(NSDictionary *)profile;
+
+@end
+
+@protocol HSUProfileViewDelegate <NSObject>
+
+- (void)tweetsButtonTouched;
+- (void)followingButtonTouched;
+- (void)followersButtonTouched;
 
 @end

@@ -16,7 +16,7 @@
 #import "HSUFollowingDataSource.h"
 #import "HSUPersonListViewController.h"
 
-@interface HSUProfileViewController ()
+@interface HSUProfileViewController () <HSUProfileViewDelegate>
 
 @property (nonatomic, strong) NSDictionary *profile;
 
@@ -44,7 +44,7 @@
 {
     [super viewDidLoad];
     
-    HSUProfileView *profileView = [[HSUProfileView alloc] initWithScreenName:self.screenName];
+    HSUProfileView *profileView = [[HSUProfileView alloc] initWithScreenName:self.screenName delegate:self];
     self.tableView.tableHeaderView = profileView;
 }
 
@@ -75,26 +75,47 @@
     HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
     if ([data.dataType isEqualToString:kDataType_NormalTitle]) {
         NSDictionary *rawData = data.rawData;
-        NSString *screenName = rawData[@"user_screen_name"];
         if ([rawData[@"action"] isEqualToString:kAction_UserTimeline]) {
             HSUUserHomeDataSource *dataSource = [[HSUUserHomeDataSource alloc] init];
-            dataSource.screenName = screenName;
+            dataSource.screenName = self.screenName;
             HSUTweetsViewController *detailVC = [[HSUTweetsViewController alloc] initWithDataSource:dataSource];
             [self.navigationController pushViewController:detailVC animated:YES];
             return;
         } else if ([rawData[@"action"] isEqualToString:kAction_Following]) {
-            HSUPersonListDataSource *dataSource = [[HSUFollowingDataSource alloc] initWithScreenName:screenName];
+            HSUPersonListDataSource *dataSource = [[HSUFollowingDataSource alloc] initWithScreenName:self.screenName];
             HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
             [self.navigationController pushViewController:detailVC animated:YES];
             return;
         } else if ([rawData[@"action"] isEqualToString:kAction_Followers]) {
-            HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:screenName];
+            HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:self.screenName];
             HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
             [self.navigationController pushViewController:detailVC animated:YES];
             return;
         }
     }
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+}
+
+- (void)tweetsButtonTouched
+{
+    HSUUserHomeDataSource *dataSource = [[HSUUserHomeDataSource alloc] init];
+    dataSource.screenName = self.screenName;
+    HSUTweetsViewController *detailVC = [[HSUTweetsViewController alloc] initWithDataSource:dataSource];
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+- (void)followingButtonTouched
+{
+    HSUPersonListDataSource *dataSource = [[HSUFollowingDataSource alloc] initWithScreenName:self.screenName];
+    HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
+    [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+- (void)followersButtonTouched
+{
+    HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:self.screenName];
+    HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
+    [self.navigationController pushViewController:detailVC animated:YES];
 }
 
 @end

@@ -40,7 +40,7 @@
 
 @implementation HSUProfileView
 
-- (id)initWithScreenName:(NSString *)screenName
+- (id)initWithScreenName:(NSString *)screenName delegate:(id<HSUProfileViewDelegate>)delegate
 {
     self = [super init];
     if (self) {
@@ -153,6 +153,7 @@
         tweetsButton.titleLabel.font = [UIFont systemFontOfSize:8];
         [tweetsButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -55, 0, 0)];
         [tweetsButton setTitle:@"TWEETS" forState:UIControlStateNormal];
+        [tweetsButton setTapTarget:delegate action:@selector(tweetsButtonTouched)];
         
         UILabel *tweetsCountLabel = [[UILabel alloc] init];
         [tweetsButton addSubview:tweetsCountLabel];
@@ -171,6 +172,7 @@
         followingButton.titleLabel.font = [UIFont systemFontOfSize:8];
         [followingButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -38.5, 0, 0)];
         [followingButton setTitle:@"FOLLOWING" forState:UIControlStateNormal];
+        [followingButton setTapTarget:delegate action:@selector(followingButtonTouched)];
         
         UILabel *followingCountLabel = [[UILabel alloc] init];
         [followingButton addSubview:followingCountLabel];
@@ -189,6 +191,7 @@
         followersButton.titleLabel.font = [UIFont systemFontOfSize:8];
         [followersButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -37.5, 0, 0)];
         [followersButton setTitle:@"FOLLOWERS" forState:UIControlStateNormal];
+        [followersButton setTapTarget:delegate action:@selector(followersButtonTouched)];
         
         UILabel *followersCountLabel = [[UILabel alloc] init];
         [followersButton addSubview:followersCountLabel];
