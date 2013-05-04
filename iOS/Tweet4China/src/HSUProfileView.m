@@ -275,7 +275,6 @@
 
 - (void)setupWithProfile:(NSDictionary *)profile
 {
-    [self.infoBGView sizeToFit];
     NSString *avatarUrl = profile[@"profile_image_url_https"];
     avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
     [self.avatarButton setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal];
@@ -299,7 +298,18 @@
     [self.followersCountLabel sizeToFit];
     self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.followersButton.titleEdgeInsets.left, self.followersButton.titleEdgeInsets.bottom, self.followersButton.titleEdgeInsets.right);
     
-    if ([profile[@"following"] boolValue]) {
+    if ([profile[@"blocked"] boolValue]) {
+        [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                     forState:UIControlStateNormal];
+        [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                     forState:UIControlStateHighlighted];
+        [self.followButton setImage:[UIImage imageNamed:@"icn_blocked_default"] forState:UIControlStateNormal];
+        self.followButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+        [self.followButton setTitleShadowColor:kWhiteColor forState:UIControlStateNormal];
+        self.followButton.titleLabel.shadowOffset = ccs(0, 1);
+        [self.followButton setTitleColor:bw(51) forState:UIControlStateNormal];
+        [self.followButton setTitle:@"Blocked" forState:UIControlStateNormal];
+    } else if ([profile[@"following"] boolValue]) {
         [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_following_default"] stretchableImageFromCenter]
                                      forState:UIControlStateNormal];
         [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_following_pressed"] stretchableImageFromCenter]
@@ -311,9 +321,9 @@
         [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
     } else {
         [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
-                                forState:UIControlStateNormal];
+                                     forState:UIControlStateNormal];
         [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
-                                forState:UIControlStateHighlighted];
+                                     forState:UIControlStateHighlighted];
         [self.followButton setImage:[UIImage imageNamed:@"ic_follow_text"] forState:UIControlStateNormal];
         self.followButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
         [self.followButton setTitleShadowColor:kWhiteColor forState:UIControlStateNormal];
@@ -321,6 +331,8 @@
         [self.followButton setTitleColor:bw(51) forState:UIControlStateNormal];
         [self.followButton setTitle:@"Follow" forState:UIControlStateNormal];
     }
+    
+    self.followButton.enabled = ![profile[@"following"] isKindOfClass:[NSString class]];
 }
 
 - (NSString *)_websiteForProfile:(NSDictionary *)profile

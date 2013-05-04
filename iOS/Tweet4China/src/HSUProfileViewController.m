@@ -56,24 +56,22 @@
 {
     [super viewDidAppear:animated];
     
-    if (!self.profile) {
-        dispatch_async(GCDBackgroundThread, ^{
-            id result = [TWENGINE lookupUsers:@[self.screenName] areIDs:NO];
-            __weak __typeof(&*self)weakSelf = self;
-            dispatch_sync(GCDMainThread, ^{
-                @autoreleasepool {
-                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-                    if ([result isKindOfClass:[NSArray class]]) {
-                        NSArray *profiles = result;
-                        if (profiles.count) {
-                            [strongSelf.profileView setupWithProfile:profiles[0]];
-                            strongSelf.profile = profiles[0];
-                        }
+    dispatch_async(GCDBackgroundThread, ^{
+        id result = [TWENGINE lookupUsers:@[self.screenName] areIDs:NO];
+        __weak __typeof(&*self)weakSelf = self;
+        dispatch_sync(GCDMainThread, ^{
+            @autoreleasepool {
+                __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                if ([result isKindOfClass:[NSArray class]]) {
+                    NSArray *profiles = result;
+                    if (profiles.count) {
+                        [strongSelf.profileView setupWithProfile:profiles[0]];
+                        strongSelf.profile = profiles[0];
                     }
                 }
-            });
+            }
         });
-    }
+    });
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -120,7 +118,30 @@
 - (void)followButtonTouched:(UIButton *)followButton
 {
     followButton.enabled = NO;
-    if ([self.profile[@"following"] boolValue]) {
+    if ([self.profile[@"blocked"] boolValue]) {
+        RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+        RIButtonItem *unblockItem = [RIButtonItem itemWithLabel:@"Unblock"];
+        unblockItem.action = ^{
+            dispatch_async(GCDBackgroundThread, ^{
+                id result = [TWENGINE unblock:self.screenName];
+                __weak __typeof(&*self)weakSelf = self;
+                dispatch_sync(GCDMainThread, ^{
+                    @autoreleasepool {
+                        __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                        if ([TWENGINE dealWithError:result errTitle:@"Unblock failed"]) {
+                            NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
+                            profile[@"blocked"] = @(NO);
+                            profile[@"following"] = @(NO);
+                            strongSelf.profile = profile;
+                            [strongSelf.profileView setupWithProfile:profile];
+                        }
+                    }
+                });
+            });
+        };
+        UIActionSheet *blockActionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:unblockItem otherButtonItems:nil, nil];
+        [blockActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    } else if ([self.profile[@"following"] boolValue]) {
         dispatch_async(GCDBackgroundThread, ^{
             id result = [TWENGINE unfollowUser:self.screenName isID:NO];
             __weak __typeof(&*self)weakSelf = self;
@@ -129,7 +150,7 @@
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([TWENGINE dealWithError:result errTitle:@"Unfollow failed"]) {
                         NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
-                        profile[@"following"] = @"false";
+                        profile[@"following"] = @(NO);
                         strongSelf.profile = profile;
                         [strongSelf.profileView setupWithProfile:profile];
                     }
@@ -146,7 +167,7 @@
                     __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                     if ([TWENGINE dealWithError:result errTitle:@"Follow failed"]) {
                         NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
-                        profile[@"following"] = @"true";
+                        profile[@"following"] = @(YES);
                         strongSelf.profile = profile;
                         [strongSelf.profileView setupWithProfile:profile];
                     }
@@ -198,16 +219,61 @@
     
     RIButtonItem *reportSpamItem = [RIButtonItem itemWithLabel:@"Report spam"];
     reportSpamItem.action = ^{
-        
+        dispatch_async(GCDBackgroundThread, ^{
+            id result = [TWENGINE reportUserAsSpam:self.screenName isID:NO];
+            dispatch_sync(GCDMainThread, ^{
+                @autoreleasepool {
+                    [TWENGINE dealWithError:result errTitle:@"Report spam failed"];
+                }
+            });
+        });
     };
     [actionSheet addButtonItem:reportSpamItem];
     count ++;
     
-    RIButtonItem *blockItem = [RIButtonItem itemWithLabel:@"Block"];
-    blockItem.action = ^{
-        
-    };
-    [actionSheet addButtonItem:blockItem];
+    if ([self.profile[@"blocked"] boolValue]) {
+        RIButtonItem *unblockItem = [RIButtonItem itemWithLabel:@"Unblock"];
+        unblockItem.action = ^{
+            dispatch_async(GCDBackgroundThread, ^{
+                id result = [TWENGINE unblock:self.screenName];
+                __weak __typeof(&*self)weakSelf = self;
+                dispatch_sync(GCDMainThread, ^{
+                    @autoreleasepool {
+                        __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                        if ([TWENGINE dealWithError:result errTitle:@"Unblock failed"]) {
+                            NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
+                            profile[@"blocked"] = @(NO);
+                            profile[@"following"] = @(NO);
+                            strongSelf.profile = profile;
+                            [strongSelf.profileView setupWithProfile:profile];
+                        }
+                    }
+                });
+            });
+        };
+        [actionSheet addButtonItem:unblockItem];
+    } else {
+        RIButtonItem *blockItem = [RIButtonItem itemWithLabel:@"Block"];
+        blockItem.action = ^{
+            dispatch_async(GCDBackgroundThread, ^{
+                id result = [TWENGINE block:self.screenName];
+                __weak __typeof(&*self)weakSelf = self;
+                dispatch_sync(GCDMainThread, ^{
+                    @autoreleasepool {
+                        __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                        if ([TWENGINE dealWithError:result errTitle:@"Block failed"]) {
+                            NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
+                            profile[@"blocked"] = @(YES);
+                            profile[@"following"] = @(NO);
+                            strongSelf.profile = profile;
+                            [strongSelf.profileView setupWithProfile:profile];
+                        }
+                    }
+                });
+            });
+        };
+        [actionSheet addButtonItem:blockItem];
+    }
     [actionSheet setDestructiveButtonIndex:count];
     count ++;
     
