@@ -17,4 +17,8 @@
 
 @interface HSUProfileDataSource : HSUBaseDataSource
 
+@property (nonatomic, copy) NSString *screenName;
+
+- (id)initWithScreenName:(NSString *)screenName;
+
 @end

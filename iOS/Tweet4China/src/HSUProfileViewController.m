@@ -26,10 +26,16 @@
 
 - (id)init
 {
+    return [self initWithScreenName:[[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]];
+}
+
+- (id)initWithScreenName:(NSString *)screenName
+{
     self = [super init];
     if (self) {
+        self.screenName = screenName;
         self.useRefreshControl = NO;
-        self.dataSourceClass = [HSUProfileDataSource class];
+        self.dataSource = [[HSUProfileDataSource alloc] initWithScreenName:screenName];
     }
     return self;
 }
@@ -38,8 +44,7 @@
 {
     [super viewDidLoad];
     
-    NSString *userScreenName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"];
-    HSUProfileView *profileView = [[HSUProfileView alloc] initWithScreenName:userScreenName];
+    HSUProfileView *profileView = [[HSUProfileView alloc] initWithScreenName:self.screenName];
     self.tableView.tableHeaderView = profileView;
 }
 
@@ -48,8 +53,7 @@
     [super viewDidAppear:animated];
     
     dispatch_async(GCDBackgroundThread, ^{
-        NSString *userScreenName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"];
-        id result = [TWENGINE lookupUsers:@[userScreenName] areIDs:NO];
+        id result = [TWENGINE lookupUsers:@[self.screenName] areIDs:NO];
         __weak __typeof(&*self)weakSelf = self;
         dispatch_sync(GCDMainThread, ^{
             @autoreleasepool {
@@ -76,19 +80,16 @@
             HSUUserHomeDataSource *dataSource = [[HSUUserHomeDataSource alloc] init];
             dataSource.screenName = screenName;
             HSUTweetsViewController *detailVC = [[HSUTweetsViewController alloc] initWithDataSource:dataSource];
-            dataSource.delegate = detailVC;
             [self.navigationController pushViewController:detailVC animated:YES];
             return;
         } else if ([rawData[@"action"] isEqualToString:kAction_Following]) {
             HSUPersonListDataSource *dataSource = [[HSUFollowingDataSource alloc] initWithScreenName:screenName];
             HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
-            dataSource.delegate = detailVC;
             [self.navigationController pushViewController:detailVC animated:YES];
             return;
         } else if ([rawData[@"action"] isEqualToString:kAction_Followers]) {
             HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:screenName];
             HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
-            dataSource.delegate = detailVC;
             [self.navigationController pushViewController:detailVC animated:YES];
             return;
         }

@@ -13,6 +13,7 @@
 #import "HSUGalleryView.h"
 #import "HSUMiniBrowser.h"
 #import "HSUNavigationBarLight.h"
+#import "HSUProfileViewController.h"
 
 @interface HSUStatusViewController ()
 
@@ -36,7 +37,6 @@
 - (void)viewDidLoad
 {
     self.dataSource = [[self.dataSourceClass alloc] initWithDelegate:self status:self.mainStatus];
-    self.dataSource.delegate = self;
     
     [super viewDidLoad];
     
@@ -47,11 +47,25 @@
     [self.tableView registerClass:[HSUMainStatusCell class] forCellReuseIdentifier:kDataType_MainStatus];
 }
 
+- (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource
+{
+    [dataSource addEventWithName:@"touchAvatar" target:self action:@selector(touchAvatar:) events:UIControlEventTouchUpInside];
+}
+
+- (void)touchAvatar:(HSUTableCellData *)cellData
+{
+    NSString *screenName = cellData.rawData[@"retweeted_status"][@"user"][@"name"];
+    if (screenName == nil) {
+        screenName = cellData.rawData[@"user"][@"screen_name"];
+    }
+    HSUProfileViewController *profileVC = [[HSUProfileViewController alloc] initWithScreenName:screenName];
+    [self.navigationController pushViewController:profileVC animated:YES];
+}
+
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
 {
     [super dataSource:dataSource didFinishRefreshWithError:error];
 }
-
 
 - (void)_composeButtonTouched
 {

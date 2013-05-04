@@ -12,6 +12,8 @@
 #import "HSUGalleryView.h"
 #import "HSUMiniBrowser.h"
 #import "HSUStatusViewController.h"
+#import "HSUProfileViewController.h"
+#import "HSUProfileDataSource.h"
 
 @interface HSUTweetsViewController ()
 
@@ -35,6 +37,7 @@
     [dataSource addEventWithName:@"favorite" target:self action:@selector(favorite:) events:UIControlEventTouchUpInside];
     [dataSource addEventWithName:@"more" target:self action:@selector(more:) events:UIControlEventTouchUpInside];
     [dataSource addEventWithName:@"delete" target:self action:@selector(delete:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"touchAvatar" target:self action:@selector(touchAvatar:) events:UIControlEventTouchUpInside];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -290,6 +293,16 @@
     
     [actionSheet setCancelButtonIndex:count];
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)touchAvatar:(HSUTableCellData *)cellData
+{
+    NSString *screenName = cellData.rawData[@"retweeted_status"][@"user"][@"name"];
+    if (screenName == nil) {
+        screenName = cellData.rawData[@"user"][@"screen_name"];
+    }
+    HSUProfileViewController *profileVC = [[HSUProfileViewController alloc] initWithScreenName:screenName];
+    [self.navigationController pushViewController:profileVC animated:YES];
 }
 
 - (void)_composeWithText:(NSString *)text

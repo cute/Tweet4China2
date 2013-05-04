@@ -12,6 +12,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "GTMNSString+HTML.h"
 #import "AFNetworking.h"
+#import "UIButton+WebCache.h"
 
 #define ambient_H 14
 #define info_H 16
@@ -32,7 +33,7 @@
     UIView *ambientArea;
     UIImageView *ambientI;
     UILabel *ambientL;
-    UIImageView *avatarI;
+    UIButton *avatarB;
     UIView *infoArea;
     UILabel *nameL;
     UILabel *screenNameL;
@@ -40,6 +41,8 @@
     UILabel *timeL;
     TTTAttributedLabel *textAL;
 }
+
+@synthesize avatarB;
 
 - (id)initWithFrame:(CGRect)frame style:(HSUStatusViewStyle)style
 {
@@ -59,8 +62,8 @@
         ambientL = [[UILabel alloc] init];
         [ambientArea addSubview:ambientL];
         
-        avatarI = [[UIImageView alloc] init];
-        [self addSubview:avatarI];
+        avatarB = [[UIButton alloc] init];
+        [self addSubview:avatarB];
         
         nameL = [[UILabel alloc] init];
         [infoArea addSubview:nameL];
@@ -94,9 +97,9 @@
     nameL.highlightedTextColor = kWhiteColor;
     nameL.backgroundColor = kClearColor;
     
-    avatarI.layer.cornerRadius = 5;
-    avatarI.layer.masksToBounds = YES;
-    avatarI.backgroundColor = bw(229);
+    avatarB.layer.cornerRadius = 5;
+    avatarB.layer.masksToBounds = YES;
+    avatarB.backgroundColor = bw(229);
     
     screenNameL.textColor = kGrayColor;
     screenNameL.font = [UIFont systemFontOfSize:12];
@@ -145,12 +148,12 @@
     ambientL.frame = ccr(avatar_S+padding_S, 0, cw-ambientI.right-padding_S, ambient_H);
     
     if (ambientArea.hidden) {
-        avatarI.frame = ccr(avatarI.left, 0, avatar_S, avatar_S);
+        avatarB.frame = ccr(avatarB.left, 0, avatar_S, avatar_S);
     } else {
-        avatarI.frame = ccr(avatarI.left, ambientArea.bottom, avatar_S, avatar_S);
+        avatarB.frame = ccr(avatarB.left, ambientArea.bottom, avatar_S, avatar_S);
     }
     
-    infoArea.frame = ccr(ambientL.left, avatarI.top, cw-ambientL.left, info_H);
+    infoArea.frame = ccr(ambientL.left, avatarB.top, cw-ambientL.left, info_H);
     textAL.frame = ccr(ambientL.left, infoArea.bottom, infoArea.width, [self.data.renderData[@"text_height"] floatValue] + 3);
     
     [timeL sizeToFit];
@@ -201,10 +204,8 @@
         screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
     }
     avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
-    [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl]];
-//    UIButton *b;
-//    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
-//    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
+    [avatarB setImageWithURL:[NSURL URLWithString:avatarUrl]
+                    forState:UIControlStateNormal];
     
     NSDictionary *geo = rawData[@"geo"];
     

@@ -42,10 +42,9 @@
 
 - (id)initWithDataSource:(HSUBaseDataSource *)dataSource
 {
-    self = [super init];
+    self = [self init];
     if (self) {
         self.dataSource = dataSource;
-        self.useRefreshControl = YES;
     }
     return self;
 }
@@ -56,8 +55,8 @@
     
     if (!self.dataSource) {
         self.dataSource = [self.dataSourceClass dataSourceWithDelegate:self useCache:YES];
-        self.dataSource.delegate = self;
     }
+    self.dataSource.delegate = self;
     
     for (HSUTableCellData *cellData in self.dataSource.allData) {
         cellData.renderData[@"attributed_label_delegate"] = self;

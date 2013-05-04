@@ -46,7 +46,7 @@
     UIView *ambientArea;
     UIImageView *ambientI;
     UILabel *ambientL;
-    UIImageView *avatarI;
+    UIButton *avatarB;
     UILabel *nameL;
     UILabel *screenNameL;
     UILabel *timeL;
@@ -89,11 +89,11 @@
         ambientL.highlightedTextColor = kWhiteColor;
         ambientL.backgroundColor = kClearColor;
         
-        avatarI = [[UIImageView alloc] init];
-        [contentArea addSubview:avatarI];
-        avatarI.layer.cornerRadius = 5;
-        avatarI.layer.masksToBounds = YES;
-        avatarI.backgroundColor = bw(229);
+        avatarB = [[UIButton alloc] init];
+        [contentArea addSubview:avatarB];
+        avatarB.layer.cornerRadius = 5;
+        avatarB.layer.masksToBounds = YES;
+        avatarB.backgroundColor = bw(229);
         
         nameL = [[UILabel alloc] init];
         [contentArea addSubview:nameL];
@@ -189,8 +189,8 @@
         ambientArea.frame = ccr(0, 0, cw, ambient_H);
         ambientI.frame = ccr(avatar_S-ambient_S, (ambient_H-ambient_S)/2, ambient_S, ambient_S);
         ambientL.frame = ccr(avatar_S+padding_S, 0, cw-ambientI.right-padding_S, ambient_H);
-        avatarI.frame = ccr(0, 0, avatar_S, avatar_S);
-        textAL.frame = ccr(avatarI.left, 0, cw, 0);
+        avatarB.frame = ccr(0, 0, avatar_S, avatar_S);
+        textAL.frame = ccr(avatarB.left, 0, cw, 0);
     }
     return self;
 }
@@ -203,15 +203,15 @@
     
     ambientArea.frame = ccr(0, 0, contentArea.width, ambient_S);
     
-    avatarI.leftTop = ccp(avatarI.left, ambientArea.hidden ? 0 : ambientArea.bottom);
+    avatarB.leftTop = ccp(avatarB.left, ambientArea.hidden ? 0 : ambientArea.bottom);
     
     [nameL sizeToFit];
-    nameL.leftTop = ccp(avatarI.right+padding_S, avatarI.top+7);
+    nameL.leftTop = ccp(avatarB.right+padding_S, avatarB.top+7);
     
     [screenNameL sizeToFit];
     screenNameL.leftTop = ccp(nameL.left, nameL.bottom+3);
     
-    textAL.frame = ccr(textAL.left, avatarI.bottom+avatar_text_Distance, textAL.width, [self.data.renderData[@"text_height"] floatValue]);
+    textAL.frame = ccr(textAL.left, avatarB.bottom+avatar_text_Distance, textAL.width, [self.data.renderData[@"text_height"] floatValue]);
     
     [timeL sizeToFit];
     timeL.leftTop = ccp(textAL.left, textAL.bottom+text_time_Distance);
@@ -267,10 +267,7 @@
         screenNameL.text = [NSString stringWithFormat:@"@%@", rawData[@"user"][@"screen_name"]];
     }
     avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
-    [avatarI setImageWithURL:[NSURL URLWithString:avatarUrl]];
-//    UIButton *b;
-//    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"ProfilePlaceholderOverBlue"]];
-//    [b setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateHighlighted placeholderImage:[UIImage imageNamed:@"avatar_pressed"]];
+    [avatarB setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal];
     
     // time
     NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:rawData[@"created_at"]];
@@ -395,6 +392,7 @@
     [self setupControl:actionV.favoriteB forKey:@"favorite"];
     [self setupControl:actionV.moreB forKey:@"more"];
     [self setupControl:actionV.deleteB forKey:@"delete"];
+    [self setupControl:avatarB forKey:@"touchAvatar"];
 }
 
 + (CGFloat)_textHeightWithCellData:(HSUTableCellData *)data

@@ -83,6 +83,7 @@
     }
     
     [statusView setupWithData:data];
+    [self setupControl:statusView.avatarB forKey:@"touchAvatar"];
     
     self.contentView.backgroundColor = kClearColor;
     statusView.alpha = 1;

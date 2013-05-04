@@ -19,29 +19,34 @@
 
 - (id)init
 {
+    return [self initWithScreenName:[[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]];
+}
+
+- (id)initWithScreenName:(NSString *)screenName
+{
     self = [super init];
     if (self) {
+        self.screenName = screenName;
         self.sectionsData = [NSMutableArray arrayWithCapacity:2];
         NSMutableArray *referencesData = [NSMutableArray arrayWithCapacity:4];
-        NSString *userScreenName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"];
         NSDictionary *rawData = @{@"title": @"Following",
                                   @"action": kAction_Following,
-                                  @"user_screen_name": userScreenName};
+                                  @"user_screen_name": screenName};
         HSUTableCellData *followingCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                                dataType:kDataType_NormalTitle];
         rawData = @{@"title": @"Followers",
                     @"action": kAction_Followers,
-                    @"user_screen_name": userScreenName};
+                    @"user_screen_name": screenName};
         HSUTableCellData *followersCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                                dataType:kDataType_NormalTitle];
         rawData = @{@"title": @"Favorites",
                     @"action": kAction_Favorites,
-                    @"user_screen_name": userScreenName};
+                    @"user_screen_name": screenName};
         HSUTableCellData *favoritesCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                                dataType:kDataType_NormalTitle];
         rawData = @{@"title": @"Lists",
                     @"action": kAction_Lists,
-                    @"user_screen_name": userScreenName};
+                    @"user_screen_name": screenName};
         HSUTableCellData *listsCellData = [[HSUTableCellData alloc] initWithRawData:rawData
                                                                            dataType:kDataType_NormalTitle];
         [referencesData addObject:followingCellData];
@@ -65,26 +70,28 @@
 {
     [super refresh];
     
+    __weak __typeof(&*self)weakSelf = self;
     dispatch_async(GCDBackgroundThread, ^{
-        NSString *userScreenName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"];
-        id result = [TWENGINE getTimelineForUser:userScreenName isID:NO count:3];
+        id result = [TWENGINE getTimelineForUser:self.screenName isID:NO count:3];
         dispatch_sync(GCDMainThread, ^{
             @autoreleasepool {
+                __strong __typeof(&*weakSelf)strongSelf = weakSelf;
                 if ([result isKindOfClass:[NSArray class]]) {
                     NSArray *tweets = result;
                     for (NSDictionary *tweet in tweets) {
                         HSUTableCellData *statusCellData = [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
-                        [self.data addObject:statusCellData];
+                        [strongSelf.data addObject:statusCellData];
                     }
-                    if (self.count) {
+                    [strongSelf.delegate preprocessDataSourceForRender:strongSelf];
+                    if (strongSelf.count) {
                         NSDictionary *rawData = @{@"title": @"View More Tweets",
                                                   @"action": kAction_UserTimeline,
-                                                  @"user_screen_name": userScreenName};
+                                                  @"user_screen_name": strongSelf.screenName};
                         HSUTableCellData *viewMoreCellData =
                             [[HSUTableCellData alloc] initWithRawData:rawData
                                                              dataType:kDataType_NormalTitle];
-                        [self.data addObject:viewMoreCellData];
-                        [self.delegate dataSource:self didFinishRefreshWithError:nil];
+                        [strongSelf.data addObject:viewMoreCellData];
+                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:nil];
                     }
                 }
             }
