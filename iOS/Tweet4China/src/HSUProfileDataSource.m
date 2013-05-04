@@ -19,7 +19,7 @@
 
 - (id)init
 {
-    return [self initWithScreenName:[[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]];
+    return [self initWithScreenName:MyScreenName];
 }
 
 - (id)initWithScreenName:(NSString *)screenName

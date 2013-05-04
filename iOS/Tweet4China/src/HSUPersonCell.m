@@ -74,9 +74,9 @@
     
     [self.avatarButton setImageWithURL:[NSURL URLWithString:data.rawData[@"profile_image_url_https"]]
                               forState:UIControlStateNormal];
+    [self setupControl:self.avatarButton forKey:@"touchAvatar"];
     
     self.nameLabel.text = data.rawData[@"name"];
-    
     self.screenNameLabel.text = data.rawData[@"screen_name"];
     
     if ([data.rawData[@"following"] boolValue]) {

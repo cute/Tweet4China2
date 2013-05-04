@@ -297,11 +297,9 @@
 
 - (void)touchAvatar:(HSUTableCellData *)cellData
 {
-    NSString *screenName = cellData.rawData[@"retweeted_status"][@"user"][@"name"];
-    if (screenName == nil) {
-        screenName = cellData.rawData[@"user"][@"screen_name"];
-    }
+    NSString *screenName = cellData.rawData[@"retweeted_status"][@"user"][@"name"] ?: cellData.rawData[@"user"][@"screen_name"];
     HSUProfileViewController *profileVC = [[HSUProfileViewController alloc] initWithScreenName:screenName];
+    profileVC.profile = cellData.rawData[@"retweeted_status"][@"user"] ?: cellData.rawData[@"user"];
     [self.navigationController pushViewController:profileVC animated:YES];
 }
 

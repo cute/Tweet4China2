@@ -8,6 +8,7 @@
 
 #import "HSUPersonListViewController.h"
 #import "HSUPersonListDataSource.h"
+#import "HSUProfileViewController.h"
 
 @implementation HSUPersonListViewController
 
@@ -30,12 +31,26 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
+    if ([data.dataType isEqualToString:kDataType_Person]) {
+        [self touchAvatar:data];
+        return;
+    }
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
 }
 
 - (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource
 {
     [dataSource addEventWithName:@"follow" target:self action:@selector(follow:) events:UIControlEventTouchUpInside];
+    [dataSource addEventWithName:@"touchAvatar" target:self action:@selector(touchAvatar:) events:UIControlEventTouchUpInside];
+}
+
+- (void)touchAvatar:(HSUTableCellData *)cellData
+{
+    NSString *screenName = cellData.rawData[@"screen_name"];
+    HSUProfileViewController *profileVC = [[HSUProfileViewController alloc] initWithScreenName:screenName];
+    profileVC.profile = cellData.rawData;
+    [self.navigationController pushViewController:profileVC animated:YES];
 }
 
 - (void)follow:(HSUTableCellData *)cellData

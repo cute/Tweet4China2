@@ -36,6 +36,9 @@
 @property (nonatomic, strong) UIButton *followersButton;
 @property (nonatomic, strong) UILabel *followersCountLabel;
 
+@property (nonatomic, strong) UIButton *accountsButton;
+@property (nonatomic, strong) UIButton *followButton;
+
 @end
 
 @implementation HSUProfileView
@@ -207,35 +210,57 @@
         buttonsPanel.frame = ccr(0, referenceButtonBGView.bottom, self.width, 48);
         buttonsPanel.backgroundColor = kWhiteColor;
         
-        UIButton *settingsButton = [[UIButton alloc] init];
-        [buttonsPanel addSubview:settingsButton];
-        [settingsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
-                        forState:UIControlStateNormal];
-        [settingsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
-                        forState:UIControlStateHighlighted];
-        [settingsButton setImage:[UIImage imageNamed:@"icn_profile_settings"] forState:UIControlStateNormal];
-        settingsButton.size = ccs(42, 30);
-        settingsButton.leftCenter = ccp(10, buttonsPanel.height/2);
-        
-        UIButton *accountsButton = [[UIButton alloc] init];
-        [buttonsPanel addSubview:accountsButton];
-        [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
-                                  forState:UIControlStateNormal];
-        [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
-                                  forState:UIControlStateHighlighted];
-        [accountsButton setImage:[UIImage imageNamed:@"icn_profile_switch_accounts"] forState:UIControlStateNormal];
-        accountsButton.size = ccs(42, 30);
-        accountsButton.leftCenter = ccp(settingsButton.right + 10, buttonsPanel.height/2);
-        
-        UIButton *messagesButton = [[UIButton alloc] init];
-        [buttonsPanel addSubview:messagesButton];
-        [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
-                                  forState:UIControlStateNormal];
-        [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
-                                  forState:UIControlStateHighlighted];
-        [messagesButton setImage:[UIImage imageNamed:@"icn_profile_messages"] forState:UIControlStateNormal];
-        messagesButton.size = ccs(42, 30);
-        messagesButton.rightCenter = ccp(buttonsPanel.width - 10, buttonsPanel.height/2);
+        if ([screenName isEqualToString:MyScreenName]) {
+            UIButton *settingsButton = [[UIButton alloc] init];
+            [buttonsPanel addSubview:settingsButton];
+            [settingsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                      forState:UIControlStateNormal];
+            [settingsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                      forState:UIControlStateHighlighted];
+            [settingsButton setImage:[UIImage imageNamed:@"icn_profile_settings"] forState:UIControlStateNormal];
+            settingsButton.size = ccs(42, 30);
+            settingsButton.leftCenter = ccp(10, buttonsPanel.height/2);
+            
+            UIButton *accountsButton = [[UIButton alloc] init];
+            [buttonsPanel addSubview:accountsButton];
+            [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                      forState:UIControlStateNormal];
+            [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                      forState:UIControlStateHighlighted];
+            [accountsButton setImage:[UIImage imageNamed:@"icn_profile_switch_accounts"] forState:UIControlStateNormal];
+            accountsButton.size = ccs(42, 30);
+            accountsButton.leftCenter = ccp(settingsButton.right + 10, buttonsPanel.height/2);
+            
+            UIButton *messagesButton = [[UIButton alloc] init];
+            [buttonsPanel addSubview:messagesButton];
+            [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                      forState:UIControlStateNormal];
+            [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                      forState:UIControlStateHighlighted];
+            [messagesButton setImage:[UIImage imageNamed:@"icn_profile_messages"] forState:UIControlStateNormal];
+            messagesButton.size = ccs(42, 30);
+            messagesButton.rightCenter = ccp(buttonsPanel.width - 10, buttonsPanel.height/2);
+        } else {
+            UIButton *accountsButton = [[UIButton alloc] init];
+            [buttonsPanel addSubview:accountsButton];
+            self.accountsButton = accountsButton;
+            [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                      forState:UIControlStateNormal];
+            [accountsButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                      forState:UIControlStateHighlighted];
+            [accountsButton setImage:[UIImage imageNamed:@"icn_profile_switch_accounts"] forState:UIControlStateNormal];
+            accountsButton.size = ccs(42, 30);
+            accountsButton.leftCenter = ccp(10, buttonsPanel.height/2);
+            
+            UIButton *followButton = [[UIButton alloc] init];
+            [buttonsPanel addSubview:followButton];
+            self.followButton = followButton;
+            [followButton setTapTarget:delegate action:@selector(followButtonTouched:)];
+            followButton.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
+            followButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+            followButton.size = ccs(90, 30);
+            followButton.rightCenter = ccp(buttonsPanel.width - 10, buttonsPanel.height/2);
+        }
         
         self.height = buttonsPanel.bottom;
     }
@@ -270,6 +295,29 @@
     self.followersCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
     [self.followersCountLabel sizeToFit];
     self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.followersButton.titleEdgeInsets.left, self.followersButton.titleEdgeInsets.bottom, self.followersButton.titleEdgeInsets.right);
+    
+    if ([profile[@"following"] boolValue]) {
+        [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_following_default"] stretchableImageFromCenter]
+                                     forState:UIControlStateNormal];
+        [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_following_pressed"] stretchableImageFromCenter]
+                                     forState:UIControlStateNormal];
+        [self.followButton setImage:nil forState:UIControlStateNormal];
+        [self.followButton setTitleShadowColor:kBlackColor forState:UIControlStateNormal];
+        self.followButton.titleLabel.shadowOffset = ccs(0, -1);
+        [self.followButton setTitleColor:kWhiteColor forState:UIControlStateNormal];
+        [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
+    } else {
+        [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
+                                forState:UIControlStateNormal];
+        [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
+                                forState:UIControlStateHighlighted];
+        [self.followButton setImage:[UIImage imageNamed:@"ic_follow_text"] forState:UIControlStateNormal];
+        self.followButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+        [self.followButton setTitleShadowColor:kWhiteColor forState:UIControlStateNormal];
+        self.followButton.titleLabel.shadowOffset = ccs(0, 1);
+        [self.followButton setTitleColor:bw(51) forState:UIControlStateNormal];
+        [self.followButton setTitle:@"Follow" forState:UIControlStateNormal];
+    }
 }
 
 - (NSString *)_websiteForProfile:(NSDictionary *)profile

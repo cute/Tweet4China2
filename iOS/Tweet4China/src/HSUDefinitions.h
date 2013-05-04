@@ -73,7 +73,7 @@ _Pragma("clang diagnostic pop") \
 
 #define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
 #define GRAY_INDICATOR [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]
-
+#define MyScreenName [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 

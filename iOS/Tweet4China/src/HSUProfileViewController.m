@@ -18,7 +18,7 @@
 
 @interface HSUProfileViewController () <HSUProfileViewDelegate>
 
-@property (nonatomic, strong) NSDictionary *profile;
+@property (nonatomic, strong) HSUProfileView *profileView;
 
 @end
 
@@ -26,7 +26,7 @@
 
 - (id)init
 {
-    return [self initWithScreenName:[[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]];
+    return [self initWithScreenName:MyScreenName];
 }
 
 - (id)initWithScreenName:(NSString *)screenName
@@ -45,29 +45,35 @@
     [super viewDidLoad];
     
     HSUProfileView *profileView = [[HSUProfileView alloc] initWithScreenName:self.screenName delegate:self];
+    if (self.profile) {
+        [profileView setupWithProfile:self.profile];
+    }
     self.tableView.tableHeaderView = profileView;
+    self.profileView = profileView;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    dispatch_async(GCDBackgroundThread, ^{
-        id result = [TWENGINE lookupUsers:@[self.screenName] areIDs:NO];
-        __weak __typeof(&*self)weakSelf = self;
-        dispatch_sync(GCDMainThread, ^{
-            @autoreleasepool {
-                __strong __typeof(&*weakSelf)strongSelf = weakSelf;
-                if ([result isKindOfClass:[NSArray class]]) {
-                    NSArray *profiles = result;
-                    if (profiles.count) {
-                        [(HSUProfileView *)strongSelf.tableView.tableHeaderView setupWithProfile:profiles[0]];
-                        strongSelf.profile = profiles[0];
+    if (!self.profile) {
+        dispatch_async(GCDBackgroundThread, ^{
+            id result = [TWENGINE lookupUsers:@[self.screenName] areIDs:NO];
+            __weak __typeof(&*self)weakSelf = self;
+            dispatch_sync(GCDMainThread, ^{
+                @autoreleasepool {
+                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                    if ([result isKindOfClass:[NSArray class]]) {
+                        NSArray *profiles = result;
+                        if (profiles.count) {
+                            [strongSelf.profileView setupWithProfile:profiles[0]];
+                            strongSelf.profile = profiles[0];
+                        }
                     }
                 }
-            }
+            });
         });
-    });
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -76,20 +82,13 @@
     if ([data.dataType isEqualToString:kDataType_NormalTitle]) {
         NSDictionary *rawData = data.rawData;
         if ([rawData[@"action"] isEqualToString:kAction_UserTimeline]) {
-            HSUUserHomeDataSource *dataSource = [[HSUUserHomeDataSource alloc] init];
-            dataSource.screenName = self.screenName;
-            HSUTweetsViewController *detailVC = [[HSUTweetsViewController alloc] initWithDataSource:dataSource];
-            [self.navigationController pushViewController:detailVC animated:YES];
+            [self tweetsButtonTouched];
             return;
         } else if ([rawData[@"action"] isEqualToString:kAction_Following]) {
-            HSUPersonListDataSource *dataSource = [[HSUFollowingDataSource alloc] initWithScreenName:self.screenName];
-            HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
-            [self.navigationController pushViewController:detailVC animated:YES];
+            [self followingButtonTouched];
             return;
         } else if ([rawData[@"action"] isEqualToString:kAction_Followers]) {
-            HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:self.screenName];
-            HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
-            [self.navigationController pushViewController:detailVC animated:YES];
+            [self followersButtonTouched];
             return;
         }
     }
@@ -116,6 +115,46 @@
     HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:self.screenName];
     HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
     [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+- (void)followButtonTouched:(UIButton *)followButton
+{
+    followButton.enabled = NO;
+    if ([self.profile[@"following"] boolValue]) {
+        dispatch_async(GCDBackgroundThread, ^{
+            id result = [TWENGINE unfollowUser:self.screenName isID:NO];
+            __weak __typeof(&*self)weakSelf = self;
+            dispatch_sync(GCDMainThread, ^{
+                @autoreleasepool {
+                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                    if ([TWENGINE dealWithError:result errTitle:@"Unfollow failed"]) {
+                        NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
+                        profile[@"following"] = @(NO);
+                        strongSelf.profile = profile;
+                        [strongSelf.profileView setupWithProfile:profile];
+                        followButton.enabled = YES;
+                    }
+                }
+            });
+        });
+    } else {
+        dispatch_async(GCDBackgroundThread, ^{
+            id result = [TWENGINE followUser:self.screenName isID:NO];
+            __weak __typeof(&*self)weakSelf = self;
+            dispatch_sync(GCDMainThread, ^{
+                @autoreleasepool {
+                    __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                    if ([TWENGINE dealWithError:result errTitle:@"Follow failed"]) {
+                        NSMutableDictionary *profile = strongSelf.profile.mutableCopy;
+                        profile[@"following"] = @(YES);
+                        strongSelf.profile = profile;
+                        [strongSelf.profileView setupWithProfile:profile];
+                        followButton.enabled = YES;
+                    }
+                }
+            });
+        });
+    }
 }
 
 @end
