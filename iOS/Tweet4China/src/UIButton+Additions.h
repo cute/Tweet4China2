@@ -15,4 +15,6 @@
 
 - (void)setTapTarget:(id)target action:(SEL)action;
 
+- (void)showSpinner:(BOOL)show;
+
 @end

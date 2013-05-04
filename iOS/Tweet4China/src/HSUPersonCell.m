@@ -90,7 +90,13 @@
                                      forState:UIControlStateNormal];
         [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]
                                      forState:UIControlStateHighlighted];
-        [self.followButton setImage:[UIImage imageNamed:@"icn_follow_checked"] forState:UIControlStateNormal];
+        [self.followButton setImage:[UIImage imageNamed:@"icn_follow_default"] forState:UIControlStateNormal];
+    }
+    
+    if ([data.renderData[@"sending_following_request"] boolValue]) {
+        self.followButton.enabled = NO;
+    } else {
+        self.followButton.enabled = YES;
     }
     
     [self setupControl:self.followButton forKey:@"follow"];

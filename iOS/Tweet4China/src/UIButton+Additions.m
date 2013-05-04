@@ -49,4 +49,22 @@ static const NSString *KEY_HIT_TEST_EDGE_INSETS = @"HitTestEdgeInsets";
     [self addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 }
 
+- (void)showSpinner:(BOOL)show
+{
+    if (show) {
+        if ([self viewWithTag:'spin']) {
+            return;
+        }
+        [self setImage:nil forState:UIControlStateNormal];
+        [self setImage:nil forState:UIControlStateHighlighted];
+        UIActivityIndicatorView *spinner = GRAY_INDICATOR;
+        spinner.tag = 'spin';
+        [self addSubview:spinner];
+        spinner.center = self.boundsCenter;
+        [spinner startAnimating];
+    } else {
+        [[self viewWithTag:'spin'] removeFromSuperview];
+    }
+}
+
 @end

@@ -41,8 +41,6 @@
     NSString *userScreenName = [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"];
     HSUProfileView *profileView = [[HSUProfileView alloc] initWithScreenName:userScreenName];
     self.tableView.tableHeaderView = profileView;
-    
-    [self.dataSource refresh];
 }
 
 - (void)viewDidAppear:(BOOL)animated

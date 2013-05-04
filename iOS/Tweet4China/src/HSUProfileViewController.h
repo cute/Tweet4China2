@@ -6,9 +6,8 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "HSUBaseViewController.h"
+#import "HSUTweetsViewController.h"
 
-@interface HSUProfileViewController : HSUBaseViewController
+@interface HSUProfileViewController : HSUTweetsViewController
 
 @end
