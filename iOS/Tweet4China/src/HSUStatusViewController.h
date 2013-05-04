@@ -6,10 +6,9 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "HSUBaseViewController.h"
+#import "HSUTweetsViewController.h"
 
-@interface HSUStatusViewController : HSUBaseViewController
+@interface HSUStatusViewController : HSUTweetsViewController
 
 - (id)initWithStatus:(NSDictionary *)status;
 

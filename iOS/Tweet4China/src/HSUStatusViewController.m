@@ -52,21 +52,6 @@
     [dataSource addEventWithName:@"touchAvatar" target:self action:@selector(touchAvatar:) events:UIControlEventTouchUpInside];
 }
 
-- (void)touchAvatar:(HSUTableCellData *)cellData
-{
-    NSString *screenName = cellData.rawData[@"retweeted_status"][@"user"][@"name"];
-    if (screenName == nil) {
-        screenName = cellData.rawData[@"user"][@"screen_name"];
-    }
-    HSUProfileViewController *profileVC = [[HSUProfileViewController alloc] initWithScreenName:screenName];
-    [self.navigationController pushViewController:profileVC animated:YES];
-}
-
-- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
-{
-    [super dataSource:dataSource didFinishRefreshWithError:error];
-}
-
 - (void)_composeButtonTouched
 {
     HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
