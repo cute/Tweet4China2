@@ -24,6 +24,7 @@
 @property (nonatomic, strong) UIView *avatarBGView;
 @property (nonatomic, strong) UIButton *avatarButton;
 @property (nonatomic, strong) UILabel *nameLabel;
+@property (nonatomic, strong) UIImageView *verifyFlag;
 @property (nonatomic, strong) UILabel *screenNameLabel;
 @property (nonatomic, strong) UILabel *descLabel;
 @property (nonatomic, strong) UILabel *locationLabel;
@@ -96,6 +97,11 @@
         nameLabel.size = ccs(kLabelWidth, 17*1.2);
         nameLabel.topCenter = ccp(infoView.width/2, avatarBGView.bottom+7);
         nameLabel.text = screenName.twitterScreenName;
+        
+        UIImageView *verifyFlag = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icn_block_verified"]];
+        [infoView addSubview:verifyFlag];
+        self.verifyFlag = verifyFlag;
+        verifyFlag.hidden = YES;
         
         UILabel *screenNameLabel = [[UILabel alloc] init];
         [infoView addSubview:screenNameLabel];
@@ -287,6 +293,12 @@
     self.pager.hidden = NO;
     NSString *bannerUrl = [profile[@"profile_banner_url"] stringByAppendingString:@"/mobile_retina"];
     [self.infoBGView setImageWithURL:[NSURL URLWithString:bannerUrl] placeholderImage:[UIImage imageNamed:@"bg_profile_empty"]];
+    if ([profile[@"verified"] boolValue]) {
+        self.verifyFlag.hidden = NO;
+        self.verifyFlag.leftCenter = ccp([self.nameLabel.text sizeWithFont:self.nameLabel.font].width/2 + self.nameLabel.center.x + 5, self.nameLabel.center.y);
+    } else {
+        self.verifyFlag.hidden = YES;
+    }
     
     self.tweetsCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
     [self.tweetsCountLabel sizeToFit];
