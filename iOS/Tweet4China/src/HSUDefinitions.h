@@ -78,7 +78,8 @@ _Pragma("clang diagnostic pop") \
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 
 #define kDataType_MainStatus @"MainStatus"
-#define kDataType_Status @"Status"
+#define kDataType_DefaultStatus @"DefaultStatus"
+#define kDataType_ChatStatus @"ChatStatus"
 #define kDataType_Person @"Person"
 #define kDataType_LoadMore @"LoadMore"
 #define kDataType_NormalTitle @"NormalTitle"

@@ -26,7 +26,7 @@
                         if (tweets.count) {
                             for (int i=tweets.count-1; i>=0; i--) {
                                 HSUTableCellData *cellData =
-                                [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_Status];
+                                [[HSUTableCellData alloc] initWithRawData:tweets[i] dataType:kDataType_DefaultStatus];
                                 [strongSelf.data insertObject:cellData atIndex:0];
                             }
                             
@@ -67,7 +67,7 @@
                         [strongSelf.data removeLastObject];
                         for (NSDictionary *tweet in result) {
                             HSUTableCellData *cellData =
-                            [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
+                            [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_DefaultStatus];
                             [strongSelf.data addObject:cellData];
                         }
                         [strongSelf.data addObject:loadMoreCellData];

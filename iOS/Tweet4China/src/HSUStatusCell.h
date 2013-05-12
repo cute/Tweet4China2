@@ -8,9 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "HSUBaseTableCell.h"
+#import "HSUStatusView.h"
+
+#define padding_S 10
 
 #define kNotification_HSUStatusCell_OtherCellSwiped @"HSUStatusCell_OtherCellSwiped"
 
+@class HSUStatusView;
 @interface HSUStatusCell : HSUBaseTableCell
+
+@property (nonatomic, strong) HSUStatusView *statusView;
+
++ (HSUStatusViewStyle)statusStyle;
 
 @end

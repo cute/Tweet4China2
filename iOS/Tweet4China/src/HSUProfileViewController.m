@@ -101,6 +101,7 @@
     dataSource.screenName = self.screenName;
     HSUTweetsViewController *detailVC = [[HSUTweetsViewController alloc] initWithDataSource:dataSource];
     [self.navigationController pushViewController:detailVC animated:YES];
+    [dataSource refresh];
 }
 
 - (void)followingButtonTouched

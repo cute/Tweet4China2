@@ -16,15 +16,17 @@
 #import "HSUStatusView.h"
 #import "HSUStatusActionView.h"
 
-#define padding_S 10
-
 @implementation HSUStatusCell
 {
-    HSUStatusView *statusView;
     UIImageView *flagIV;
     HSUStatusActionView *actionV;
     
     BOOL retweeted, favorited;
+}
+
++ (HSUStatusViewStyle)statusStyle
+{
+    return HSUStatusViewStyle_Default;
 }
 
 - (void)dealloc
@@ -38,18 +40,9 @@
     if (self) {
         self.backgroundColor = kWhiteColor;
         
-        statusView = [[HSUStatusView alloc] initWithFrame:ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0)
-                                                    style:HSUStatusViewStyle_Default];
-        [self.contentView addSubview:statusView];
-        
-        flagIV = [[UIImageView alloc] init];
-        [self.contentView addSubview:flagIV];
-        
-        UISwipeGestureRecognizer *swipeGesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(cellSwiped:)];
-        swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
-        [self addGestureRecognizer:swipeGesture];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherCellSwiped:) name:kNotification_HSUStatusCell_OtherCellSwiped object:nil];
+        self.statusView = [[HSUStatusView alloc] initWithFrame:ccr(padding_S, padding_S, self.contentView.width-padding_S*4, 0)
+                                                    style:[[self class] statusStyle]];
+        [self.contentView addSubview:self.statusView];
     }
     return self;
 }
@@ -58,10 +51,7 @@
 {
     [super layoutSubviews];
     
-    statusView.frame = ccr(statusView.left, statusView.top, statusView.width, self.contentView.height-padding_S*2);
-    
-    [flagIV sizeToFit];
-    flagIV.rightTop = ccp(self.contentView.width, 0);
+    self.statusView.frame = ccr(self.statusView.left, self.statusView.top, self.statusView.width, self.contentView.height-padding_S*2);
 }
 
 - (void)setupWithData:(HSUTableCellData *)data
@@ -82,11 +72,11 @@
         flagIV.image = nil;
     }
     
-    [statusView setupWithData:data];
-    [self setupControl:statusView.avatarB forKey:@"touchAvatar"];
+    [self.statusView setupWithData:data];
+    [self setupControl:self.statusView.avatarB forKey:@"touchAvatar"];
     
     self.contentView.backgroundColor = kClearColor;
-    statusView.alpha = 1;
+    self.statusView.alpha = 1;
     self.data.renderData[@"mode"] = @"default";
     
     actionV.hidden = YES;
@@ -116,7 +106,7 @@
     if (actionV) {
         [UIView animateWithDuration:0.2 animations:^{
             self.contentView.backgroundColor = kClearColor;
-            statusView.alpha = 1;
+            self.statusView.alpha = 1;
             actionV.alpha = 0;
         } completion:^(BOOL finish){
             [actionV removeFromSuperview];
@@ -139,7 +129,7 @@
         actionV.alpha = 0;
         [UIView animateWithDuration:0.2 animations:^{
             self.contentView.backgroundColor = bw(230);
-            statusView.alpha = 0;
+            self.statusView.alpha = 0;
             actionV.alpha = 1;
         }];
         

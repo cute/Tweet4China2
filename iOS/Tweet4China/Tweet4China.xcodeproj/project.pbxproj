@@ -266,6 +266,8 @@
 		9696D84116F21DB6005D7AAB /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9696D84016F21DB6005D7AAB /* CoreText.framework */; };
 		969B6FB11720489400420F01 /* HSUMainStatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 969B6FB01720489400420F01 /* HSUMainStatusCell.m */; };
 		969B6FB417204BC800420F01 /* HSUStatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 969B6FB317204BC800420F01 /* HSUStatusDataSource.m */; };
+		969B7435173FA8370072EFC0 /* HSUChatStatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 969B7434173FA8370072EFC0 /* HSUChatStatusCell.m */; };
+		969B7438173FB3910072EFC0 /* HSUDefaultStatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 969B7437173FB3910072EFC0 /* HSUDefaultStatusCell.m */; };
 		96A2127117204F3200BC1D09 /* HSUContextStatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A2127017204F3200BC1D09 /* HSUContextStatusCell.m */; };
 		96A2127417218BCE00BC1D09 /* icn_nav_bar_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 96A2127217218BCE00BC1D09 /* icn_nav_bar_back.png */; };
 		96A2127517218BCE00BC1D09 /* icn_nav_bar_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96A2127317218BCE00BC1D09 /* icn_nav_bar_back@2x.png */; };
@@ -686,6 +688,10 @@
 		969B6FB01720489400420F01 /* HSUMainStatusCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUMainStatusCell.m; sourceTree = "<group>"; };
 		969B6FB217204BC800420F01 /* HSUStatusDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUStatusDataSource.h; sourceTree = "<group>"; };
 		969B6FB317204BC800420F01 /* HSUStatusDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUStatusDataSource.m; sourceTree = "<group>"; };
+		969B7433173FA8370072EFC0 /* HSUChatStatusCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUChatStatusCell.h; sourceTree = "<group>"; };
+		969B7434173FA8370072EFC0 /* HSUChatStatusCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUChatStatusCell.m; sourceTree = "<group>"; };
+		969B7436173FB3910072EFC0 /* HSUDefaultStatusCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUDefaultStatusCell.h; sourceTree = "<group>"; };
+		969B7437173FB3910072EFC0 /* HSUDefaultStatusCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUDefaultStatusCell.m; sourceTree = "<group>"; };
 		96A2126F17204F3200BC1D09 /* HSUContextStatusCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUContextStatusCell.h; sourceTree = "<group>"; };
 		96A2127017204F3200BC1D09 /* HSUContextStatusCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUContextStatusCell.m; sourceTree = "<group>"; };
 		96A2127217218BCE00BC1D09 /* icn_nav_bar_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_nav_bar_back.png; sourceTree = "<group>"; };
@@ -1420,6 +1426,10 @@
 			children = (
 				96BE216B16EC74AB00226799 /* HSUStatusCell.h */,
 				96BE216C16EC74AB00226799 /* HSUStatusCell.m */,
+				969B7436173FB3910072EFC0 /* HSUDefaultStatusCell.h */,
+				969B7437173FB3910072EFC0 /* HSUDefaultStatusCell.m */,
+				969B7433173FA8370072EFC0 /* HSUChatStatusCell.h */,
+				969B7434173FA8370072EFC0 /* HSUChatStatusCell.m */,
 				967A55F916FDB2AD00581274 /* HSULoadMoreCell.h */,
 				967A55FA16FDB2AD00581274 /* HSULoadMoreCell.m */,
 				96BE217216EC8FDA00226799 /* HSUBaseTableCell.h */,
@@ -1834,6 +1844,8 @@
 				967272B31733CC2100B6E30A /* HSUTweetsViewController.m in Sources */,
 				967272B61733CCB500B6E30A /* HSUTweetsDataSource.m in Sources */,
 				967272B91733E3E500B6E30A /* HSUUserHomeDataSource.m in Sources */,
+				969B7435173FA8370072EFC0 /* HSUChatStatusCell.m in Sources */,
+				969B7438173FB3910072EFC0 /* HSUDefaultStatusCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

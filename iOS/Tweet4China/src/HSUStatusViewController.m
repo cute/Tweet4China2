@@ -47,6 +47,33 @@
     [self.tableView registerClass:[HSUMainStatusCell class] forCellReuseIdentifier:kDataType_MainStatus];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self.dataSource loadMore];
+}
+
+- (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
+{
+    if (error) {
+        L(error);
+    } else {
+        [self.tableView reloadData];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
+    if ([data.dataType isEqualToString:kDataType_ChatStatus]) {
+        HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] initWithStatus:data.rawData];
+        [self.navigationController pushViewController:statusVC animated:YES];
+        return;
+    }
+    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+}
+
 - (void)_composeButtonTouched
 {
     HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];

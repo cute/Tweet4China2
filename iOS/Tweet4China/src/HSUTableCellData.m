@@ -34,6 +34,9 @@
     self = [self init];
     if (self) {
         self.dataType = cacheData[@"data_type"];
+        if ([self.dataType isEqualToString:@"Status"]) {
+            self.dataType = @"DefaultStatus";
+        }
         self.rawData = cacheData[@"raw_data"];
     }
     return self;

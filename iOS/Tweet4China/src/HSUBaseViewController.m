@@ -22,6 +22,8 @@
 #import "HSUFollowersDataSource.h"
 #import "HSUFollowingDataSource.h"
 #import "HSUPersonCell.h"
+#import "HSUChatStatusCell.h"
+#import "HSUDefaultStatusCell.h"
 
 @interface HSUBaseViewController ()
 
@@ -64,7 +66,8 @@
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     // todo: rework
-    [tableView registerClass:[HSUStatusCell class] forCellReuseIdentifier:kDataType_Status];
+    [tableView registerClass:[HSUDefaultStatusCell class] forCellReuseIdentifier:kDataType_DefaultStatus];
+    [tableView registerClass:[HSUChatStatusCell class] forCellReuseIdentifier:kDataType_ChatStatus];
     [tableView registerClass:[HSUPersonCell class] forCellReuseIdentifier:kDataType_Person];
     [tableView registerClass:[HSULoadMoreCell class] forCellReuseIdentifier:kDataType_LoadMore];
     [tableView registerClass:[HSUNormalTitleCell class] forCellReuseIdentifier:kDataType_NormalTitle];
@@ -114,7 +117,7 @@
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSUTableCellData *data = [self.dataSource dataAtIndex:indexPath.row];
-    if ([data.dataType isEqualToString:kDataType_Status]) {
+    if ([data.dataType isEqualToString:kDataType_DefaultStatus]) {
         if ([data.renderData[@"mode"] isEqualToString:@"action"]) {
             return NO;
         }

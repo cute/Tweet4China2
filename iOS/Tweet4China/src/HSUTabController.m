@@ -13,11 +13,12 @@
 #import "HSUProfileViewController.h"
 #import "HSUNavitationBar.h"
 
-@interface HSUTabController ()
+@interface HSUTabController () <UITabBarControllerDelegate>
 
 @property (nonatomic, retain) NSArray *tabBarItemsData;
 @property (nonatomic, retain) NSMutableArray *tabBarItems;
 @property (nonatomic, weak) UIButton *selectedTabBarItem;
+@property (nonatomic, weak) UITabBarItem *lastSelectedTabBarItem;
 
 @end
 
@@ -56,6 +57,9 @@
         [meNav.tabBarItem setTitlePositionAdjustment:UIOffsetMake(0, -1)];
         
         self.viewControllers = @[homeNav, connectNav, discoverNav, meNav];
+        
+        self.delegate = self;
+        self.lastSelectedTabBarItem = homeNav.tabBarItem;
     }
     return self;
 }
@@ -149,6 +153,15 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    if (self.lastSelectedTabBarItem == item) {
+        HSUBaseViewController *currentVC = ((UINavigationController *)self.selectedViewController).viewControllers[0];
+        [currentVC.tableView setContentOffset:ccp(0, 0) animated:YES];
+    }
+    self.lastSelectedTabBarItem = item;
 }
 
 - (void)showUnreadIndicatorOnTabBarItem:(UITabBarItem *)tabBarItem

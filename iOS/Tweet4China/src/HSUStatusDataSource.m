@@ -19,20 +19,24 @@
         
         self.delegate = delegate;
         [self.delegate preprocessDataSourceForRender:self];
-        
-        return self;
-        
-        // load context data, then call finish on delegate
-        dispatch_async(GCDBackgroundThread, ^{
-            id result = [TWENGINE getDetailsForTweet:status[@"in_reply_to_status_id_str"]];
-            if ([result isKindOfClass:[NSError class]]) {
-                
-            } else {
-                L(result);
-            }
-        });
     }
     return self;
+}
+
+- (void)loadMore
+{
+    // load context data, then call finish on delegate
+    dispatch_async(GCDBackgroundThread, ^{
+        NSDictionary *status = [self rawDataAtIndex:0];
+        id result = [TWENGINE getDetailsForTweet:status[@"in_reply_to_status_id_str"]];
+        if ([result isKindOfClass:[NSError class]]) {
+            [self.delegate dataSource:self didFinishRefreshWithError:result];
+        } else {
+            HSUTableCellData *chatCellData = [[HSUTableCellData alloc] initWithRawData:result dataType:kDataType_ChatStatus];
+            [self.data insertObject:chatCellData atIndex:0];
+            [self.delegate dataSource:self didFinishRefreshWithError:nil];
+        }
+    });
 }
 
 @end

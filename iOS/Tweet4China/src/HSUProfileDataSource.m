@@ -79,7 +79,7 @@
                 if ([result isKindOfClass:[NSArray class]]) {
                     NSArray *tweets = result;
                     for (NSDictionary *tweet in tweets) {
-                        HSUTableCellData *statusCellData = [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_Status];
+                        HSUTableCellData *statusCellData = [[HSUTableCellData alloc] initWithRawData:tweet dataType:kDataType_DefaultStatus];
                         [strongSelf.data addObject:statusCellData];
                     }
                     [strongSelf.delegate preprocessDataSourceForRender:strongSelf];

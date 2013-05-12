@@ -124,14 +124,21 @@
     textAL.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
     textAL.lineHeightMultiple = textAL_LHM;
     
-    if (self.style == HSUStatusViewStyle_Gallery) {
+    if (self.style == HSUStatusViewStyle_Default) {
+        avatarB.frame = ccr(0, 0, avatar_S, avatar_S);
+    } else if (self.style == HSUStatusViewStyle_Gallery) {
         attrI.hidden = YES;
         ambientL.textColor = kWhiteColor;
         nameL.textColor = kWhiteColor;
         screenNameL.textColor = kWhiteColor;
         timeL.textColor = kWhiteColor;
         textAL.textColor = kWhiteColor;
+        avatarB.frame = ccr(0, 0, avatar_S, avatar_S);
     } else if (self.style == HSUStatusViewStyle_Light) {
+        attrI.hidden = YES;
+        avatarB.frame = ccr(0, 0, avatar_S, avatar_S);
+    } else if (self.style == HSUStatusViewStyle_Chat) {
+        avatarB.frame = ccr(avatar_S-32, 0, 32, 32);
         attrI.hidden = YES;
     }
 }
@@ -147,10 +154,8 @@
     ambientI.frame = ccr(avatar_S-ambient_S, (ambient_H-ambient_S)/2, ambient_S, ambient_S);
     ambientL.frame = ccr(avatar_S+padding_S, 0, cw-ambientI.right-padding_S, ambient_H);
     
-    if (ambientArea.hidden) {
-        avatarB.frame = ccr(avatarB.left, 0, avatar_S, avatar_S);
-    } else {
-        avatarB.frame = ccr(avatarB.left, ambientArea.bottom, avatar_S, avatar_S);
+    if (!ambientArea.hidden) {
+        avatarB.frame = ccr(avatarB.left, ambientArea.bottom, avatarB.width, avatarB.height);
     }
     
     infoArea.frame = ccr(ambientL.left, avatarB.top, cw-ambientL.left, info_H);

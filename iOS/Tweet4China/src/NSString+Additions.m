@@ -19,7 +19,7 @@
     
     while (len > 0) {
         [ret appendString:[NSString stringWithFormat:@"%C", [str characterAtIndex:--len]]];
-        if ((str.length - len) % 3 == 0) {
+        if (len && (str.length - len) % 3 == 0) {
             [ret appendString:@","];
         }
     }

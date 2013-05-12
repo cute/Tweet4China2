@@ -23,13 +23,6 @@
 
 @implementation HSUTweetsViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    [self.dataSource refresh];
-}
-
 - (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource
 {
     [dataSource addEventWithName:@"reply" target:self action:@selector(reply:) events:UIControlEventTouchUpInside];
@@ -43,7 +36,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
-    if ([data.dataType isEqualToString:kDataType_Status]) {
+    if ([data.dataType isEqualToString:kDataType_DefaultStatus]) {
         HSUStatusViewController *statusVC = [[HSUStatusViewController alloc] initWithStatus:data.rawData];
         [self.navigationController pushViewController:statusVC animated:YES];
         return;

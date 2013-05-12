@@ -303,10 +303,10 @@
     self.tweetsCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
     [self.tweetsCountLabel sizeToFit];
     self.tweetsButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.tweetsButton.titleEdgeInsets.left, self.tweetsButton.titleEdgeInsets.bottom, self.tweetsButton.titleEdgeInsets.right);
-    self.followingCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
+    self.followingCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"friends_count"] integerValue]];
     [self.followingCountLabel sizeToFit];
     self.followingButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.followingButton.titleEdgeInsets.left, self.followingButton.titleEdgeInsets.bottom, self.followingButton.titleEdgeInsets.right);
-    self.followersCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"statuses_count"] integerValue]];
+    self.followersCountLabel.text = [NSString stringSplitWithCommaFromInteger:[profile[@"followers_count"] integerValue]];
     [self.followersCountLabel sizeToFit];
     self.followersButton.titleEdgeInsets = UIEdgeInsetsMake(16, self.followersButton.titleEdgeInsets.left, self.followersButton.titleEdgeInsets.bottom, self.followersButton.titleEdgeInsets.right);
     
@@ -327,7 +327,7 @@
         [self.followButton setBackgroundImage:[[UIImage imageNamed:@"btn_following_pressed"] stretchableImageFromCenter]
                                      forState:UIControlStateNormal];
         [self.followButton setImage:nil forState:UIControlStateNormal];
-        [self.followButton setTitleShadowColor:kBlackColor forState:UIControlStateNormal];
+        [self.followButton setTitleShadowColor:bw(80) forState:UIControlStateNormal];
         self.followButton.titleLabel.shadowOffset = ccs(0, -1);
         [self.followButton setTitleColor:kWhiteColor forState:UIControlStateNormal];
         [self.followButton setTitle:@"Following" forState:UIControlStateNormal];
