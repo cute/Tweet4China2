@@ -15,6 +15,8 @@
 #import "HSUFollowersDataSource.h"
 #import "HSUFollowingDataSource.h"
 #import "HSUPersonListViewController.h"
+#import "HSUComposeViewController.h"
+#import "HSUNavigationBarLight.h"
 
 @interface HSUProfileViewController () <HSUProfileViewDelegate>
 
@@ -283,6 +285,18 @@
     count ++;
     
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)_composeButtonTouched
+{
+    HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
+    if (![self.screenName isEqualToString:[TWENGINE myScreenName]]) {
+        composeVC.defaultText = [NSString stringWithFormat:@"@%@ ", self.screenName];
+        composeVC.defaultSelectedRange = NSMakeRange(0, composeVC.defaultText.length);
+    }
+    UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+    nav.viewControllers = @[composeVC];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 @end

@@ -153,7 +153,6 @@
     }
 
     [((HSUTabController *)self.tabBarController) hideUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];
-    [HSUNetworkActivityIndicatorManager oneLess];
 }
 
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishLoadMoreWithError:(NSError *)error
@@ -164,13 +163,11 @@
         [self.tableView reloadData];
         [self.refreshControl endRefreshing];
     }
-    [HSUNetworkActivityIndicatorManager oneLess];
 }
 
 - (void)dataSourceDidFindUnread:(HSUBaseDataSource *)dataSource
 {
     [((HSUTabController *)self.tabBarController) showUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];
-    [HSUNetworkActivityIndicatorManager oneLess];
 }
 
 - (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource

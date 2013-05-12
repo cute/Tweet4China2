@@ -12,7 +12,6 @@
 
 + (void)checkUnreadForViewController:(HSUBaseViewController *)viewController
 {
-    [HSUNetworkActivityIndicatorManager oneMore];
     dispatch_async(GCDBackgroundThread, ^{
         @autoreleasepool {
             NSString *latestIdStr = [[NSUserDefaults standardUserDefaults] objectForKey:S(@"%@_first_id_str", self.cacheKey)];

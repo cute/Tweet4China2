@@ -79,14 +79,16 @@ static NSString *sProxyUrl = nil;
     [proxyRequest setValue:S(@"%d", proxyBody.length) forHTTPHeaderField:@"Content-Length"];
     
     connection = [NSURLConnection connectionWithRequest:proxyRequest delegate:self];
+    [HSUNetworkActivityIndicatorManager show];
 }
 
 - (void)stopLoading
 {
     [connection cancel];
+    [HSUNetworkActivityIndicatorManager hide];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+- (void)connection:(NSURLConnection *)_connection didReceiveData:(NSData *)data
 {
     if (proRespData == nil) {
         proRespData = [data mutableCopy];
@@ -98,11 +100,12 @@ static NSString *sProxyUrl = nil;
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     [self.client URLProtocol:self didFailWithError:error];
+    [HSUNetworkActivityIndicatorManager hide];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    [self.client URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];  // We cache ourselves.
+    [self.client URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
@@ -112,6 +115,7 @@ static NSString *sProxyUrl = nil;
     
     [self.client URLProtocol:self didLoadData:sourceData];
     [self.client URLProtocolDidFinishLoading:self];
+    [HSUNetworkActivityIndicatorManager hide];
 }
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request

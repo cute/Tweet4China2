@@ -47,11 +47,6 @@
     [self.tableView registerClass:[HSUMainStatusCell class] forCellReuseIdentifier:kDataType_MainStatus];
 }
 
-- (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource
-{
-    [dataSource addEventWithName:@"touchAvatar" target:self action:@selector(touchAvatar:) events:UIControlEventTouchUpInside];
-}
-
 - (void)_composeButtonTouched
 {
     HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];

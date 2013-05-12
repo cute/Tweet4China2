@@ -10,7 +10,7 @@
 
 @interface HSUNetworkActivityIndicatorManager : NSObject
 
-+ (void)oneMore;
-+ (void)oneLess;
++ (void)show;
++ (void)hide;
 
 @end

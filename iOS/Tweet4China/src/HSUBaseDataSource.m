@@ -135,14 +135,12 @@
 - (void)refresh
 {
     self.loadingCount ++;
-	[HSUNetworkActivityIndicatorManager oneMore];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNNStartRefreshing object:nil];
 }
 
 - (void)loadMore
 {
     self.loadingCount ++;
-    [HSUNetworkActivityIndicatorManager oneMore];
 }
 
 - (void)loadFromIndex:(NSInteger)startIndex toIndex:(NSInteger)endIndex

@@ -14,13 +14,14 @@
 #import "HSUStatusView.h"
 #import "HSUStatusViewController.h"
 
-@interface HSUGalleryView()
+@interface HSUGalleryView() <UIScrollViewDelegate>
 
 @end
 
 @implementation HSUGalleryView
 {
     UIProgressView *progressBar;
+    UIScrollView *imagePanel;
     UIImageView *imageView;
     UIView *menuView;
     HSUStatusView *statusView;
@@ -49,8 +50,13 @@
         progressBar.progressTintColor = kWhiteColor;
         progressBar.trackTintColor = kBlackColor;
         
-        imageView = [[UIImageView alloc] init];
-        [self addSubview:imageView];
+        imagePanel = [[UIScrollView alloc] initWithFrame:self.bounds];
+        [self addSubview:imagePanel];
+        imagePanel.contentSize = self.size;
+        imagePanel.delegate = self;
+        
+        imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        [imagePanel addSubview:imageView];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         
         menuView = [[UIView alloc] init];
@@ -100,7 +106,6 @@
         menuView.height = actionView.bottom + 5;
         
         progressBar.center = self.boundsCenter;
-        imageView.frame = self.bounds;
         
         // gestures
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] init];
@@ -130,6 +135,16 @@
     if (self) {
         [progressBar removeFromSuperview];
         [imageView setImage:image];
+        [imageView sizeToFit];
+        float zoomScale = 0;
+        if (imageView.width / imageView.height > self.width / self.height) {
+            zoomScale = self.width / imageView.width;
+        } else {
+            zoomScale = self.height / imageView.height;
+        }
+        imagePanel.maximumZoomScale = 2 * zoomScale;
+        imagePanel.minimumZoomScale = zoomScale;
+        imagePanel.zoomScale = zoomScale;
     }
     return self;
 }
@@ -150,6 +165,15 @@
         [downloader setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
             [progressBar removeFromSuperview];
             [imageView setImage:responseObject];
+            float zoomScale = 0;
+            if (imageView.width / imageView.height > self.width / self.height) {
+                zoomScale = self.width / imageView.width;
+            } else {
+                zoomScale = self.height / imageView.height;
+            }
+            imagePanel.maximumZoomScale = 2 * zoomScale;
+            imagePanel.minimumZoomScale = zoomScale;
+            imagePanel.zoomScale = zoomScale;
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [progressBar removeFromSuperview];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Load image failed" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -246,6 +270,11 @@
         [self removeFromSuperview];
         [event performSelector:@selector(fire:) withObject:sender];
     }];
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return imageView;
 }
 
 @end

@@ -11,13 +11,13 @@
 static uint indicatorCount = 0;
 @implementation HSUNetworkActivityIndicatorManager
 
-+ (void)oneMore
++ (void)show
 {
     indicatorCount ++;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
-+ (void)oneLess
++ (void)hide
 {
     if (indicatorCount > 0) {
         indicatorCount --;

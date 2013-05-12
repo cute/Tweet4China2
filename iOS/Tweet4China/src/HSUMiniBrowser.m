@@ -50,6 +50,7 @@
     [self.view addSubview:webview];
     self.webview = webview;
     webview.delegate = self;
+    webview.scrollView.delegate = self;
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:self.url];
     [webview loadRequest:request];
     UIColor *webviewBGC = [UIColor clearColor];
