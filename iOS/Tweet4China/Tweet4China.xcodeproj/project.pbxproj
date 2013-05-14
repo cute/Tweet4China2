@@ -282,6 +282,10 @@
 		96BE217416EC8FDA00226799 /* HSUBaseTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BE217316EC8FDA00226799 /* HSUBaseTableCell.m */; };
 		96CFC382171EC82000B6D212 /* TwitterText.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CFC37F171EC82000B6D212 /* TwitterText.m */; };
 		96CFC383171EC82000B6D212 /* TwitterTextEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 96CFC381171EC82000B6D212 /* TwitterTextEntity.m */; };
+		96D291B51742879400AB4F8C /* HSUDraftManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D291B41742879400AB4F8C /* HSUDraftManager.m */; };
+		96D291BA17428A3A00AB4F8C /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D291B817428A3A00AB4F8C /* NSString+MD5.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		96D291BB17428A3A00AB4F8C /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D291B917428A3A00AB4F8C /* README.txt */; };
+		96D291BE1742924000AB4F8C /* NSData+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D291BD1742924000AB4F8C /* NSData+MD5.m */; };
 		96D4BC8C172830F700E7BABA /* HSUConnectDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D4BC8B172830F700E7BABA /* HSUConnectDataSource.m */; };
 		96DABC44172A8471001AD70A /* icn_gallery_tweet_action_delete_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 96DABC20172A846E001AD70A /* icn_gallery_tweet_action_delete_default.png */; };
 		96DABC45172A8473001AD70A /* icn_gallery_tweet_action_delete_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96DABC21172A846E001AD70A /* icn_gallery_tweet_action_delete_default@2x.png */; };
@@ -713,6 +717,13 @@
 		96CFC37F171EC82000B6D212 /* TwitterText.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterText.m; path = "twitter-text-objc/lib/TwitterText.m"; sourceTree = "<group>"; };
 		96CFC380171EC82000B6D212 /* TwitterTextEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterTextEntity.h; path = "twitter-text-objc/lib/TwitterTextEntity.h"; sourceTree = "<group>"; };
 		96CFC381171EC82000B6D212 /* TwitterTextEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterTextEntity.m; path = "twitter-text-objc/lib/TwitterTextEntity.m"; sourceTree = "<group>"; };
+		96D291B31742879400AB4F8C /* HSUDraftManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUDraftManager.h; sourceTree = "<group>"; };
+		96D291B41742879400AB4F8C /* HSUDraftManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUDraftManager.m; sourceTree = "<group>"; };
+		96D291B717428A3A00AB4F8C /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		96D291B817428A3A00AB4F8C /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		96D291B917428A3A00AB4F8C /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		96D291BC1742924000AB4F8C /* NSData+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MD5.h"; sourceTree = "<group>"; };
+		96D291BD1742924000AB4F8C /* NSData+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MD5.m"; sourceTree = "<group>"; };
 		96D4BC8A172830F700E7BABA /* HSUConnectDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUConnectDataSource.h; sourceTree = "<group>"; };
 		96D4BC8B172830F700E7BABA /* HSUConnectDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUConnectDataSource.m; sourceTree = "<group>"; };
 		96DABC20172A846E001AD70A /* icn_gallery_tweet_action_delete_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_gallery_tweet_action_delete_default.png; sourceTree = "<group>"; };
@@ -930,6 +941,7 @@
 		9628177516DE5FDF00ABF0AD /* 3th-party */ = {
 			isa = PBXGroup;
 			children = (
+				96D291B617428A3A00AB4F8C /* NSString-MD5 */,
 				96CFC37D171EC73800B6D212 /* twitter-text-objc */,
 				9631AD161714738F006A4C0F /* GTMNSString+HTML */,
 				9612AF4217086D710038935C /* libshadow */,
@@ -1208,6 +1220,8 @@
 				60390D64609E5798B654DD30 /* UIButton+Additions.h */,
 				9628E6D717312240005A9EC9 /* NSString+Additions.h */,
 				9628E6D817312240005A9EC9 /* NSString+Additions.m */,
+				96D291BC1742924000AB4F8C /* NSData+MD5.h */,
+				96D291BD1742924000AB4F8C /* NSData+MD5.m */,
 			);
 			name = Additions;
 			sourceTree = "<group>";
@@ -1417,6 +1431,8 @@
 				96F92D8316FB02070026284D /* TTTAttributedLabel.m */,
 				962AB00416FB324D00D44566 /* HSURefreshControl.h */,
 				962AB00516FB324D00D44566 /* HSURefreshControl.m */,
+				96D291B31742879400AB4F8C /* HSUDraftManager.h */,
+				96D291B41742879400AB4F8C /* HSUDraftManager.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -1451,6 +1467,16 @@
 				96CFC381171EC82000B6D212 /* TwitterTextEntity.m */,
 			);
 			name = "twitter-text-objc";
+			sourceTree = "<group>";
+		};
+		96D291B617428A3A00AB4F8C /* NSString-MD5 */ = {
+			isa = PBXGroup;
+			children = (
+				96D291B717428A3A00AB4F8C /* NSString+MD5.h */,
+				96D291B817428A3A00AB4F8C /* NSString+MD5.m */,
+				96D291B917428A3A00AB4F8C /* README.txt */,
+			);
+			path = "NSString-MD5";
 			sourceTree = "<group>";
 		};
 		96DABC68172A8492001AD70A /* Controller_Model */ = {
@@ -1742,6 +1768,7 @@
 				967272CA17352EF100B6E30A /* icn_blocked_default~iphone.png in Resources */,
 				967272CB17352EF100B6E30A /* icn_profile_action@2x~iphone.png in Resources */,
 				967272CC17352EF100B6E30A /* icn_profile_action~iphone.png in Resources */,
+				96D291BB17428A3A00AB4F8C /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1846,6 +1873,9 @@
 				967272B91733E3E500B6E30A /* HSUUserHomeDataSource.m in Sources */,
 				969B7435173FA8370072EFC0 /* HSUChatStatusCell.m in Sources */,
 				969B7438173FB3910072EFC0 /* HSUDefaultStatusCell.m in Sources */,
+				96D291B51742879400AB4F8C /* HSUDraftManager.m in Sources */,
+				96D291BA17428A3A00AB4F8C /* NSString+MD5.m in Sources */,
+				96D291BE1742924000AB4F8C /* NSData+MD5.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

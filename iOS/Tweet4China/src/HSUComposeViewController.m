@@ -441,59 +441,53 @@
 - (void)sendTweet
 {
     if (contentTV.text == nil) return;
+    NSString *status = contentTV.text;
     NSString *briefMessage = [NSString stringWithFormat:@"Message sent: %@", [contentTV.text substringToIndex:MIN(20, contentTV.text.length)]];
     dispatch_async(GCDBackgroundThread, ^{
+        //save draft
+        NSData *imageData = UIImageJPEGRepresentation(postImage, 0.92);
+        NSString *draftID = [[HSUDraftManager shared] saveDraftWithStatus:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
+        
+        // do send
         NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
         
         NSMutableArray *params = [NSMutableArray array];
         
-        NSString *status = contentTV.text;
+        // status param
         OARequestParameter *statusP = [OARequestParameter requestParameterWithName:@"status" value:status];
         [params addObject:statusP];
         
+        // reply param
         if (self.inReplyToStatusId) {
             OARequestParameter *inReplyToStatusIdP = [OARequestParameter requestParameterWithName:@"in_reply_to_status_id" value:self.inReplyToStatusId];
             [params addObject:inReplyToStatusIdP];
         }
-
+        
+        // image param
         if (postImage) {
             baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update_with_media.json"];
-            OARequestParameter *mediaP = [OARequestParameter requestParameterWithName:@"media_data[]" value:[UIImageJPEGRepresentation(postImage, 0.92) base64EncodingWithLineLength:0]];
+            OARequestParameter *mediaP = [OARequestParameter requestParameterWithName:@"media_data[]" value:[imageData base64EncodingWithLineLength:0]];
             [params addObject:mediaP];
         }
+        
+        // location param
         if (location.latitude && location.longitude) {
             OARequestParameter *latP = [OARequestParameter requestParameterWithName:@"lat" value:S(@"%g", location.latitude)];
             OARequestParameter *longP = [OARequestParameter requestParameterWithName:@"long" value:S(@"%g", location.longitude)];
             [params addObject:latP];
             [params addObject:longP];
         }
-        if (self.inReplyToStatusId) {
-            OARequestParameter *inReplyToP = [OARequestParameter requestParameterWithName:@"in_reply_to_status_id" value:self.inReplyToStatusId];
-            [params addObject:inReplyToP];
-        }
-
+        
         OAMutableURLRequest *request = [TWENGINE requestWithBaseURL:baseURL];
         NSError *err = [TWENGINE sendPOSTRequest:request withParameters:params];
         if (err) {
-            RIButtonItem *retryItem = [RIButtonItem itemWithLabel:@"Retry"];
-            retryItem.action = ^{
-                UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
-                HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
-                nav.viewControllers = @[composeVC];
-                composeVC.defaultText = status;
-                double delayInSeconds = 0.5;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [DEF_RootViewController presentViewController:nav animated:YES completion:nil];
-                });
-            };
-            RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Send status failed" message:err.localizedDescription cancelButtonItem:cancelItem otherButtonItems:retryItem, nil];
+            [[HSUDraftManager shared] activeDraftWithID:draftID];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Tweet not sent" message:@"There was an issue when sending your Tweets. It has been saved to your drafts. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             dispatch_async(GCDMainThread, ^{
                 [alert show];
             });
         } else {
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"draft"];
+            [[HSUDraftManager shared] removeDraftWithID:draftID];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sent" message:briefMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
             dispatch_async(GCDMainThread, ^{
                 [alert show];

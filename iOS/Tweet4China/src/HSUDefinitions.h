@@ -34,6 +34,8 @@
 #import "HSULoadMoreCell.h"
 #import "HSUNavitationBar.h"
 #import "HSUNavigationBarLight.h"
+#import "HSUDraftManager.h"
+#import "NSData+MD5.h"
 
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <MobileCoreServices/MobileCoreServices.h>

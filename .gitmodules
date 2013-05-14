@@ -22,3 +22,6 @@
 [submodule "iOS/Tweet4China/3th-party/SDWebImage"]
 	path = iOS/Tweet4China/3th-party/SDWebImage
 	url = git://github.com/rs/SDWebImage.git
+[submodule "iOS/Tweet4China/3th-party/NSString-MD5"]
+	path = iOS/Tweet4China/3th-party/NSString-MD5
+	url = git://github.com/H2CO3/NSString-MD5.git
