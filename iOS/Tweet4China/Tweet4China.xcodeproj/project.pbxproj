@@ -1928,11 +1928,17 @@
 		9628177316DE5EDC00ABF0AD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jingsi Liu (7G753UCBHH)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tweet4China/Tweet4China-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"AUTHOR_jason=1",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "Tweet4China/Tweet4China-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "0EE3C6E5-A911-4865-8E30-9B6C3454484B";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

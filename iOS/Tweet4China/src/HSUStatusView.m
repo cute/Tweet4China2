@@ -156,6 +156,8 @@
     
     if (!ambientArea.hidden) {
         avatarB.frame = ccr(avatarB.left, ambientArea.bottom, avatarB.width, avatarB.height);
+    } else {
+        avatarB.frame = ccr(avatarB.left, 0, avatarB.width, avatarB.height);
     }
     
     infoArea.frame = ccr(ambientL.left, avatarB.top, cw-ambientL.left, info_H);

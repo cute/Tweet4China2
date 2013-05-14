@@ -32,6 +32,8 @@
 #import "HSUUIEvent.h"
 #import "HSUCommonTools.h"
 #import "HSULoadMoreCell.h"
+#import "HSUNavitationBar.h"
+#import "HSUNavigationBarLight.h"
 
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <MobileCoreServices/MobileCoreServices.h>
@@ -74,6 +76,7 @@ _Pragma("clang diagnostic pop") \
 #define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
 #define GRAY_INDICATOR [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]
 #define MyScreenName [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]
+#define DEF_RootViewController [UIApplication sharedApplication].keyWindow.rootViewController
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 

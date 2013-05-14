@@ -82,6 +82,8 @@
     NSUInteger suggestionType;
     NSMutableArray *filteredSuggestions;
     NSUInteger filterLocation;
+    
+    UIImage *postImage;
 }
 
 - (void)dealloc
@@ -439,12 +441,14 @@
 - (void)sendTweet
 {
     if (contentTV.text == nil) return;
+    NSString *briefMessage = [NSString stringWithFormat:@"Message sent: %@", [contentTV.text substringToIndex:MIN(20, contentTV.text.length)]];
     dispatch_async(GCDBackgroundThread, ^{
         NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
         
         NSMutableArray *params = [NSMutableArray array];
-
-        OARequestParameter *statusP = [OARequestParameter requestParameterWithName:@"status" value:contentTV.text];
+        
+        NSString *status = contentTV.text;
+        OARequestParameter *statusP = [OARequestParameter requestParameterWithName:@"status" value:status];
         [params addObject:statusP];
         
         if (self.inReplyToStatusId) {
@@ -452,9 +456,9 @@
             [params addObject:inReplyToStatusIdP];
         }
 
-        if (previewIV.image) {
+        if (postImage) {
             baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update_with_media.json"];
-            OARequestParameter *mediaP = [OARequestParameter requestParameterWithName:@"media_data[]" value:[UIImageJPEGRepresentation(previewIV.image, 0.92) base64EncodingWithLineLength:0]];
+            OARequestParameter *mediaP = [OARequestParameter requestParameterWithName:@"media_data[]" value:[UIImageJPEGRepresentation(postImage, 0.92) base64EncodingWithLineLength:0]];
             [params addObject:mediaP];
         }
         if (location.latitude && location.longitude) {
@@ -470,10 +474,31 @@
 
         OAMutableURLRequest *request = [TWENGINE requestWithBaseURL:baseURL];
         NSError *err = [TWENGINE sendPOSTRequest:request withParameters:params];
-        if (err == nil) {
+        if (err) {
+            RIButtonItem *retryItem = [RIButtonItem itemWithLabel:@"Retry"];
+            retryItem.action = ^{
+                UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
+                HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
+                nav.viewControllers = @[composeVC];
+                composeVC.defaultText = status;
+                double delayInSeconds = 0.5;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [DEF_RootViewController presentViewController:nav animated:YES completion:nil];
+                });
+            };
+            RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Send status failed" message:err.localizedDescription cancelButtonItem:cancelItem otherButtonItems:retryItem, nil];
+            dispatch_async(GCDMainThread, ^{
+                [alert show];
+            });
+        } else {
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"draft"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sent" message:briefMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            dispatch_async(GCDMainThread, ^{
+                [alert show];
+            });
         }
-        [TWENGINE dealWithError:err errTitle:@"Send status failed"];
     });
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -583,7 +608,8 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     image = [image scaleToWidth:640];
-
+    
+    postImage = image;
     CGFloat height = previewIV.height / previewIV.width * image.size.width;
     CGFloat top = image.size.height/2 - height/2;
     CGImageRef imageRef = CGImageCreateWithImageInRect(image.CGImage, ccr(0, top, image.size.width, height));
@@ -609,6 +635,7 @@
         previewIV.alpha = 0;
         previewIV.center = extraPanelSV.boundsCenter;
     } completion:^(BOOL finished) {
+        postImage = nil;
         previewIV.image = nil;
         previewIV.hidden = YES;
         takePhotoBnt.hidden = NO;

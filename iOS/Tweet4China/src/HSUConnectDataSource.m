@@ -13,7 +13,9 @@
 
 + (void)checkUnreadForViewController:(HSUBaseViewController *)viewController
 {
+#ifdef AUTHOR_jason
     return;
+#endif
     dispatch_async(GCDBackgroundThread, ^{
         @autoreleasepool {
             NSString *latestIdStr = [[NSUserDefaults standardUserDefaults] objectForKey:S(@"%@_first_id_str", self.cacheKey)];
