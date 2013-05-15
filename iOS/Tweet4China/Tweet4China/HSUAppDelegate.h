@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "HSUTabController.h"
 
+@class HSUTabController;
 @interface HSUAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, weak) HSUTabController *tabController;
+
++ (HSUAppDelegate *)shared;
 
 @end

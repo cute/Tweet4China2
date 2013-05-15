@@ -27,6 +27,7 @@
 #import "HSUBaseViewController.h"
 #import "FHSTwitterEngine+Additions.h"
 #import "NSString+Additions.h"
+#import "HSUAppDelegate.h"
 
 #import "HSUTableCellData.h"
 #import "HSUUIEvent.h"
@@ -78,7 +79,7 @@ _Pragma("clang diagnostic pop") \
 #define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
 #define GRAY_INDICATOR [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]
 #define MyScreenName [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]
-#define DEF_RootViewController [UIApplication sharedApplication].keyWindow.rootViewController
+#define DEF_NavitationController_Light [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil]
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 
@@ -88,6 +89,10 @@ _Pragma("clang diagnostic pop") \
 #define kDataType_Person @"Person"
 #define kDataType_LoadMore @"LoadMore"
 #define kDataType_NormalTitle @"NormalTitle"
+#define kDataType_Draft @"Draft"
+
+
+#define kTwitter_Parameter_Key_Reply_ID @"in_reply_to_status_id"
 
 #define kUserSettings_DBKey @"user_settings"
 

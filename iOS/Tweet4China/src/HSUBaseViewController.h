@@ -16,11 +16,14 @@
 @property (nonatomic, strong) HSUBaseDataSource *dataSource;
 @property (nonatomic, weak) HSURefreshControl *refreshControl;
 @property (nonatomic, weak) UITableView *tableView;
-@property (nonatomic, assign) BOOL showBackButton;
+@property (nonatomic, assign) BOOL hideBackButton;
+@property (nonatomic, assign) BOOL hideRightButtons;
 @property (nonatomic, assign) BOOL useRefreshControl;
 
 - (id)initWithDataSource:(HSUBaseDataSource *)dataSource;
 
 - (Class)cellClassForDataType:(NSString *)dataType;
+
+- (void)presentModelClass:(Class)modelClass;
 
 @end

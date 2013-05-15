@@ -8,6 +8,7 @@
 
 #import "HSUDraftManager.h"
 #import "NSString+MD5.h"
+#import "HSUDraftsViewController.h"
 
 @implementation HSUDraftManager
 
@@ -20,37 +21,37 @@
     return hSUDraftManager;
 }
 
-- (NSString *)saveDraftWithStatus:(NSString *)status imageFilePath:(NSString *)imageFilePath reply:(NSString *)reply locationXY:(CLLocationCoordinate2D)locationXY
+- (NSString *)saveDraftWithTitle:(NSString *)title status:(NSString *)status imageFilePath:(NSString *)imageFilePath reply:(NSString *)reply locationXY:(CLLocationCoordinate2D)locationXY
 {
     NSString *draftID = [status MD5Hash];
     NSDictionary *drafts = [[NSUserDefaults standardUserDefaults] objectForKey:@"drafts"];
     if (!drafts) {
         drafts = [[NSMutableDictionary alloc] init];
     } else {
-        NSDictionary *draft = drafts[draftID];
-        if (draft) {
-            return draftID;
-        } else {
-            drafts = [drafts mutableCopy];
-        }
+        drafts = [drafts mutableCopy];
     }
-    ((NSMutableDictionary *)drafts)[draftID] = @{@"status": status,
-                                                 @"image_file_path": imageFilePath,
-                                                 @"in_reply_to_status_id": reply,
-                                                 @"lat": [@(locationXY.latitude) description],
-                                                 @"long": [@(locationXY.longitude) description],
-                                                 @"update_time": @([[NSDate date] timeIntervalSince1970]),
-                                                 };
+    NSMutableDictionary *draft = [[NSMutableDictionary alloc] init];
+    draft[@"status"] = status;
+    if (title) draft[@"title"] = title;
+    if (imageFilePath) draft[@"image_file_path"] = imageFilePath;
+    if (reply) draft[kTwitter_Parameter_Key_Reply_ID] = reply;
+    if (locationXY.latitude) draft[@"lat"] = S(@"%g", locationXY.latitude);
+    if (locationXY.longitude) draft[@"long"] = S(@"%g", locationXY.longitude);
+    draft[@"update_time"] = [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]];
+    ((NSMutableDictionary *)drafts)[draftID] = draft;
     [[NSUserDefaults standardUserDefaults] setObject:drafts forKey:@"drafts"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     return draftID;
 }
 
-- (NSString *)saveDraftWithStatus:(NSString *)status imageData:(NSData *)imageData reply:(NSString *)reply locationXY:(CLLocationCoordinate2D)locationXY
+- (NSString *)saveDraftWithTitle:(NSString *)title status:(NSString *)status imageData:(NSData *)imageData reply:(NSString *)reply locationXY:(CLLocationCoordinate2D)locationXY
 {
-    NSString *filePath = dp(S(@"drafts/%@", imageData.md5));
-    [imageData writeToFile:filePath atomically:YES];
-    return [self saveDraftWithStatus:status imageFilePath:filePath reply:reply locationXY:locationXY];
+    NSString *filePath = nil;
+    if (imageData) {
+        NSString *filePath = dp(S(@"drafts/%@", imageData.md5));
+        [imageData writeToFile:filePath atomically:YES];
+    }
+    return [self saveDraftWithTitle:title status:status imageFilePath:filePath reply:reply locationXY:locationXY];
 }
 
 - (void)activeDraftWithID:(NSString *)draftID
@@ -79,7 +80,7 @@
     NSMutableArray *draftArr = [[NSMutableArray alloc] initWithCapacity:drafts.count];
     for (NSString *dID in drafts.allKeys) {
         NSDictionary *draft = drafts[dID];
-        if ([draft[@"active"][@"active"] boolValue]) {
+        if ([draft[@"active"] boolValue]) {
             [draftArr addObject:draft];
         }
     }
@@ -87,6 +88,13 @@
         return [d1[@"update_time"] doubleValue] - [d2[@"update_time"] doubleValue];
     }];
     return draftArr;
+}
+
+- (void)presentDraftsViewController
+{
+    UINavigationController *nav = DEF_NavitationController_Light;
+    nav.viewControllers = @[[[HSUDraftsViewController alloc] init]];
+    [[HSUAppDelegate shared].tabController presentViewController:nav animated:YES completion:nil];
 }
 
 @end

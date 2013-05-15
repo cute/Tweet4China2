@@ -90,6 +90,8 @@
         } else if ([rawData[@"action"] isEqualToString:kAction_Followers]) {
             [self followersButtonTouched];
             return;
+        } else if ([rawData[@"action"] isEqualToString:kAction_Drafts]) {
+            [self draftsButtonTouched];
         }
     }
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
@@ -116,6 +118,11 @@
     HSUPersonListDataSource *dataSource = [[HSUFollowersDataSource alloc] initWithScreenName:self.screenName];
     HSUPersonListViewController *detailVC = [[HSUPersonListViewController alloc] initWithDataSource:dataSource];
     [self.navigationController pushViewController:detailVC animated:YES];
+}
+
+- (void)draftsButtonTouched
+{
+    [[HSUDraftManager shared] presentDraftsViewController];
 }
 
 - (void)followButtonTouched:(UIButton *)followButton

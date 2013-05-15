@@ -446,7 +446,7 @@
     dispatch_async(GCDBackgroundThread, ^{
         //save draft
         NSData *imageData = UIImageJPEGRepresentation(postImage, 0.92);
-        NSString *draftID = [[HSUDraftManager shared] saveDraftWithStatus:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
+        NSString *draftID = [[HSUDraftManager shared] saveDraftWithTitle:self.title status:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
         
         // do send
         NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
@@ -459,7 +459,7 @@
         
         // reply param
         if (self.inReplyToStatusId) {
-            OARequestParameter *inReplyToStatusIdP = [OARequestParameter requestParameterWithName:@"in_reply_to_status_id" value:self.inReplyToStatusId];
+            OARequestParameter *inReplyToStatusIdP = [OARequestParameter requestParameterWithName:kTwitter_Parameter_Key_Reply_ID value:self.inReplyToStatusId];
             [params addObject:inReplyToStatusIdP];
         }
         
@@ -482,7 +482,14 @@
         NSError *err = [TWENGINE sendPOSTRequest:request withParameters:params];
         if (err) {
             [[HSUDraftManager shared] activeDraftWithID:draftID];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Tweet not sent" message:@"There was an issue when sending your Tweets. It has been saved to your drafts. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+            RIButtonItem *draftsItem = [RIButtonItem itemWithLabel:@"Drafts"];
+            draftsItem.action = ^{
+                [[HSUDraftManager shared] presentDraftsViewController];
+            };
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Tweet not sent"
+                                                            message:@"There was an issue when sending your Tweets. It has been saved to your drafts. Please try again later."
+                                                   cancelButtonItem:cancelItem otherButtonItems:draftsItem, nil];
             dispatch_async(GCDMainThread, ^{
                 [alert show];
             });

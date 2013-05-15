@@ -24,6 +24,7 @@
 #import "HSUPersonCell.h"
 #import "HSUChatStatusCell.h"
 #import "HSUDefaultStatusCell.h"
+#import "HSUDraftCell.h"
 
 @interface HSUBaseViewController ()
 
@@ -64,21 +65,27 @@
         cellData.renderData[@"attributed_label_delegate"] = self;
     }
     
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    UITableView *tableView;
+    if (self.tableView) {
+        tableView = self.tableView;
+    } else {
+        tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        [self.view addSubview:tableView];
+        self.tableView = tableView;
+    }
     // todo: rework
     [tableView registerClass:[HSUDefaultStatusCell class] forCellReuseIdentifier:kDataType_DefaultStatus];
     [tableView registerClass:[HSUChatStatusCell class] forCellReuseIdentifier:kDataType_ChatStatus];
     [tableView registerClass:[HSUPersonCell class] forCellReuseIdentifier:kDataType_Person];
     [tableView registerClass:[HSULoadMoreCell class] forCellReuseIdentifier:kDataType_LoadMore];
     [tableView registerClass:[HSUNormalTitleCell class] forCellReuseIdentifier:kDataType_NormalTitle];
+    [tableView registerClass:[HSUDraftCell class] forCellReuseIdentifier:kDataType_Draft];
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     tableView.backgroundColor = kClearColor;
     tableView.backgroundView = nil;
     tableView.separatorColor = rgb(206, 206, 206);
-    [self.view addSubview:tableView];
-    self.tableView = tableView;
     
     if (self.useRefreshControl) {
         HSURefreshControl *refreshControl = [[HSURefreshControl alloc] init];
@@ -87,9 +94,13 @@
         self.refreshControl = refreshControl;
     }
     
-    self.navigationItem.rightBarButtonItems = [self _createRightBarButtonItems];
-    if ([self.navigationController.viewControllers objectAtIndex:0] != self) {
-        self.navigationItem.leftBarButtonItem = [self _createBackButton];
+    if (!self.hideRightButtons) {
+        self.navigationItem.rightBarButtonItems = [self _createRightBarButtonItems];
+    }
+    if (!self.hideBackButton) {
+        if ([self.navigationController.viewControllers objectAtIndex:0] != self) {
+            self.navigationItem.leftBarButtonItem = [self _createBackButton];
+        }
     }
 }
 
@@ -232,6 +243,14 @@
 - (void)_searchButtonTouched
 {
     L(@"search button touched");
+}
+
+- (void)presentModelClass:(Class)modelClass
+{
+    UINavigationController *nav = DEF_NavitationController_Light;
+    UIViewController *vc = [[modelClass alloc] init];
+    nav.viewControllers = @[vc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 @end
