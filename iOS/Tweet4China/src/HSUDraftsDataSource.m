@@ -24,4 +24,15 @@
     return self;
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        HSUTableCellData *cellData = [self dataAtIndexPath:indexPath];
+        if ([[HSUDraftManager shared] removeDraft:cellData.rawData]) {
+            [self removeCellData:cellData];
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    }
+}
+
 @end

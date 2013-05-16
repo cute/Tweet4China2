@@ -446,42 +446,11 @@
     dispatch_async(GCDBackgroundThread, ^{
         //save draft
         NSData *imageData = UIImageJPEGRepresentation(postImage, 0.92);
-        NSString *draftID = [[HSUDraftManager shared] saveDraftWithTitle:self.title status:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
+        NSDictionary *draft = [[HSUDraftManager shared] saveDraftWithTitle:self.title status:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
         
-        // do send
-        NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update.json"];
-        
-        NSMutableArray *params = [NSMutableArray array];
-        
-        // status param
-        OARequestParameter *statusP = [OARequestParameter requestParameterWithName:@"status" value:status];
-        [params addObject:statusP];
-        
-        // reply param
-        if (self.inReplyToStatusId) {
-            OARequestParameter *inReplyToStatusIdP = [OARequestParameter requestParameterWithName:kTwitter_Parameter_Key_Reply_ID value:self.inReplyToStatusId];
-            [params addObject:inReplyToStatusIdP];
-        }
-        
-        // image param
-        if (postImage) {
-            baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/update_with_media.json"];
-            OARequestParameter *mediaP = [OARequestParameter requestParameterWithName:@"media_data[]" value:[imageData base64EncodingWithLineLength:0]];
-            [params addObject:mediaP];
-        }
-        
-        // location param
-        if (location.latitude && location.longitude) {
-            OARequestParameter *latP = [OARequestParameter requestParameterWithName:@"lat" value:S(@"%g", location.latitude)];
-            OARequestParameter *longP = [OARequestParameter requestParameterWithName:@"long" value:S(@"%g", location.longitude)];
-            [params addObject:latP];
-            [params addObject:longP];
-        }
-        
-        OAMutableURLRequest *request = [TWENGINE requestWithBaseURL:baseURL];
-        NSError *err = [TWENGINE sendPOSTRequest:request withParameters:params];
+        NSError *err = [[HSUDraftManager shared] sendDraft:draft];
         if (err) {
-            [[HSUDraftManager shared] activeDraftWithID:draftID];
+            [[HSUDraftManager shared] activeDraft:draft];
             RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
             RIButtonItem *draftsItem = [RIButtonItem itemWithLabel:@"Drafts"];
             draftsItem.action = ^{
@@ -494,7 +463,7 @@
                 [alert show];
             });
         } else {
-            [[HSUDraftManager shared] removeDraftWithID:draftID];
+            [[HSUDraftManager shared] removeDraft:draft];
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sent" message:briefMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
             dispatch_async(GCDMainThread, ^{
                 [alert show];

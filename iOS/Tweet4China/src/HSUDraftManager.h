@@ -16,24 +16,26 @@
 /**
  * return a draft id, md5-hashed by status
 **/
-- (NSString *)saveDraftWithTitle:(NSString *)title
+- (NSDictionary *)saveDraftWithTitle:(NSString *)title
                           status:(NSString *)status
                     imageFilePath:(NSString *)imageFilePath
                             reply:(NSString *)reply
                        locationXY:(CLLocationCoordinate2D)locationXY;
 
-- (NSString *)saveDraftWithTitle:(NSString *)title
+- (NSDictionary *)saveDraftWithTitle:(NSString *)title
                           status:(NSString *)status
                         imageData:(NSData *)imageData
                             reply:(NSString *)reply
                        locationXY:(CLLocationCoordinate2D)locationXY;
 
 
-- (void)activeDraftWithID:(NSString *)draftID;
-- (void)removeDraftWithID:(NSString *)draftID;
+- (void)activeDraft:(NSDictionary *)draft;
+- (BOOL)removeDraft:(NSDictionary *)draft;
 
 - (NSArray *)draftsSortedByUpdateTime;
 
 - (void)presentDraftsViewController;
+
+- (NSError *)sendDraft:(NSDictionary *)draft;
 
 @end

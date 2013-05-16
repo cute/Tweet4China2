@@ -42,6 +42,7 @@
     self.tableView = tableView;
     
     [super viewDidLoad];
+    self.tableView.backgroundColor = kWhiteColor;
     
     // setup navigation bar
     self.navigationController.navigationBar.tintColor = bw(212);
@@ -124,7 +125,13 @@
 
 - (void)_sendButtonTouched
 {
-    
+    for (HSUTableCellData *cellData in self.dataSource.allData) {
+        NSDictionary *draft = cellData.rawData;
+        dispatch_async(GCDBackgroundThread, ^{
+            [[HSUDraftManager shared] sendDraft:draft];
+        });
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -145,7 +152,5 @@
     
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
 }
-
-// support editing
 
 @end
