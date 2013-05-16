@@ -116,7 +116,7 @@
     NSIndexPath *selection = [self.tableView indexPathForSelectedRow];
 	if (selection)
 		[self.tableView deselectRowAtIndexPath:selection animated:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_HSUStatusCell_OtherCellSwiped object:self];
+    notification_post(kNotification_HSUStatusCell_OtherCellSwiped);
 }
 
 #pragma mark - TableView
@@ -157,6 +157,7 @@
 
 - (void)dataSource:(HSUBaseDataSource *)dataSource didFinishRefreshWithError:(NSError *)error
 {
+    [self.refreshControl endRefreshing];
     if (error) {
         NSLog(@"%@", error);
     } else {
@@ -165,7 +166,6 @@
         }
         
         [self.tableView reloadData];
-        [self.refreshControl endRefreshing];
     }
 
     [((HSUTabController *)self.tabBarController) hideUnreadIndicatorOnTabBarItem:self.navigationController.tabBarItem];

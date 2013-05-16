@@ -26,7 +26,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    notification_remove_observer(self);
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -40,7 +40,7 @@
         swipeGesture.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
         [self addGestureRecognizer:swipeGesture];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(otherCellSwiped:) name:kNotification_HSUStatusCell_OtherCellSwiped object:nil];
+        notification_add_observer(kNotification_HSUStatusCell_OtherCellSwiped, self, @selector(otherCellSwiped:));
     }
     return self;
 }

@@ -135,7 +135,7 @@
 - (void)refresh
 {
     self.loadingCount ++;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNNStartRefreshing object:nil];
+    notification_post(kNNStartRefreshing);
 }
 
 - (void)loadMore

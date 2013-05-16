@@ -14,5 +14,7 @@
 @property (nonatomic, copy) NSString *defaultTitle;
 @property (nonatomic, assign) NSRange defaultSelectedRange;
 @property (nonatomic, copy) NSString *inReplyToStatusId;
+@property (nonatomic, strong) UIImage *defaultImage;
+@property (nonatomic, strong) NSDictionary *draft;
 
 @end

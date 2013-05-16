@@ -43,6 +43,8 @@
                         }
                         [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:nil];
                         strongSelf.loadingCount --;
+                    } else {
+                        [strongSelf.delegate dataSource:strongSelf didFinishRefreshWithError:result];
                     }
                 }
             });

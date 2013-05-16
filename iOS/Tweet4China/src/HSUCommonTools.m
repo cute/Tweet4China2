@@ -10,6 +10,27 @@
 
 #import "HSUCommonTools.h"
 
+void notification_add_observer(NSString *name, id observer, SEL selector)
+{
+    [[NSNotificationCenter defaultCenter] addObserver:observer selector:selector name:name object:nil];
+}
+
+void notification_remove_observer(id observer)
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:observer];
+}
+
+void notification_post(NSString *name)
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:nil];
+}
+
+void notification_post_with_object(NSString *name, id object)
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:object];
+}
+
+
 @interface HSUMailHelper : NSObject <MFMailComposeViewControllerDelegate>
 @property (nonatomic, weak) UIViewController *currentViewController;
 

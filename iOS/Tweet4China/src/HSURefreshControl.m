@@ -13,14 +13,14 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    notification_remove_observer(self);
 }
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startRefreshing) name:kNNStartRefreshing object:nil];
+        notification_add_observer(kNNStartRefreshing, self, @selector(startRefreshing));
     }
     return self;
 }

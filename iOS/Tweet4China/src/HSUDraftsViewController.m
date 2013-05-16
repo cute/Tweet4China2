@@ -140,9 +140,7 @@
     if ([cellData.dataType isEqualToString:kDataType_Draft]) {
         UINavigationController *nav = DEF_NavitationController_Light;
         HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
-        composeVC.defaultTitle = cellData.rawData[@"title"];
-        composeVC.defaultText = cellData.rawData[@"status"];
-        composeVC.inReplyToStatusId = cellData.rawData[kTwitter_Parameter_Key_Reply_ID];
+        composeVC.draft = cellData.rawData;
         nav.viewControllers = @[composeVC];
         [self dismissViewControllerAnimated:YES completion:^{
             [[HSUAppDelegate shared].tabController presentViewController:nav animated:YES completion:nil];

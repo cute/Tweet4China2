@@ -22,9 +22,16 @@
     return hSUDraftManager;
 }
 
-- (NSDictionary *)saveDraftWithTitle:(NSString *)title status:(NSString *)status imageFilePath:(NSString *)imageFilePath reply:(NSString *)reply locationXY:(CLLocationCoordinate2D)locationXY
+- (NSDictionary *)saveDraftWithDraftID:(NSString *)draftID
+                                 title:(NSString *)title
+                                status:(NSString *)status
+                         imageFilePath:(NSString *)imageFilePath
+                                 reply:(NSString *)reply
+                            locationXY:(CLLocationCoordinate2D)locationXY
 {
-    NSString *draftID = [status MD5Hash];
+    if (!draftID) {
+        draftID = [status MD5Hash];
+    }
     NSDictionary *drafts = [[NSUserDefaults standardUserDefaults] objectForKey:@"drafts"];
     if (!drafts) {
         drafts = [[NSMutableDictionary alloc] init];
@@ -46,14 +53,21 @@
     return draft;
 }
 
-- (NSDictionary *)saveDraftWithTitle:(NSString *)title status:(NSString *)status imageData:(NSData *)imageData reply:(NSString *)reply locationXY:(CLLocationCoordinate2D)locationXY
+- (NSDictionary *)saveDraftWithDraftID:(NSString *)draftID
+                                 title:(NSString *)title
+                                status:(NSString *)status
+                             imageData:(NSData *)imageData
+                                 reply:(NSString *)reply
+                            locationXY:(CLLocationCoordinate2D)locationXY
 {
     NSString *filePath = nil;
     if (imageData) {
-        NSString *filePath = dp(S(@"drafts/%@", imageData.md5));
+        NSString *dir = dp(@"drafts");
+        [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:0 error:nil];
+        filePath = dp(S(@"drafts/%@", imageData.md5));
         [imageData writeToFile:filePath atomically:YES];
     }
-    return [self saveDraftWithTitle:title status:status imageFilePath:filePath reply:reply locationXY:locationXY];
+    return [self saveDraftWithDraftID:draftID title:title status:status imageFilePath:filePath reply:reply locationXY:locationXY];
 }
 
 
@@ -70,7 +84,7 @@
     drafts[draftID] = draft;
     [[NSUserDefaults standardUserDefaults] setObject:drafts forKey:@"drafts"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTI_DraftsCountChanged object:nil];
+    notification_post(NOTI_DraftsCountChanged);
 }
 
 - (BOOL)removeDraft:(NSDictionary *)draft
@@ -94,7 +108,7 @@
         [drafts removeObjectForKey:draftID];
         [[NSUserDefaults standardUserDefaults] setObject:drafts forKey:@"drafts"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTI_DraftsCountChanged object:nil];
+        notification_post(NOTI_DraftsCountChanged);
     }
     return YES;
 }

@@ -81,6 +81,7 @@ _Pragma("clang diagnostic pop") \
 #define MyScreenName [[NSUserDefaults standardUserDefaults] objectForKey:kUserSettings_DBKey][@"screen_name"]
 #define DEF_NavitationController_Light [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil]
 
+
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 
 #define kDataType_MainStatus @"MainStatus"

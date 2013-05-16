@@ -19,7 +19,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    notification_remove_observer(self);
 }
 
 - (id)init
@@ -69,7 +69,7 @@
         [draftData addObject:draftsCellData];
         [self.sectionsData addObject:draftData];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notificationDraftCountChanged) name:NOTI_DraftsCountChanged object:nil];
+        notification_add_observer(NOTI_DraftsCountChanged, self, @selector(_notificationDraftCountChanged));
     }
     return self;
 }

@@ -31,7 +31,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    notification_remove_observer(self);
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -133,7 +133,7 @@
             actionV.alpha = 1;
         }];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_HSUStatusCell_OtherCellSwiped object:self];
+        notification_post(kNotification_HSUStatusCell_OtherCellSwiped);
         self.data.renderData[@"mode"] = @"action";
     }
 }

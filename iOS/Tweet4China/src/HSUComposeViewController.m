@@ -88,7 +88,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    notification_remove_observer(self);
     [locationManager stopUpdatingLocation];
 }
 
@@ -96,19 +96,17 @@
 {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardFrameChanged:)
-                                                 name:UIKeyboardWillChangeFrameNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-
+    notification_add_observer(UIKeyboardWillChangeFrameNotification, self, @selector(keyboardFrameChanged:));
+    notification_add_observer(UIKeyboardWillHideNotification, self, @selector(keyboardWillHide:));
+    notification_add_observer(UIKeyboardWillShowNotification, self, @selector(keyboardWillShow:));
+    
+    // setup default values
+    self.defaultTitle = self.draft[@"title"];
+    self.defaultText = self.draft[@"status"];
+    self.inReplyToStatusId = self.draft[kTwitter_Parameter_Key_Reply_ID];
+    self.defaultImage = [UIImage imageWithContentsOfFile:self.draft[@"image_file_path"]];
+    
+    
 //    setup navigation bar
     if (self.defaultTitle) {
         self.title = self.defaultTitle;
@@ -120,7 +118,7 @@
             UITextAttributeTextShadowColor: kWhiteColor,
             UITextAttributeTextShadowOffset: [NSValue valueWithCGPoint:ccp(0, 1)]};
     self.navigationController.navigationBar.titleTextAttributes = attributes;
-
+    
     UIBarButtonItem *cancelButtonItem = [[UIBarButtonItem alloc] init];
     cancelButtonItem.title = @"Cancel";
     cancelButtonItem.target = self;
@@ -322,6 +320,10 @@
     contentShadowV.hidden = YES;
     contentShadowV.top = suggestionsTV.top;
     contentShadowV.width = suggestionsTV.width;
+    
+    if (self.defaultImage) {
+        postImage = self.defaultImage;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -416,18 +418,24 @@
 
 - (void)cancelCompose
 {
+    if (self.draft) {
+        NSData *imageData = UIImageJPEGRepresentation(postImage, 0.92);
+        [[HSUDraftManager shared] saveDraftWithDraftID:self.draft[@"id"] title:self.title status:contentTV.text imageData:imageData reply:self.inReplyToStatusId locationXY:location];
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
     if (contentTV.text.length) {
         RIButtonItem *cancelBnt = [RIButtonItem itemWithLabel:@"Cancel"];
         RIButtonItem *giveUpBnt = [RIButtonItem itemWithLabel:@"Don't save"];
         giveUpBnt.action = ^{
-            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"draft"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
             [self dismissViewControllerAnimated:YES completion:nil];
         };
         RIButtonItem *saveBnt = [RIButtonItem itemWithLabel:@"Save draft"];
         saveBnt.action = ^{
-            [[NSUserDefaults standardUserDefaults] setObject:contentTV.text forKey:@"draft"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
+            NSString *status = contentTV.text;
+            NSData *imageData = UIImageJPEGRepresentation(postImage, 0.92);
+            NSDictionary *draft = [[HSUDraftManager shared] saveDraftWithDraftID:nil title:self.title status:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
+            [[HSUDraftManager shared] activeDraft:draft];
             [self dismissViewControllerAnimated:YES completion:nil];
         };
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelBnt destructiveButtonItem:nil otherButtonItems:giveUpBnt, saveBnt, nil];
@@ -446,7 +454,7 @@
     dispatch_async(GCDBackgroundThread, ^{
         //save draft
         NSData *imageData = UIImageJPEGRepresentation(postImage, 0.92);
-        NSDictionary *draft = [[HSUDraftManager shared] saveDraftWithTitle:self.title status:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
+        NSDictionary *draft = [[HSUDraftManager shared] saveDraftWithDraftID:self.draft[@"id"] title:self.title status:status imageData:imageData reply:self.inReplyToStatusId locationXY:location];
         
         NSError *err = [[HSUDraftManager shared] sendDraft:draft];
         if (err) {
@@ -553,6 +561,9 @@
 
 #pragma mark - Actions
 - (void)photoButtonTouched {
+    if (postImage && !previewIV.image) {
+        [self imagePickerController:nil didFinishPickingMediaWithInfo:@{UIImagePickerControllerOriginalImage: postImage}];
+    }
     if (contentTV.isFirstResponder || extraPanelSV.contentOffset.x > 0) {
         [contentTV resignFirstResponder];
         [extraPanelSV setContentOffset:ccp(0, 0) animated:YES];
@@ -591,7 +602,7 @@
     previewCloseBnt.hidden = NO;
     [photoBnt setImage:[UIImage imageNamed:@"button-bar-camera-glow"] forState:UIControlStateNormal];
 
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
