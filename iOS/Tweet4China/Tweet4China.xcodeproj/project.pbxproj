@@ -348,6 +348,7 @@
 		96E34B59170167580066CD5E /* compose-map-toggle-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E34B4E170167580066CD5E /* compose-map-toggle-button@2x.png */; };
 		96E34B5A170167580066CD5E /* compose-nipple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E34B4F170167580066CD5E /* compose-nipple@2x.png */; };
 		96F92D8416FB02070026284D /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F92D8316FB02070026284D /* TTTAttributedLabel.m */; };
+		96FA81D317450B6A00DB023A /* HSUDraftsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FA81D217450B6A00DB023A /* HSUDraftsCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -801,6 +802,8 @@
 		96E34B4F170167580066CD5E /* compose-nipple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compose-nipple@2x.png"; sourceTree = "<group>"; };
 		96F92D8216FB02070026284D /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		96F92D8316FB02070026284D /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
+		96FA81D117450B6A00DB023A /* HSUDraftsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUDraftsCell.h; sourceTree = "<group>"; };
+		96FA81D217450B6A00DB023A /* HSUDraftsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUDraftsCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1475,6 +1478,8 @@
 				968EC06016ECB0830068A6A0 /* HSUPersonCell.m */,
 				9628E6DD1731325D005A9EC9 /* HSUNormalTitleCell.h */,
 				9628E6DE1731325D005A9EC9 /* HSUNormalTitleCell.m */,
+				96FA81D117450B6A00DB023A /* HSUDraftsCell.h */,
+				96FA81D217450B6A00DB023A /* HSUDraftsCell.m */,
 			);
 			name = TableCell_Level1;
 			sourceTree = "<group>";
@@ -1910,6 +1915,7 @@
 				96D291C11743273400AB4F8C /* HSUDraftsViewController.m in Sources */,
 				96D292351743856200AB4F8C /* HSUDraftsDataSource.m in Sources */,
 				96D292381743861F00AB4F8C /* HSUDraftCell.m in Sources */,
+				96FA81D317450B6A00DB023A /* HSUDraftsCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

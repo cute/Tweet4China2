@@ -30,7 +30,7 @@
         HSUTableCellData *cellData = [self dataAtIndexPath:indexPath];
         if ([[HSUDraftManager shared] removeDraft:cellData.rawData]) {
             [self removeCellData:cellData];
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
         }
     }
 }

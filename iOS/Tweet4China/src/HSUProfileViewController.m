@@ -79,8 +79,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     HSUTableCellData *data = [self.dataSource dataAtIndexPath:indexPath];
+    NSDictionary *rawData = data.rawData;
     if ([data.dataType isEqualToString:kDataType_NormalTitle]) {
-        NSDictionary *rawData = data.rawData;
         if ([rawData[@"action"] isEqualToString:kAction_UserTimeline]) {
             [self tweetsButtonTouched];
             return;
@@ -90,7 +90,9 @@
         } else if ([rawData[@"action"] isEqualToString:kAction_Followers]) {
             [self followersButtonTouched];
             return;
-        } else if ([rawData[@"action"] isEqualToString:kAction_Drafts]) {
+        }
+    } else if ([data.dataType isEqualToString:kDataType_Drafts]) {
+        if ([rawData[@"action"] isEqualToString:kAction_Drafts]) {
             [self draftsButtonTouched];
         }
     }

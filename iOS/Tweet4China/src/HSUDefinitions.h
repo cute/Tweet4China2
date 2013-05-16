@@ -89,11 +89,14 @@ _Pragma("clang diagnostic pop") \
 #define kDataType_Person @"Person"
 #define kDataType_LoadMore @"LoadMore"
 #define kDataType_NormalTitle @"NormalTitle"
+#define kDataType_Drafts @"Drafts"
 #define kDataType_Draft @"Draft"
 
 
 #define kTwitter_Parameter_Key_Reply_ID @"in_reply_to_status_id"
 
 #define kUserSettings_DBKey @"user_settings"
+
+#define NOTI_DraftsCountChanged @"HSUDraftsCountChanged"
 
 #endif

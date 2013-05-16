@@ -17,6 +17,11 @@
 
 @implementation HSUProfileDataSource
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (id)init
 {
     return [self initWithScreenName:MyScreenName];
@@ -57,11 +62,14 @@
         
         NSMutableArray *draftData = [NSMutableArray arrayWithCapacity:1];
         rawData = @{@"title": @"Drafts",
+                    @"count": @([[HSUDraftManager shared] draftsSortedByUpdateTime].count),
                     @"action": kAction_Drafts};
         HSUTableCellData *draftsCellData = [[HSUTableCellData alloc] initWithRawData:rawData
-                                                                           dataType:kDataType_NormalTitle];
+                                                                           dataType:kDataType_Drafts];
         [draftData addObject:draftsCellData];
         [self.sectionsData addObject:draftData];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notificationDraftCountChanged) name:NOTI_DraftsCountChanged object:nil];
     }
     return self;
 }
@@ -130,6 +138,19 @@
         return [super tableView:tableView numberOfRowsInSection:section];
     }
     return [self.sectionsData[section-1] count];
+}
+
+- (void)_notificationDraftCountChanged
+{
+    NSDictionary *rawData = @{@"title": @"Drafts",
+                              @"count": @([[HSUDraftManager shared] draftsSortedByUpdateTime].count),
+                              @"action": kAction_Drafts};
+    HSUTableCellData *draftsCellData = [[HSUTableCellData alloc] initWithRawData:rawData
+                                                                        dataType:kDataType_Drafts];
+    [self.sectionsData.lastObject removeAllObjects];
+    [self.sectionsData.lastObject addObject:draftsCellData];
+    
+    [self.delegate dataSource:self didFinishRefreshWithError:nil];
 }
 
 @end

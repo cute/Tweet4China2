@@ -153,4 +153,12 @@
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
 }
 
+- (void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (!self.editing) {
+        self.editing = YES;
+        [self.editButton setTitle:@"Done" forState:UIControlStateNormal];
+    }
+}
+
 @end

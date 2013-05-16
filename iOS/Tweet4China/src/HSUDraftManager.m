@@ -70,6 +70,7 @@
     drafts[draftID] = draft;
     [[NSUserDefaults standardUserDefaults] setObject:drafts forKey:@"drafts"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTI_DraftsCountChanged object:nil];
 }
 
 - (BOOL)removeDraft:(NSDictionary *)draft
@@ -78,6 +79,8 @@
     if (!draftID) {
         draftID = [draft[@"status"] MD5Hash];
     }
+    NSString *imageFilePath = draft[@"image_file_path"];
+    [[NSFileManager defaultManager] removeItemAtPath:imageFilePath error:nil];
     return [self removeDraftWithID:draftID];
 }
 
@@ -91,6 +94,7 @@
         [drafts removeObjectForKey:draftID];
         [[NSUserDefaults standardUserDefaults] setObject:drafts forKey:@"drafts"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTI_DraftsCountChanged object:nil];
     }
     return YES;
 }
