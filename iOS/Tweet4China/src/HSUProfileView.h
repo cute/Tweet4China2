@@ -24,5 +24,6 @@
 - (void)followersButtonTouched;
 - (void)actionsButtonTouched;
 - (void)followButtonTouched:(UIButton *)followButton;
+- (void)messagesButtonTouched;
 
 @end

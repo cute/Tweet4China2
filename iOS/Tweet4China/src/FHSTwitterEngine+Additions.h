@@ -27,6 +27,8 @@
 - (id)getTrends;
 - (id)getFollowersSinceId:(NSString *)sinceId forUserScreenName:(NSString *)screenName;
 - (id)getFollowingSinceId:(NSString *)sinceId forUserScreenName:(NSString *)screenName;
+- (id)getDirectMessagesSinceID:(NSString *)sinceId;
+- (id)getSentDirectMessagesSinceID:(NSString *)sinceId;
 
 - (NSArray *)generateRequestStringsFromArray:(NSArray *)array;
 

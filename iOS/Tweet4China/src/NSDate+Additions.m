@@ -15,18 +15,28 @@
     NSTimeInterval cur = [[NSDate date] timeIntervalSince1970];
     NSTimeInterval then = [self timeIntervalSince1970];
     NSTimeInterval interval = cur - then;
+    if (interval < 3600 * 24 * 7) {
+        return self.pureTwitterDisplay;
+    } else {
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateStyle:NSDateFormatterShortStyle];
+        return [df stringFromDate:self];
+    }
+}
+
+- (NSString *)pureTwitterDisplay
+{
+    NSTimeInterval cur = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval then = [self timeIntervalSince1970];
+    NSTimeInterval interval = cur - then;
     if (interval < 60) {
         return [NSString stringWithFormat:@"%gs", ceil(cur-then)];
     } else if (interval < 3600) {
         return [NSString stringWithFormat:@"%gm", ceil((cur-then)/60)];
     } else if (interval < 3600 * 24) {
         return [NSString stringWithFormat:@"%gh", ceil((cur-then)/3600)];
-    } else if (interval < 3600 * 24 * 7) {
-        return [NSString stringWithFormat:@"%gd", ceil((cur-then)/3600/24)];
     } else {
-        NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateStyle:NSDateFormatterShortStyle];
-        return [df stringFromDate:self];
+        return [NSString stringWithFormat:@"%gd", ceil((cur-then)/3600/24)];
     }
 }
 

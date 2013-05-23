@@ -199,4 +199,23 @@
     return [self sendGETRequest:request withParameters:@[cursorParam, screenNameParam, includeUserEntitiesParam, skipStatusParam]];
 }
 
+- (id)getDirectMessagesSinceID:(NSString *)sinceId
+{
+    NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/direct_messages.json"];
+    OAMutableURLRequest *request = [OAMutableURLRequest requestWithURL:baseURL consumer:self.consumer token:self.accessToken];
+    OARequestParameter *cursorP = [OARequestParameter requestParameterWithName:@"since_id" value:sinceId?:@"-1"];
+    OARequestParameter *countP = [OARequestParameter requestParameterWithName:@"count" value:@"200"];
+    OARequestParameter *skipStatusP = [OARequestParameter requestParameterWithName:@"skip_status" value:@"true"];
+    return [self sendGETRequest:request withParameters:[NSArray arrayWithObjects:cursorP, countP, skipStatusP, nil]];
+}
+
+- (id)getSentDirectMessagesSinceID:(NSString *)sinceId
+{
+    NSURL *baseURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/direct_messages/sent.json"];
+    OAMutableURLRequest *request = [OAMutableURLRequest requestWithURL:baseURL consumer:self.consumer token:self.accessToken];
+    OARequestParameter *cursorP = [OARequestParameter requestParameterWithName:@"since_id" value:sinceId?:@"-1"];
+    OARequestParameter *countP = [OARequestParameter requestParameterWithName:@"count" value:@"200"];
+    return [self sendGETRequest:request withParameters:[NSArray arrayWithObjects:cursorP, countP, nil]];
+}
+
 @end

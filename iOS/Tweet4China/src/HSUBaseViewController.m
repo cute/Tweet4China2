@@ -26,6 +26,7 @@
 #import "HSUDefaultStatusCell.h"
 #import "HSUDraftCell.h"
 #import "HSUDraftsCell.h"
+#import "HSUConversationCell.h"
 
 @interface HSUBaseViewController ()
 
@@ -82,6 +83,7 @@
     [tableView registerClass:[HSUNormalTitleCell class] forCellReuseIdentifier:kDataType_NormalTitle];
     [tableView registerClass:[HSUDraftCell class] forCellReuseIdentifier:kDataType_Draft];
     [tableView registerClass:[HSUDraftsCell class] forCellReuseIdentifier:kDataType_Drafts];
+    [tableView registerClass:[HSUConversationCell class] forCellReuseIdentifier:kDataType_Conversation];
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;

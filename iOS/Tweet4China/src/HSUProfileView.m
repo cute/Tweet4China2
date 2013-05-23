@@ -239,6 +239,7 @@
             
             UIButton *messagesButton = [[UIButton alloc] init];
             [buttonsPanel addSubview:messagesButton];
+            [messagesButton setTapTarget:delegate action:@selector(messagesButtonTouched)];
             [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_default"] stretchableImageFromCenter]
                                       forState:UIControlStateNormal];
             [messagesButton setBackgroundImage:[[UIImage imageNamed:@"btn_floating_segment_selected"] stretchableImageFromCenter]

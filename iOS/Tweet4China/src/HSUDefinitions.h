@@ -92,6 +92,8 @@ _Pragma("clang diagnostic pop") \
 #define kDataType_NormalTitle @"NormalTitle"
 #define kDataType_Drafts @"Drafts"
 #define kDataType_Draft @"Draft"
+#define kDataType_Message @"Message"
+#define kDataType_Conversation @"Conversation"
 
 
 #define kTwitter_Parameter_Key_Reply_ID @"in_reply_to_status_id"

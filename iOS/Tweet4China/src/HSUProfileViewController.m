@@ -17,6 +17,7 @@
 #import "HSUPersonListViewController.h"
 #import "HSUComposeViewController.h"
 #import "HSUNavigationBarLight.h"
+#import "HSUConversationsViewController.h"
 
 @interface HSUProfileViewController () <HSUProfileViewDelegate>
 
@@ -188,6 +189,14 @@
             });
         });
     }
+}
+
+- (void)messagesButtonTouched
+{
+    UINavigationController *nav = DEF_NavitationController_Light;
+    HSUConversationsViewController *messagesVC = [[HSUConversationsViewController alloc] init];
+    nav.viewControllers = @[messagesVC];
+    [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)actionsButtonTouched
