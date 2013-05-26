@@ -80,4 +80,19 @@
     });
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        HSUTableCellData *cellData = [self dataAtIndexPath:indexPath];
+        NSArray *messages = cellData.rawData[@"messages"];
+        dispatch_async(GCDBackgroundThread, ^{
+            for (NSDictionary *message in messages) {
+                [TWENGINE deleteDirectMessage:message[@"id_str"]];
+            }
+        });
+        [self removeCellData:cellData];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }
+}
+
 @end
