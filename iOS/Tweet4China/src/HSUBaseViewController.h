@@ -19,6 +19,7 @@
 @property (nonatomic, assign) BOOL hideBackButton;
 @property (nonatomic, assign) BOOL hideRightButtons;
 @property (nonatomic, assign) BOOL useRefreshControl;
+@property (nonatomic, assign) uint viewDidAppearCount;
 
 - (id)initWithDataSource:(HSUBaseDataSource *)dataSource;
 

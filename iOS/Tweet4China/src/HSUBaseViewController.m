@@ -27,6 +27,7 @@
 #import "HSUDraftCell.h"
 #import "HSUDraftsCell.h"
 #import "HSUConversationCell.h"
+#import "HSUMessageCell.h"
 
 @interface HSUBaseViewController ()
 
@@ -84,6 +85,7 @@
     [tableView registerClass:[HSUDraftCell class] forCellReuseIdentifier:kDataType_Draft];
     [tableView registerClass:[HSUDraftsCell class] forCellReuseIdentifier:kDataType_Drafts];
     [tableView registerClass:[HSUConversationCell class] forCellReuseIdentifier:kDataType_Conversation];
+    [tableView registerClass:[HSUMessageCell class] forCellReuseIdentifier:kDataType_Message];
     tableView.dataSource = self.dataSource;
     tableView.delegate = self;
     tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -119,6 +121,13 @@
 	if (selection)
 		[self.tableView deselectRowAtIndexPath:selection animated:YES];
     notification_post(kNotification_HSUStatusCell_OtherCellSwiped);
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    self.viewDidAppearCount ++;
 }
 
 #pragma mark - TableView

@@ -10,4 +10,6 @@
 
 @interface HSUMessagesDataSource : HSUBaseDataSource
 
+- (id)initWithConversation:(NSDictionary *)conversation;
+
 @end

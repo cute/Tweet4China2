@@ -8,6 +8,8 @@
 
 #import "HSUConversationsViewController.h"
 #import "HSUConversationsDataSource.h"
+#import "HSUMessagesViewController.h"
+#import "HSUMessagesDataSource.h"
 
 #define toolbar_height 44
 
@@ -95,7 +97,11 @@
 {
     [super viewDidAppear:animated];
     
-    [self.dataSource refresh];
+    if (self.viewDidAppearCount == 1) {
+        [self.dataSource refresh];
+    } else {
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewDidLayoutSubviews
@@ -126,6 +132,16 @@
     } else {
         [self.editButton setTitle:@"Edit" forState:UIControlStateNormal];
     }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    HSUTableCellData *cellData = [self.dataSource dataAtIndexPath:indexPath];
+    
+    HSUMessagesDataSource *dataSource = [[HSUMessagesDataSource alloc] initWithConversation:cellData.rawData];
+    HSUMessagesViewController *messagesVC = [[HSUMessagesViewController alloc] init];
+    messagesVC.dataSource = dataSource;
+    [self.navigationController pushViewController:messagesVC animated:YES];
 }
 
 @end
