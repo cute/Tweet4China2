@@ -20,6 +20,7 @@
 @property (nonatomic, assign) BOOL hideRightButtons;
 @property (nonatomic, assign) BOOL useRefreshControl;
 @property (nonatomic, assign) uint viewDidAppearCount;
+@property (nonatomic, assign) float keyboardHeight;
 
 - (id)initWithDataSource:(HSUBaseDataSource *)dataSource;
 

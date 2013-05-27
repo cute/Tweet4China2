@@ -31,11 +31,18 @@
 
 @interface HSUBaseViewController ()
 
+@property (nonatomic, assign) float defaultKeyboardHeight;
+
 @end
 
 @implementation HSUBaseViewController
 
 #pragma mark - Liftstyle
+- (void)dealloc
+{
+    notification_remove_observer(self);
+}
+
 - (id)init
 {
     self = [super init];
@@ -58,6 +65,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    notification_add_observer(UIKeyboardWillChangeFrameNotification, self, @selector(keyboardFrameChanged:));
+    notification_add_observer(UIKeyboardWillHideNotification, self, @selector(keyboardWillHide:));
+    notification_add_observer(UIKeyboardWillShowNotification, self, @selector(keyboardWillShow:));
     
     if (!self.dataSource) {
         self.dataSource = [self.dataSourceClass dataSourceWithDelegate:self useCache:YES];
@@ -128,6 +139,24 @@
     [super viewDidAppear:animated];
     
     self.viewDidAppearCount ++;
+}
+
+- (void)keyboardFrameChanged:(NSNotification *)notification
+{
+    NSValue* keyboardFrame = [notification.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
+    self.keyboardHeight = keyboardFrame.CGRectValue.size.height;
+    self.defaultKeyboardHeight = self.keyboardHeight;
+    [self.view setNeedsLayout];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    self.keyboardHeight = 0;
+    [self.view setNeedsDisplay];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    self.keyboardHeight = self.defaultKeyboardHeight;
+    [self.view setNeedsDisplay];
 }
 
 #pragma mark - TableView
