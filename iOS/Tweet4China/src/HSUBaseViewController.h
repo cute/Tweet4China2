@@ -23,9 +23,8 @@
 @property (nonatomic, assign) float keyboardHeight;
 
 - (id)initWithDataSource:(HSUBaseDataSource *)dataSource;
-
 - (Class)cellClassForDataType:(NSString *)dataType;
-
 - (void)presentModelClass:(Class)modelClass;
+- (void)backButtonTouched;
 
 @end

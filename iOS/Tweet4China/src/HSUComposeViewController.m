@@ -13,6 +13,7 @@
 #import "OAMutableURLRequest.h"
 #import "HSUSuggestMentionCell.h"
 #import <MapKit/MapKit.h>
+#import "HSUSendBarButtonItem.h"
 
 #define kMaxWordLen 140
 #define kSingleLineHeight 45
@@ -126,13 +127,12 @@
     cancelButtonItem.tintColor = bw(220);
     self.navigationItem.leftBarButtonItem = cancelButtonItem;
 
-    UIBarButtonItem *sendButtonItem = [[UIBarButtonItem alloc] init];
+    UIBarButtonItem *sendButtonItem = [[HSUSendBarButtonItem alloc] init];
+    self.navigationItem.rightBarButtonItem = sendButtonItem;
     sendButtonItem.title = @"Tweet";
     sendButtonItem.target = self;
     sendButtonItem.action = @selector(sendTweet);
-    sendButtonItem.tintColor = bw(220);
     sendButtonItem.enabled = NO;
-    self.navigationItem.rightBarButtonItem = sendButtonItem;
 
     NSDictionary *disabledAttributes = @{UITextAttributeTextColor: bw(129),
             UITextAttributeTextShadowColor: kWhiteColor,
@@ -140,15 +140,6 @@
     [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
     [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
     [cancelButtonItem setTitleTextAttributes:disabledAttributes forState:UIControlStateDisabled];
-
-    attributes = @{UITextAttributeTextColor: kWhiteColor,
-            UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:ccs(0, -1)]};
-    disabledAttributes = @{UITextAttributeTextColor: bw(129),
-            UITextAttributeTextShadowColor: kWhiteColor,
-            UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:ccs(0, 1)]};
-    [sendButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    [sendButtonItem setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
-    [sendButtonItem setTitleTextAttributes:disabledAttributes forState:UIControlStateDisabled];
 
 //    setup view
     self.view.backgroundColor = kWhiteColor;
@@ -490,10 +481,8 @@
     NSUInteger wordLen = [TWENGINE twitterTextLength:contentTV.text];
     if (wordLen > 0) {
         self.navigationItem.rightBarButtonItem.enabled = YES;
-        self.navigationItem.rightBarButtonItem.tintColor = rgb(52, 172, 232);
     } else {
         self.navigationItem.rightBarButtonItem.enabled = NO;
-        self.navigationItem.rightBarButtonItem.tintColor = bw(220);
     }
     wordCountL.text = S(@"%d", kMaxWordLen-wordLen);
     

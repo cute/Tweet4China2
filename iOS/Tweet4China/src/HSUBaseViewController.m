@@ -157,6 +157,8 @@
 - (void)keyboardWillShow:(NSNotification *)notification {
     self.keyboardHeight = self.defaultKeyboardHeight;
     [self.view setNeedsDisplay];
+    
+//    [self.tableView setContentOffset:ccp(0, self.tableView.contentSize.height) animated:YES];
 }
 
 #pragma mark - TableView
@@ -263,12 +265,12 @@
     [backButton sizeToFit];
     backButton.width *= 1.6;
     backButton.showsTouchWhenHighlighted = YES;
-    [backButton setTapTarget:self action:@selector(_backButtonTouched)];
+    [backButton setTapTarget:self action:@selector(backButtonTouched)];
     
     return [[UIBarButtonItem alloc] initWithCustomView:backButton];
 }
 
-- (void)_backButtonTouched
+- (void)backButtonTouched
 {
     [self.navigationController popViewControllerAnimated:YES];
 }

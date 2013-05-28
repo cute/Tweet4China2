@@ -272,6 +272,11 @@
 		967A55FB16FDB2AD00581274 /* HSULoadMoreCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 967A55FA16FDB2AD00581274 /* HSULoadMoreCell.m */; };
 		967F63471753048500CB8730 /* direct-message-text-bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 967F63451753048500CB8730 /* direct-message-text-bubble.png */; };
 		967F63481753048500CB8730 /* direct-message-text-bubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 967F63461753048500CB8730 /* direct-message-text-bubble@2x.png */; };
+		967F63521753A89900CB8730 /* direct-message-bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 967F63501753A89900CB8730 /* direct-message-bar.png */; };
+		967F63531753A89900CB8730 /* direct-message-bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 967F63511753A89900CB8730 /* direct-message-bar@2x.png */; };
+		967F6357175500C300CB8730 /* btn_standard_disabled@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 967F6355175500C300CB8730 /* btn_standard_disabled@2x~iphone.png */; };
+		967F6358175500C300CB8730 /* btn_standard_disabled~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 967F6356175500C300CB8730 /* btn_standard_disabled~iphone.png */; };
+		967F635B17550B4D00CB8730 /* HSUSendBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 967F635A17550B4D00CB8730 /* HSUSendBarButtonItem.m */; };
 		96891F571743A6810019D396 /* btn_tool_bar_dark_segment_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 96891F531743A6810019D396 /* btn_tool_bar_dark_segment_default.png */; };
 		96891F581743A6810019D396 /* btn_tool_bar_dark_segment_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 96891F541743A6810019D396 /* btn_tool_bar_dark_segment_default@2x.png */; };
 		96891F591743A6810019D396 /* btn_tool_bar_dark_segment_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 96891F551743A6810019D396 /* btn_tool_bar_dark_segment_selected.png */; };
@@ -726,6 +731,12 @@
 		967A55FA16FDB2AD00581274 /* HSULoadMoreCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSULoadMoreCell.m; sourceTree = "<group>"; };
 		967F63451753048500CB8730 /* direct-message-text-bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "direct-message-text-bubble.png"; sourceTree = "<group>"; };
 		967F63461753048500CB8730 /* direct-message-text-bubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "direct-message-text-bubble@2x.png"; sourceTree = "<group>"; };
+		967F63501753A89900CB8730 /* direct-message-bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "direct-message-bar.png"; sourceTree = "<group>"; };
+		967F63511753A89900CB8730 /* direct-message-bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "direct-message-bar@2x.png"; sourceTree = "<group>"; };
+		967F6355175500C300CB8730 /* btn_standard_disabled@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_standard_disabled@2x~iphone.png"; sourceTree = "<group>"; };
+		967F6356175500C300CB8730 /* btn_standard_disabled~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_standard_disabled~iphone.png"; sourceTree = "<group>"; };
+		967F635917550B4D00CB8730 /* HSUSendBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUSendBarButtonItem.h; sourceTree = "<group>"; };
+		967F635A17550B4D00CB8730 /* HSUSendBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUSendBarButtonItem.m; sourceTree = "<group>"; };
 		96891F531743A6810019D396 /* btn_tool_bar_dark_segment_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_tool_bar_dark_segment_default.png; sourceTree = "<group>"; };
 		96891F541743A6810019D396 /* btn_tool_bar_dark_segment_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_tool_bar_dark_segment_default@2x.png"; sourceTree = "<group>"; };
 		96891F551743A6810019D396 /* btn_tool_bar_dark_segment_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_tool_bar_dark_segment_selected.png; sourceTree = "<group>"; };
@@ -1040,6 +1051,10 @@
 		962817A216DE5FDF00ABF0AD /* images */ = {
 			isa = PBXGroup;
 			children = (
+				967F6355175500C300CB8730 /* btn_standard_disabled@2x~iphone.png */,
+				967F6356175500C300CB8730 /* btn_standard_disabled~iphone.png */,
+				967F63501753A89900CB8730 /* direct-message-bar.png */,
+				967F63511753A89900CB8730 /* direct-message-bar@2x.png */,
 				967F63451753048500CB8730 /* direct-message-text-bubble.png */,
 				967F63461753048500CB8730 /* direct-message-text-bubble@2x.png */,
 				9633E5DB174D20EF009062B7 /* error-bubble.png */,
@@ -1565,6 +1580,8 @@
 				962AB00516FB324D00D44566 /* HSURefreshControl.m */,
 				96D291B31742879400AB4F8C /* HSUDraftManager.h */,
 				96D291B41742879400AB4F8C /* HSUDraftManager.m */,
+				967F635917550B4D00CB8730 /* HSUSendBarButtonItem.h */,
+				967F635A17550B4D00CB8730 /* HSUSendBarButtonItem.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -1891,6 +1908,10 @@
 				9633E5E6174D20EF009062B7 /* ic_dm_reply_pressed@2x.png in Resources */,
 				967F63471753048500CB8730 /* direct-message-text-bubble.png in Resources */,
 				967F63481753048500CB8730 /* direct-message-text-bubble@2x.png in Resources */,
+				967F63521753A89900CB8730 /* direct-message-bar.png in Resources */,
+				967F63531753A89900CB8730 /* direct-message-bar@2x.png in Resources */,
+				967F6357175500C300CB8730 /* btn_standard_disabled@2x~iphone.png in Resources */,
+				967F6358175500C300CB8730 /* btn_standard_disabled~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2008,6 +2029,7 @@
 				966ACE3C174B9B3E0050F110 /* HSUMessagesDataSource.m in Sources */,
 				96FAB148174BDBBC00C8C854 /* HSUMessageCell.m in Sources */,
 				9633E5E9174D2258009062B7 /* HSUConversationCell.m in Sources */,
+				967F635B17550B4D00CB8730 /* HSUSendBarButtonItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
