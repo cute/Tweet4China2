@@ -10,6 +10,8 @@
 
 @interface HSUMessagesDataSource : HSUBaseDataSource
 
+@property (nonatomic, strong) NSDictionary *conversation;
+
 - (id)initWithConversation:(NSDictionary *)conversation;
 - (void)deleteConversation;
 

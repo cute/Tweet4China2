@@ -11,6 +11,11 @@
 
 @implementation HSUBaseDataSource
 
+- (void)dealloc
+{
+    notification_remove_observer(self);
+}
+
 - (id)init
 {
     self = [super init];

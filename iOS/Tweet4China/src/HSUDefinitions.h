@@ -25,7 +25,7 @@
 #import "HSUTabController.h"
 #import "Reachability.h"
 #import "HSUBaseViewController.h"
-#import "FHSTwitterEngine+Additions.h"
+#import "HSUTwitterEngine.h"
 #import "NSString+Additions.h"
 #import "HSUAppDelegate.h"
 
@@ -74,7 +74,7 @@ _Pragma("clang diagnostic pop") \
 #define kGrayColor [UIColor grayColor]
 #define kWinWidth [HSUCommonTools winWidth]
 #define kWinHeight [HSUCommonTools winHeight]
-#define TWENGINE [FHSTwitterEngine engine]
+#define TWENGINE [HSUTwitterEngine engine]
 
 #define kNamedImageView(s) [[UIImageView alloc] initWithImage:[UIImage imageNamed:s]]
 #define GRAY_INDICATOR [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]
@@ -84,6 +84,7 @@ _Pragma("clang diagnostic pop") \
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
 #define kNNDeleteConversation @"DeleteConversation"
+#define kNNConversationBackWithIncompletedSending @"ConversationBackWithIncompletedSending"
 
 #define kDataType_MainStatus @"MainStatus"
 #define kDataType_DefaultStatus @"DefaultStatus"
@@ -100,6 +101,7 @@ _Pragma("clang diagnostic pop") \
 #define kTwitter_Parameter_Key_Reply_ID @"in_reply_to_status_id"
 
 #define kUserSettings_DBKey @"user_settings"
+#define kUserProfile_DBKey @"user_profile"
 
 #define NOTI_DraftsCountChanged @"HSUDraftsCountChanged"
 

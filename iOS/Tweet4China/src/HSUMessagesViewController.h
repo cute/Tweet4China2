@@ -10,4 +10,7 @@
 
 @interface HSUMessagesViewController : HSUBaseViewController
 
+@property (nonatomic, strong) NSDictionary *myProfile;
+@property (nonatomic, strong) NSDictionary *herProfile;
+
 @end

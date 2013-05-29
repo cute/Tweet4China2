@@ -147,7 +147,7 @@
 		9633E5E6174D20EF009062B7 /* ic_dm_reply_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9633E5E0174D20EF009062B7 /* ic_dm_reply_pressed@2x.png */; };
 		9633E5E9174D2258009062B7 /* HSUConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9633E5E8174D2258009062B7 /* HSUConversationCell.m */; };
 		9639B91B16FDF0B10032177F /* ic_inset_larry@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9639B91A16FDF0B10032177F /* ic_inset_larry@2x.png */; };
-		9639B91F16FDF5DE0032177F /* FHSTwitterEngine+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Additions.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		9639B91F16FDF5DE0032177F /* HSUTwitterEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B91E16FDF5DE0032177F /* HSUTwitterEngine.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9639B92216FE1AD20032177F /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639B92116FE1AD20032177F /* UIView+Additions.m */; };
 		9648276116E230910002345B /* bg_tab_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9648275F16E230910002345B /* bg_tab_bar@2x.png */; };
 		9648276816E23A0D0002345B /* ic_tab_home_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9648276416E23A0D0002345B /* ic_tab_home_default@2x.png */; };
@@ -564,8 +564,8 @@
 		9633E5E7174D2258009062B7 /* HSUConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUConversationCell.h; sourceTree = "<group>"; };
 		9633E5E8174D2258009062B7 /* HSUConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUConversationCell.m; sourceTree = "<group>"; };
 		9639B91A16FDF0B10032177F /* ic_inset_larry@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_inset_larry@2x.png"; sourceTree = "<group>"; };
-		9639B91D16FDF5DE0032177F /* FHSTwitterEngine+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "FHSTwitterEngine+Additions.h"; sourceTree = "<group>"; };
-		9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "FHSTwitterEngine+Additions.m"; sourceTree = "<group>"; };
+		9639B91D16FDF5DE0032177F /* HSUTwitterEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUTwitterEngine.h; sourceTree = "<group>"; };
+		9639B91E16FDF5DE0032177F /* HSUTwitterEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HSUTwitterEngine.m; sourceTree = "<group>"; };
 		9639B92016FE1AD20032177F /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
 		9639B92116FE1AD20032177F /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
 		9648275F16E230910002345B /* bg_tab_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg_tab_bar@2x.png"; sourceTree = "<group>"; };
@@ -1323,8 +1323,8 @@
 		9639B91C16FDF59E0032177F /* Additions */ = {
 			isa = PBXGroup;
 			children = (
-				9639B91D16FDF5DE0032177F /* FHSTwitterEngine+Additions.h */,
-				9639B91E16FDF5DE0032177F /* FHSTwitterEngine+Additions.m */,
+				9639B91D16FDF5DE0032177F /* HSUTwitterEngine.h */,
+				9639B91E16FDF5DE0032177F /* HSUTwitterEngine.m */,
 				966498BB16F3041400BC901A /* UIImageView+Additions.h */,
 				966498BC16F3041500BC901A /* UIImageView+Additions.m */,
 				9664996E16F30BBF00BC901A /* NSDate+Additions.h */,
@@ -1968,7 +1968,7 @@
 				967A55E716FCD30900581274 /* HSUTableCellData.m in Sources */,
 				967A55EA16FCD3DA00581274 /* HSUUIEvent.m in Sources */,
 				967A55FB16FDB2AD00581274 /* HSULoadMoreCell.m in Sources */,
-				9639B91F16FDF5DE0032177F /* FHSTwitterEngine+Additions.m in Sources */,
+				9639B91F16FDF5DE0032177F /* HSUTwitterEngine.m in Sources */,
 				9639B92216FE1AD20032177F /* UIView+Additions.m in Sources */,
 				96E34B4417015ECD0066CD5E /* HSUComposeViewController.m in Sources */,
 				9620089717056C5100D54BF7 /* HSUProxyURLProtocol.m in Sources */,

@@ -8,12 +8,6 @@
 
 #import "HSUMessagesDataSource.h"
 
-@interface HSUMessagesDataSource ()
-
-@property (nonatomic, strong) NSDictionary *conversation;
-
-@end
-
 @implementation HSUMessagesDataSource
 
 - (id)initWithConversation:(NSDictionary *)conversation

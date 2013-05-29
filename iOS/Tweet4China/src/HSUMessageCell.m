@@ -17,6 +17,7 @@
 @property (nonatomic, weak) UIImageView *contentBackground;
 @property (nonatomic, weak) TTTAttributedLabel *contentLabel;
 @property (nonatomic, weak) UIButton *avatarButton;
+@property (nonatomic, weak) UIButton *retryButton;
 
 @property (nonatomic, assign, getter = isMyself) BOOL myself;
 
@@ -61,6 +62,13 @@
         avatarButton.layer.cornerRadius = 5;
         avatarButton.layer.masksToBounds = YES;
         avatarButton.size = ccs(50, 50);
+        
+        UIButton *retryButton = [[UIButton alloc] init];
+        [self.contentView addSubview:retryButton];
+        self.retryButton = retryButton;
+        [retryButton setImage:[UIImage imageNamed:@"error-bubble"] forState:UIControlStateNormal];
+        [retryButton sizeToFit];
+        retryButton.hidden = YES;
     }
     return self;
 }
@@ -75,6 +83,7 @@
         self.contentBackground.size = ccs(self.contentLabel.width+7+18, self.contentLabel.height+14);
         self.contentBackground.rightTop = ccp(self.avatarButton.left-2, self.timeLabel.bottom+6);
         self.contentLabel.leftTop = ccp(self.contentBackground.left+7, self.contentBackground.top+7);
+        self.retryButton.leftTop = ccp(5, self.contentBackground.top);
     } else {
         self.avatarButton.leftTop = ccp(5, 6);
         self.contentBackground.size = ccs(self.contentLabel.width+7+18, self.contentLabel.height+14);
@@ -108,10 +117,22 @@
 {
     [super setupWithData:data];
     
-    NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:data.rawData[@"created_at"]];
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"M/d/yyyy HH:mm:ss"];
-    self.timeLabel.text = [df stringFromDate:createdDate];
+    [self setupControl:self.retryButton forKey:@"retry"];
+    
+    self.retryButton.hidden = YES;
+    if ([data.rawData[@"sending"] boolValue]) {
+        if ([data.rawData[@"failed"] boolValue]) {
+            self.timeLabel.text = @"Failed";
+            self.retryButton.hidden = NO;
+        } else {
+            self.timeLabel.text = @"Sending...";
+        }
+    } else {
+        NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:data.rawData[@"created_at"]];
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"M/d/yyyy HH:mm:ss"];
+        self.timeLabel.text = [df stringFromDate:createdDate];
+    }
     [self.timeLabel sizeToFit];
     
     self.contentLabel.text = data.rawData[@"text"];

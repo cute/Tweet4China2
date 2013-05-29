@@ -70,6 +70,8 @@
                     if (profiles.count) {
                         [strongSelf.profileView setupWithProfile:profiles[0]];
                         strongSelf.profile = profiles[0];
+                        [[NSUserDefaults standardUserDefaults] setObject:strongSelf.profile forKey:kUserProfile_DBKey];
+                        [[NSUserDefaults standardUserDefaults] synchronize];
                     }
                 }
             }

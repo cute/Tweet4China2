@@ -10,6 +10,15 @@
 
 @implementation HSUConversationsDataSource
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        notification_add_observer(kNNConversationBackWithIncompletedSending, self, @selector(_conversationBack:));
+    }
+    return self;
+}
+
 - (void)refresh
 {
     [super refresh];
@@ -92,6 +101,19 @@
         });
         [self removeCellData:cellData];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    }
+}
+
+- (void)_conversationBack:(NSNotification *)notification
+{
+    NSArray *obj = notification.object;
+    NSDictionary *conversation = obj[0];
+    NSString *text = obj[1];
+    for (uint i=0; i<self.count; i++) {
+        HSUTableCellData *cd = [self dataAtIndex:i];
+        if (cd.rawData == conversation) {
+            cd.renderData[@"typingMessage"] = text;
+        }
     }
 }
 

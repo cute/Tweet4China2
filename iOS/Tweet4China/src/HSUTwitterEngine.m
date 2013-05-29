@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Jason Hsu <support@tuoxie.me>. All rights reserved.
 //
 
-#import "FHSTwitterEngine+Additions.h"
+#import "HSUTwitterEngine.h"
 #import "OAuthConsumer.h"
 #import "TwitterText.h"
 #import "OAMutableURLRequest.h"
 
-@implementation FHSTwitterEngine (Additions)
+@implementation HSUTwitterEngine
 
 @dynamic consumer;
 
@@ -216,6 +216,64 @@
     OARequestParameter *cursorP = [OARequestParameter requestParameterWithName:@"since_id" value:sinceId?:@"-1"];
     OARequestParameter *countP = [OARequestParameter requestParameterWithName:@"count" value:@"200"];
     return [self sendGETRequest:request withParameters:[NSArray arrayWithObjects:cursorP, countP, nil]];
+}
+
+- (NSError *)sendDirectMessage:(NSString *)body toUser:(NSString *)user isID:(BOOL)isID {
+    static NSString * const url_direct_messages_new = @"https://api.twitter.com/1.1/direct_messages/new.json";
+    NSURL *baseURL = [NSURL URLWithString:url_direct_messages_new];
+    OAMutableURLRequest *request = [OAMutableURLRequest requestWithURL:baseURL consumer:self.consumer token:self.accessToken];
+    OARequestParameter *bodyP = [OARequestParameter requestParameterWithName:@"text" value:[body fhs_trimForTwitter]];
+    OARequestParameter *userP = [OARequestParameter requestParameterWithName:isID?@"user_id":@"screen_name" value:user];
+    return [self responseForSendPOSTRequest:request withParameters:[NSArray arrayWithObjects:userP, bodyP, nil]];
+}
+
+- (NSError *)responseForSendPOSTRequest:(OAMutableURLRequest *)request withParameters:(NSArray *)params
+{
+    
+    if (![self isAuthorized]) {
+        return [NSError errorWithDomain:@"You are not authorized via OAuth" code:401 userInfo:[NSDictionary dictionaryWithObject:request forKey:@"request"]];
+    }
+    
+    [request setCachePolicy:NSURLRequestReloadIgnoringCacheData];
+    [request setTimeoutInterval:25];
+    [request setHTTPMethod:@"POST"];
+    [request setParameters:params];
+    [request prepare];
+    
+    if (self.shouldClearConsumer) {
+        self.shouldClearConsumer = NO;
+        self.consumer = nil;
+    }
+    
+    
+    id retobj = [self sendRequest:request];
+    
+    if (retobj == nil) {
+        return [NSError errorWithDomain:@"Twitter successfully processed the request, but did not return any content" code:204 userInfo:nil];
+    }
+    
+    if ([retobj isKindOfClass:[NSError class]]) {
+        return retobj;
+    }
+    
+    id parsedJSONResponse = removeNull([NSJSONSerialization JSONObjectWithData:(NSData *)retobj options:NSJSONReadingMutableContainers error:nil]);
+    
+    if ([parsedJSONResponse isKindOfClass:[NSDictionary class]]) {
+        NSString *errorMessage = [parsedJSONResponse objectForKey:@"error"];
+        NSArray *errorArray = [parsedJSONResponse objectForKey:@"errors"];
+        if (errorMessage.length > 0) {
+            return [NSError errorWithDomain:errorMessage code:[[parsedJSONResponse objectForKey:@"code"]intValue] userInfo:[NSDictionary dictionaryWithObject:request forKey:@"request"]];
+        } else if (errorArray.count > 0) {
+            if (errorArray.count > 1) {
+                return [NSError errorWithDomain:@"Multiple Errors" code:1337 userInfo:[NSDictionary dictionaryWithObject:request forKey:@"request"]];
+            } else {
+                NSDictionary *theError = [errorArray objectAtIndex:0];
+                return [NSError errorWithDomain:[theError objectForKey:@"message"] code:[[theError objectForKey:@"code"]integerValue] userInfo:[NSDictionary dictionaryWithObject:request forKey:@"request"]];
+            }
+        }
+    }
+    
+    return parsedJSONResponse;
 }
 
 @end

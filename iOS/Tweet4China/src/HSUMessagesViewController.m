@@ -170,15 +170,24 @@
     [self.view setNeedsLayout];
 }
 
+- (void)preprocessDataSourceForRender:(HSUBaseDataSource *)dataSource
+{
+    [super preprocessDataSourceForRender:dataSource];
+    
+    [dataSource addEventWithName:@"retry" target:self action:@selector(retry:) events:UIControlEventTouchUpInside];
+}
+
 - (void)backButtonTouched
 {
     // todo
+    if (self.textView.hasText) {
+        notification_post_with_object(kNNConversationBackWithIncompletedSending, @[((HSUMessagesDataSource *)self.dataSource).conversation, self.textView.text]);
+    }
     [super backButtonTouched];
 }
 
 - (void)_actionsButtonTouched
 {
-    // todo
     RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
     RIButtonItem *mailItem = [RIButtonItem itemWithLabel:@"Mail Conversation"];
     mailItem.action = ^{
@@ -207,7 +216,59 @@
 
 - (void)_sendButtonTouched
 {
-    // todo
+    NSMutableDictionary *message = [NSMutableDictionary dictionary];
+    message[@"sender"] = self.myProfile;
+    message[@"recipient"] = self.herProfile;
+    message[@"sender_id"] = self.myProfile[@"id"];
+    message[@"sender_id_str"] = self.myProfile[@"id_str"];
+    message[@"sender_screen_name"] = self.myProfile[@"screen_name"];
+    message[@"recipient_id"] = self.herProfile[@"id"];
+    message[@"recipient_id_str"] = self.herProfile[@"id_str"];
+    message[@"recipient_screen_name"] = self.herProfile[@"screen_name"];
+    message[@"text"] = self.textView.text;
+    message[@"sending"] = @(YES);
+    HSUTableCellData *appendingCellData = [[HSUTableCellData alloc] initWithRawData:message dataType:kDataType_Message];
+    [self.dataSource.data addObject:appendingCellData];
+    [self preprocessDataSourceForRender:self.dataSource];
+    [self _retrySendMessage:message];
+    self.textView.text = nil;
+    [self textViewDidChange:self.textView];
+}
+
+- (void)retry:(HSUTableCellData *)cellData
+{
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+    RIButtonItem *retryItem = [RIButtonItem itemWithLabel:@"Retry send"];
+    retryItem.action = ^{
+        NSMutableDictionary *message = cellData.rawData.mutableCopy;
+        cellData.rawData = message;
+        [self _retrySendMessage:message];
+    };
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Message failed to send" cancelButtonItem:cancelItem destructiveButtonItem:nil otherButtonItems:retryItem, nil];
+    [actionSheet showInView:self.view.window];
+}
+
+- (void)_retrySendMessage:(NSMutableDictionary *)message
+{
+    [message removeObjectForKey:@"failed"];
+    [self.tableView reloadData];
+    dispatch_async(GCDBackgroundThread, ^{
+        id result = [TWENGINE sendDirectMessage:message[@"text"] toUser:message[@"recipient_screen_name"] isID:NO];
+        __weak __typeof(&*self)weakSelf = self;
+        dispatch_sync(GCDMainThread, ^{
+            @autoreleasepool {
+                __strong __typeof(&*weakSelf)strongSelf = weakSelf;
+                if ([TWENGINE dealWithError:result errTitle:@"Failed to send message"]) {
+                    [message setValuesForKeysWithDictionary:result];
+                    [message removeObjectForKey:@"sending"];
+                    [strongSelf.tableView reloadData];
+                } else {
+                    message[@"failed"] = @(YES);
+                    [strongSelf.tableView reloadData];
+                }
+            }
+        });
+    });
 }
 
 @end

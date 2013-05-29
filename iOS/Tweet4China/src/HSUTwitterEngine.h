@@ -10,12 +10,12 @@
 
 @class OAMutableURLRequest;
 
-@interface FHSTwitterEngine (Additions)
+@interface HSUTwitterEngine : FHSTwitterEngine
 
 @property (nonatomic, strong) OAConsumer *consumer;
 @property (nonatomic, copy, readonly) NSString *myScreenName;
 
-+ (FHSTwitterEngine *)engine;
++ (HSUTwitterEngine *)engine;
 - (void)auth;
 // YES if no error
 - (BOOL)dealWithError:(NSError *)error errTitle:(NSString *)errTitle;
@@ -31,5 +31,13 @@
 - (id)getSentDirectMessagesSinceID:(NSString *)sinceId;
 
 - (NSArray *)generateRequestStringsFromArray:(NSArray *)array;
+
+
+
+// super
+@property (assign, nonatomic) BOOL shouldClearConsumer;
+
+- (id)sendRequest:(NSURLRequest *)request;
+- (NSError *)sendPOSTRequest:(OAMutableURLRequest *)request withParameters:(NSArray *)params;
 
 @end

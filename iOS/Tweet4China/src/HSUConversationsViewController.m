@@ -38,7 +38,7 @@
 
 - (void)viewDidLoad
 {
-    notification_add_observer(kNNDeleteConversation, self, @selector(_conversationDeleted));
+    notification_add_observer(kNNDeleteConversation, self, @selector(_conversationDeleted:));
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     [self.view addSubview:tableView];
@@ -143,13 +143,33 @@
     HSUMessagesDataSource *dataSource = [[HSUMessagesDataSource alloc] initWithConversation:cellData.rawData];
     HSUMessagesViewController *messagesVC = [[HSUMessagesViewController alloc] init];
     messagesVC.dataSource = dataSource;
+    
+    NSDictionary *conversation = cellData.rawData;
+    NSArray *messages = conversation[@"messages"];
+    for (NSDictionary *message in messages) {
+        if ([message[@"sender_screen_name"] isEqualToString:MyScreenName]) {
+            messagesVC.myProfile = message[@"sender"];
+            messagesVC.herProfile = message[@"recipient"];
+        } else {
+            messagesVC.myProfile = message[@"recipient"];
+            messagesVC.herProfile = message[@"sender"];
+        }
+        break;
+    }
+    
     [self.navigationController pushViewController:messagesVC animated:YES];
 }
 
 - (void)_conversationDeleted:(NSNotification *)notification
 {
-    [self.dataSource.data removeObject:notification.object];
-    [self.tableView reloadData];
+    for (uint i=0; i<self.dataSource.count; i++) {
+        HSUTableCellData *cd = [self.dataSource dataAtIndex:i];
+        if (cd.rawData == notification.object) {
+            [self.dataSource.data removeObject:cd];
+            [self.tableView reloadData];
+            break;
+        }
+    }
 }
 
 @end
