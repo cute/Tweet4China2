@@ -38,6 +38,8 @@
 
 - (void)viewDidLoad
 {
+    notification_add_observer(kNNDeleteConversation, self, @selector(_conversationDeleted));
+    
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     [self.view addSubview:tableView];
     self.tableView = tableView;
@@ -142,6 +144,12 @@
     HSUMessagesViewController *messagesVC = [[HSUMessagesViewController alloc] init];
     messagesVC.dataSource = dataSource;
     [self.navigationController pushViewController:messagesVC animated:YES];
+}
+
+- (void)_conversationDeleted:(NSNotification *)notification
+{
+    [self.dataSource.data removeObject:notification.object];
+    [self.tableView reloadData];
 }
 
 @end

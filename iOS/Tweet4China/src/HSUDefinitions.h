@@ -83,6 +83,7 @@ _Pragma("clang diagnostic pop") \
 
 
 #define kNNStartRefreshing @"HSU_Start_Refreshing"
+#define kNNDeleteConversation @"DeleteConversation"
 
 #define kDataType_MainStatus @"MainStatus"
 #define kDataType_DefaultStatus @"DefaultStatus"

@@ -11,5 +11,6 @@
 @interface HSUMessagesDataSource : HSUBaseDataSource
 
 - (id)initWithConversation:(NSDictionary *)conversation;
+- (void)deleteConversation;
 
 @end

@@ -75,7 +75,6 @@
     self.navigationItem.rightBarButtonItem = self.actionsBarButtonItem;
     
     UIBarButtonItem *sendButtonItem = [[HSUSendBarButtonItem alloc] init];
-    self.navigationItem.rightBarButtonItem = sendButtonItem;
     self.sendBarButtonItem = sendButtonItem;
     sendButtonItem.title = @"Send";
     sendButtonItem.target = self;
@@ -180,6 +179,30 @@
 - (void)_actionsButtonTouched
 {
     // todo
+    RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+    RIButtonItem *mailItem = [RIButtonItem itemWithLabel:@"Mail Conversation"];
+    mailItem.action = ^{
+        RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Forget it"];
+        RIButtonItem *feedbackItem = [RIButtonItem itemWithLabel:@"Feedback"];
+        feedbackItem.action = ^{
+            [HSUCommonTools sendMailWithSubject:@"[Feedback][Tweet4China][New Feature]" body:@"I need feature \"Mail direct message conversation\"" presentFromViewController:self];
+        };
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"擦，这个功能还有人用啊！我用不到，所以就没做!==如果你确实需要这个功能请反馈给我。" cancelButtonItem:cancelItem otherButtonItems:feedbackItem, nil];
+        [alert show];
+    };
+    RIButtonItem *deleteItem = [RIButtonItem itemWithLabel:@"Delete conversation"];
+    deleteItem.action = ^{
+        RIButtonItem *cancelItem = [RIButtonItem itemWithLabel:@"Cancel"];
+        RIButtonItem *deleteItem = [RIButtonItem itemWithLabel:@"Delete conversation"];
+        deleteItem.action = ^{
+            [self.navigationController popViewControllerAnimated:YES];
+            [((HSUMessagesDataSource *)self.dataSource) deleteConversation];
+        };
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:deleteItem otherButtonItems:nil, nil];
+        [actionSheet showInView:self.view.window];
+    };
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil cancelButtonItem:cancelItem destructiveButtonItem:deleteItem otherButtonItems:mailItem, nil];
+    [actionSheet showInView:self.view.window];
 }
 
 - (void)_sendButtonTouched
