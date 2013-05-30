@@ -29,10 +29,9 @@
     if (self) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         
-        UIImageView *replyIcon = [[UIImageView alloc] init];
+        UIImageView *replyIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_dm_reply_default"]];
         [self.contentView addSubview:replyIcon];
         self.replyIcon = replyIcon;
-        replyIcon.image = [UIImage imageNamed:@"ic_dm_reply_default"];
         
         UIImageView *avatarView = [[UIImageView alloc] init];
         [self.contentView addSubview:avatarView];
@@ -79,7 +78,7 @@
 {
     [super layoutSubviews];
     
-//    self.replyIcon.frame =
+    self.replyIcon.leftTop = ccp(10, 20);
     self.avatarView.frame = ccr(29, 10, 32, 32);
     self.nameLabel.leftTop = ccp(66, 10);
     self.timeLabel.leftTop = ccp(self.contentView.width-10-self.timeLabel.width, 12);
@@ -102,11 +101,11 @@
     NSString *avatarUrl = user[@"profile_image_url_https"];
     NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:data.rawData[@"created_at"]];
     NSString *time = createdDate.pureTwitterDisplay;
-    NSDictionary *latestMessage = data.rawData[@"messages"][0];
+    NSDictionary *latestMessage = [data.rawData[@"messages"] lastObject];
     NSString *content = latestMessage[@"text"];
-    BOOL sending = [data.rawData[@"sending"] boolValue];
+    BOOL waitingReply = [latestMessage[@"sender_screen_name"] isEqualToString:MyScreenName];
     
-    self.replyIcon.hidden = !sending;
+    self.replyIcon.hidden = !waitingReply;
     [self.avatarView setImageWithURL:[NSURL URLWithString:avatarUrl]];
     self.nameLabel.text = name;
     self.snLabel.text = sn;

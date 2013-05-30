@@ -23,14 +23,13 @@
 {
     [super refresh];
     
-    [self.data removeAllObjects];
     dispatch_async(GCDBackgroundThread, ^{
         NSString *sinceId = nil;
         for (HSUTableCellData *cellData in self.data) {
             NSDictionary *conversation = cellData.rawData;
             NSArray *messages = conversation[@"messages"];
             if (messages.count) {
-                NSDictionary *message = messages[0];
+                NSDictionary *message = messages.lastObject;
                 sinceId = message[@"id_str"];
                 break;
             }
@@ -47,9 +46,9 @@
                     // merge received messages & sent messages
                     NSArray *messages = [[NSArray arrayWithArray:rMsgs] arrayByAddingObjectsFromArray:sMsgs];
                     messages = [messages sortedArrayUsingComparator:^NSComparisonResult(id msg1, id msg2) {
-                        NSString *created_at1 = msg1[@"created_at"];
-                        NSString *created_at2 = msg2[@"created_at"];
-                        return [created_at1 compare:created_at2];
+                        NSString *id_str1 = msg1[@"id_str"];
+                        NSString *id_str2 = msg2[@"id_str"];
+                        return [id_str1 compare:id_str2];
                     }];
                     
                     // reorgnize messages as dict, friend_screen_name as key, refered messages as value
@@ -73,16 +72,30 @@
                     for (NSString *fsn in orderedFriendScreenNames) {
                         NSMutableDictionary *conversation = [NSMutableDictionary dictionary];
                         NSArray *messages = conversations[fsn];
-                        NSDictionary *latestMessage = messages[0];
+                        NSDictionary *latestMessage = messages.lastObject;
                         NSString *sender_sn = latestMessage[@"sender_screen_name"];
+                        NSString *recipient_sn = latestMessage[@"recipient_screen_name"];
                         
                         conversation[@"user"] = [fsn isEqualToString:sender_sn] ? latestMessage[@"sender"] : latestMessage[@"recipient"];
                         conversation[@"messages"] = messages;
                         conversation[@"created_at"] = latestMessage[@"created_at"];
                         
-                        HSUTableCellData *cellData = [[HSUTableCellData alloc] initWithRawData:conversation
-                                                                                      dataType:kDataType_Conversation];
-                        [self.data insertObject:cellData atIndex:0];
+                        BOOL found = NO;
+                        for (HSUTableCellData *oldCellData in self.data) {
+                            if ([oldCellData.rawData[@"user"][@"screen_name"] isEqualToString:sender_sn] ||
+                                [oldCellData.rawData[@"user"][@"screen_name"] isEqualToString:recipient_sn]) {
+                                NSMutableDictionary *rawData = oldCellData.rawData.mutableCopy;
+                                rawData[@"messages"] = [rawData[@"messages"] arrayByAddingObjectsFromArray:messages];
+                                oldCellData.rawData = rawData;
+                                found = YES;
+                            }
+                        }
+                        
+                        if (!found) {
+                            HSUTableCellData *cellData = [[HSUTableCellData alloc] initWithRawData:conversation
+                                                                                          dataType:kDataType_Conversation];
+                            [self.data insertObject:cellData atIndex:0];
+                        }
                     }
                     
                     [strongSelf saveCache];

@@ -54,7 +54,7 @@
         contentLabel.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
                                               (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
         contentLabel.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
-        contentLabel.lineHeightMultiple = 1 + 4.0/14;
+        contentLabel.lineHeightMultiple = 1;
         
         UIButton *avatarButton = [[UIButton alloc] init];
         [self.contentView addSubview:avatarButton];
@@ -80,15 +80,15 @@
     self.timeLabel.topCenter = ccp(self.contentView.width/2, 6);
     if (self.isMyself) {
         self.avatarButton.rightTop = ccp(self.contentView.width-5, 6);
-        self.contentBackground.size = ccs(self.contentLabel.width+7+18, self.contentLabel.height+14);
+        self.contentBackground.size = ccs(self.contentLabel.width+7+21, self.contentLabel.height+10);
         self.contentBackground.rightTop = ccp(self.avatarButton.left-2, self.timeLabel.bottom+6);
-        self.contentLabel.leftTop = ccp(self.contentBackground.left+7, self.contentBackground.top+7);
+        self.contentLabel.leftTop = ccp(self.contentBackground.left+14, self.contentBackground.top+3);
         self.retryButton.leftTop = ccp(5, self.contentBackground.top);
     } else {
         self.avatarButton.leftTop = ccp(5, 6);
-        self.contentBackground.size = ccs(self.contentLabel.width+7+18, self.contentLabel.height+14);
+        self.contentBackground.size = ccs(self.contentLabel.width+7+21, self.contentLabel.height+10);
         self.contentBackground.leftTop = ccp(self.avatarButton.right+2, self.timeLabel.bottom+6);
-        self.contentLabel.leftTop = ccp(self.contentBackground.left+18, self.contentBackground.top+7);
+        self.contentLabel.leftTop = ccp(self.contentBackground.left+14, self.contentBackground.top+3);
     }
 }
 
@@ -106,7 +106,7 @@
     testSizeLabel.activeLinkAttributes = @{(NSString *)kTTTBackgroundFillColorAttributeName: (id)cgrgb(215, 230, 242),
                                            (NSString *)kTTTBackgroundCornerRadiusAttributeName: @(2)};
     testSizeLabel.verticalAlignment = TTTAttributedLabelVerticalAlignmentTop;
-    testSizeLabel.lineHeightMultiple = 1 + 4.0/14;
+    testSizeLabel.lineHeightMultiple = 1;
     
     testSizeLabel.text = data.rawData[@"text"];
     CGFloat textHeight = [testSizeLabel sizeThatFits:ccs(225, 0)].height;
@@ -130,22 +130,25 @@
     } else {
         NSDate *createdDate = [TWENGINE getDateFromTwitterCreatedAt:data.rawData[@"created_at"]];
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"M/d/yyyy HH:mm:ss"];
+        [df setDateFormat:@"M/d/yyyy HH:mm"];
         self.timeLabel.text = [df stringFromDate:createdDate];
     }
     [self.timeLabel sizeToFit];
     
-    self.contentLabel.text = data.rawData[@"text"];
     self.myself = [MyScreenName isEqualToString:data.rawData[@"sender_screen_name"]];
     if (self.isMyself) {
         self.contentBackground.image = [[UIImage imageNamed:@"sms-right"] stretchableImageFromCenter];
+        self.contentLabel.textAlignment = NSTextAlignmentRight;
     } else {
         self.contentBackground.image = [[UIImage imageNamed:@"sms-left"] stretchableImageFromCenter];
+        self.contentLabel.textAlignment = NSTextAlignmentLeft;
     }
+    self.contentLabel.text = data.rawData[@"text"];
     NSString *avatarUrl = data.rawData[@"sender"][@"profile_image_url_https"];
     avatarUrl = [avatarUrl stringByReplacingOccurrencesOfString:@"normal" withString:@"bigger"];
     [self.avatarButton setImageWithURL:[NSURL URLWithString:avatarUrl] forState:UIControlStateNormal];
-    self.contentLabel.size = [self.contentLabel sizeThatFits:ccs(225, 0)];
+    CGSize size = [self.contentLabel sizeThatFits:ccs(225, 0)];
+    self.contentLabel.size = ccs(MAX(size.width, 30), size.height);
 }
 
 @end

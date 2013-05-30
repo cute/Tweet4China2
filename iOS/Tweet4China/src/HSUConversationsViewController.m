@@ -45,6 +45,7 @@
     self.tableView = tableView;
     
     [super viewDidLoad];
+    
     self.tableView.backgroundColor = kWhiteColor;
     
     // setup navigation bar
