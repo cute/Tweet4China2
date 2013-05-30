@@ -149,7 +149,7 @@
     } else {
         [UIView animateWithDuration:0.3 animations:^{
             animatedBlock();
-            [weakSelf.tableView setContentOffset:ccp(0, weakSelf.tableView.contentSize.height-weakSelf.tableView.height) animated:YES];
+            [weakSelf _scrollToBottom];
         } completion:^(BOOL finished) {
             weakSelf.navigationItem.rightBarButtonItem = weakSelf.sendBarButtonItem;
         }];
@@ -175,6 +175,11 @@
     [super preprocessDataSourceForRender:dataSource];
     
     [dataSource addEventWithName:@"retry" target:self action:@selector(retry:) events:UIControlEventTouchUpInside];
+}
+
+- (void)_scrollToBottom
+{
+    [self.tableView setContentOffset:ccp(0, MAX(self.tableView.contentSize.height-self.tableView.height, 0)) animated:YES];
 }
 
 - (void)backButtonTouched
@@ -233,6 +238,7 @@
     [self _retrySendMessage:message];
     self.textView.text = nil;
     [self textViewDidChange:self.textView];
+    [self _scrollToBottom];
 }
 
 - (void)retry:(HSUTableCellData *)cellData

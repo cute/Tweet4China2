@@ -23,6 +23,7 @@
 {
     [super refresh];
     
+    [self.data removeAllObjects];
     dispatch_async(GCDBackgroundThread, ^{
         NSString *sinceId = nil;
         for (HSUTableCellData *cellData in self.data) {
@@ -45,6 +46,11 @@
                     
                     // merge received messages & sent messages
                     NSArray *messages = [[NSArray arrayWithArray:rMsgs] arrayByAddingObjectsFromArray:sMsgs];
+                    messages = [messages sortedArrayUsingComparator:^NSComparisonResult(id msg1, id msg2) {
+                        NSString *created_at1 = msg1[@"created_at"];
+                        NSString *created_at2 = msg2[@"created_at"];
+                        return [created_at1 compare:created_at2];
+                    }];
                     
                     // reorgnize messages as dict, friend_screen_name as key, refered messages as value
                     NSMutableDictionary *conversations = [[NSMutableDictionary alloc] init];
@@ -76,7 +82,7 @@
                         
                         HSUTableCellData *cellData = [[HSUTableCellData alloc] initWithRawData:conversation
                                                                                       dataType:kDataType_Conversation];
-                        [self.data addObject:cellData];
+                        [self.data insertObject:cellData atIndex:0];
                     }
                     
                     [strongSelf saveCache];

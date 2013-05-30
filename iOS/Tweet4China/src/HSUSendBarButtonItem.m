@@ -29,9 +29,11 @@
 
 - (void)setEnabled:(BOOL)enabled
 {
-    [super setEnabled:enabled];
+    if (self.enabled != enabled) {
+        self.tintColor = enabled ? rgb(52, 172, 232) : bw(220);
+    }
     
-    self.tintColor = enabled ? rgb(52, 172, 232) : bw(220);
+    [super setEnabled:enabled];
 }
 
 @end
