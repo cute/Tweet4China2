@@ -9,22 +9,16 @@
 #import "HSUNavigationBarLight.h"
 
 @implementation HSUNavigationBarLight
-
-- (void)drawRect:(CGRect)rect
 {
-//    [super drawRect:rect];
-    
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGRect rectangle = CGRectMake(0, 0, rect.size.width, rect.size.height/2);
-    CGContextSetRGBFillColor(context, 0, 0, 0, 1);
-    CGContextSetRGBStrokeColor(context, 0, 0, 0, 1);
-    CGContextFillRect(context, rectangle);
-    rectangle = CGRectMake(0, rect.size.height/2, rect.size.width, rect.size.height/2);
-    CGContextSetRGBFillColor(context, 1, 1, 1, 1);
-    CGContextSetRGBStrokeColor(context, 1, 1, 1, 1);
-    CGContextFillRect(context, rectangle);
-    
-    [[UIImage imageNamed:@"bg_nav_bar_light"] drawInRect:CGRectMake(0, 0, rect.size.width, rect.size.height+3)];
+    BOOL addedBackground;
+}
+
+- (void)layoutSubviews
+{
+    if (!addedBackground) {
+        addedBackground = YES;
+        [self setBackgroundImage:[UIImage imageNamed:@"bg_nav_bar_light"] forBarMetrics:UIBarMetricsDefault];
+    }
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
