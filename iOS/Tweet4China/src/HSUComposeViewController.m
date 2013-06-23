@@ -126,20 +126,20 @@
     cancelButtonItem.action = @selector(cancelCompose);
     cancelButtonItem.tintColor = bw(220);
     self.navigationItem.leftBarButtonItem = cancelButtonItem;
+    
+    NSDictionary *disabledAttributes = @{UITextAttributeTextColor: bw(129),
+                                         UITextAttributeTextShadowColor: kWhiteColor,
+                                         UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:ccs(0, 1)]};
+    [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
+    [cancelButtonItem setTitleTextAttributes:disabledAttributes forState:UIControlStateDisabled];
 
     UIBarButtonItem *sendButtonItem = [[HSUSendBarButtonItem alloc] init];
-    self.navigationItem.rightBarButtonItem = sendButtonItem;
     sendButtonItem.title = @"Tweet";
     sendButtonItem.target = self;
     sendButtonItem.action = @selector(sendTweet);
     sendButtonItem.enabled = NO;
-
-    NSDictionary *disabledAttributes = @{UITextAttributeTextColor: bw(129),
-            UITextAttributeTextShadowColor: kWhiteColor,
-            UITextAttributeTextShadowOffset: [NSValue valueWithCGSize:ccs(0, 1)]};
-    [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    [cancelButtonItem setTitleTextAttributes:attributes forState:UIControlStateHighlighted];
-    [cancelButtonItem setTitleTextAttributes:disabledAttributes forState:UIControlStateDisabled];
+    self.navigationItem.rightBarButtonItem = sendButtonItem;
 
 //    setup view
     self.view.backgroundColor = kWhiteColor;

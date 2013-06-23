@@ -871,6 +871,7 @@
 		96E34B4D170167580066CD5E /* compose-map-toggle-button-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compose-map-toggle-button-pressed@2x.png"; sourceTree = "<group>"; };
 		96E34B4E170167580066CD5E /* compose-map-toggle-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compose-map-toggle-button@2x.png"; sourceTree = "<group>"; };
 		96E34B4F170167580066CD5E /* compose-nipple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compose-nipple@2x.png"; sourceTree = "<group>"; };
+		96E6BE08176E07C5000D125C /* HSUAppDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUAppDefinitions.h; sourceTree = "<group>"; };
 		96F92D8216FB02070026284D /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		96F92D8316FB02070026284D /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		96FA81D117450B6A00DB023A /* HSUDraftsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSUDraftsCell.h; sourceTree = "<group>"; };
@@ -1559,6 +1560,7 @@
 		96BE216916EC744B00226799 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				96E6BE08176E07C5000D125C /* HSUAppDefinitions.h */,
 				9620089517056C5100D54BF7 /* HSUProxyURLProtocol.h */,
 				9620089617056C5100D54BF7 /* HSUProxyURLProtocol.m */,
 				962817C916DF81C000ABF0AD /* HSUDefinitions.h */,
@@ -2059,8 +2061,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jingsi Liu (7G753UCBHH)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2075,7 +2076,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "7C74EF06-F274-406F-8404-836B128E8E64";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2093,8 +2094,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jingsi Liu (7G753UCBHH)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2102,7 +2102,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "7C74EF06-F274-406F-8404-836B128E8E64";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
