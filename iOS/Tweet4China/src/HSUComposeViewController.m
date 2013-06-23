@@ -463,7 +463,7 @@
             });
         } else {
             [[HSUDraftManager shared] removeDraft:draft];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sent" message:briefMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sent" message:briefMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             dispatch_async(GCDMainThread, ^{
                 [alert show];
             });

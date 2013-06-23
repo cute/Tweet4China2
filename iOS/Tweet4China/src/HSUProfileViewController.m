@@ -38,7 +38,9 @@
     if (self) {
         self.screenName = screenName;
         self.useRefreshControl = NO;
-        self.dataSource = [[HSUProfileDataSource alloc] initWithScreenName:screenName];
+        if (self.screenName) {
+            self.dataSource = [[HSUProfileDataSource alloc] initWithScreenName:screenName];
+        }
     }
     return self;
 }
