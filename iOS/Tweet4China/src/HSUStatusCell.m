@@ -133,7 +133,7 @@
             actionV.alpha = 1;
         }];
         
-        notification_post(kNotification_HSUStatusCell_OtherCellSwiped);
+        notification_post_with_object(kNotification_HSUStatusCell_OtherCellSwiped, self);
         self.data.renderData[@"mode"] = @"action";
     }
 }

@@ -85,6 +85,8 @@
     NSUInteger filterLocation;
     
     UIImage *postImage;
+    
+    BOOL contentChanged;
 }
 
 - (void)dealloc
@@ -102,11 +104,12 @@
     notification_add_observer(UIKeyboardWillShowNotification, self, @selector(keyboardWillShow:));
     
     // setup default values
-    self.defaultTitle = self.draft[@"title"];
-    self.defaultText = self.draft[@"status"];
-    self.inReplyToStatusId = self.draft[kTwitter_Parameter_Key_Reply_ID];
-    self.defaultImage = [UIImage imageWithContentsOfFile:self.draft[@"image_file_path"]];
-    
+    if (self.draft) {
+        self.defaultTitle = self.draft[@"title"];
+        self.defaultText = self.draft[@"status"];
+        self.inReplyToStatusId = self.draft[kTwitter_Parameter_Key_Reply_ID];
+        self.defaultImage = [UIImage imageWithContentsOfFile:self.draft[@"image_file_path"]];
+    }
     
 //    setup navigation bar
     if (self.defaultTitle) {
@@ -325,6 +328,7 @@
         [contentTV becomeFirstResponder];
     }
     [self textViewDidChange:contentTV];
+    contentChanged = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -415,7 +419,7 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
-    if (contentTV.text.length) {
+    if (contentChanged) {
         RIButtonItem *cancelBnt = [RIButtonItem itemWithLabel:@"Cancel"];
         RIButtonItem *giveUpBnt = [RIButtonItem itemWithLabel:@"Don't save"];
         giveUpBnt.action = ^{
@@ -487,6 +491,8 @@
     wordCountL.text = S(@"%d", kMaxWordLen-wordLen);
     
     [self filterSuggestions];
+    
+    contentChanged = YES;
 }
 
 - (void)filterSuggestions {

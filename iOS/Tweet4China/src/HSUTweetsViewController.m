@@ -51,7 +51,7 @@
     NSString *id_str = rawData[@"id_str"];
     
     HSUComposeViewController *composeVC = [[HSUComposeViewController alloc] init];
-    composeVC.defaultText = S(@"@%@ ", screen_name);
+    composeVC.defaultText = S(@" @%@ ", screen_name);
     composeVC.inReplyToStatusId = id_str;
     UINavigationController *nav = [[UINavigationController alloc] initWithNavigationBarClass:[HSUNavigationBarLight class] toolbarClass:nil];
     nav.viewControllers = @[composeVC];
